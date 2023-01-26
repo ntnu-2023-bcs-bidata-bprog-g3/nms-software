@@ -2,6 +2,8 @@
 .idea
 nms-software.iml
 
+target
+
 # Compiled class file
 *.class
 
