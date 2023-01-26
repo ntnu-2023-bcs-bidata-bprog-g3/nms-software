@@ -1,3 +1,7 @@
+# JetBrains IDE
+.idea
+nms-software.iml
+
 # Compiled class file
 *.class
 
