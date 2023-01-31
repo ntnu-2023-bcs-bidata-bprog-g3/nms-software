@@ -1,6 +1,6 @@
 package no.ntnu.nms.database.repositories;
 
-import no.ntnu.nms.database.entities.Pool;
+import no.ntnu.nms.domain_model.Pool;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;

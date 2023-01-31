@@ -1,4 +1,4 @@
-package no.ntnu.nms.database.entities;
+package no.ntnu.nms.domain_model;
 
 import javax.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
