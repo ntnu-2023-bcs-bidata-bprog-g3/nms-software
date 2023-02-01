@@ -19,7 +19,7 @@ public class PoolHandler {
                     .getPoolByMediaFunction(mediaFunction)
                     .jsonify();
         } catch (NullPointerException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No pool with media function found");
+            return "{\"error\": \"No pool with media function " + mediaFunction + " found\"}";
         }
 
     }
@@ -27,6 +27,9 @@ public class PoolHandler {
     @GetMapping(value={"/all"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllPools() {
+        if (!PoolRegistry.getInstance().getPoolList().hasNext()) {
+            return "{\"error\": \"No pools found\"}";
+        }
         return PoolRegistry.getInstance().jsonify();
     }
 
