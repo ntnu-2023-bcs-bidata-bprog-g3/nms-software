@@ -1,36 +1,37 @@
 package no.ntnu.nms.domain_model;
 
-import javax.persistence.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
-@Entity
-public class Pool extends AbstractPersistable<Long> {
+public class Pool {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String mediaFunction;
 
     public Pool(String mediaFunction) {
         setMediaFunction(mediaFunction);
+        setId((long) (Math.random() * 1000000000000000000L));
     }
-
-    protected Pool() {}
 
     public String getMediaFunction() {
         return this.mediaFunction;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setMediaFunction(String mediaFunction) {
         this.mediaFunction = mediaFunction;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return String.format(
                 "Pool[id=%d, media function=%s]",
-                this.id, this.getMediaFunction()
+                this.getId(), this.getMediaFunction()
         );
     }
 
