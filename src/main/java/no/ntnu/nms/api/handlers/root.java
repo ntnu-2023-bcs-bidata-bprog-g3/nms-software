@@ -1,9 +1,10 @@
 package no.ntnu.nms.api.handlers;
 
 import org.springframework.web.bind.annotation.*;
+import no.ntnu.nms.api.CONSTANTS;
 
 @RestController
-@RequestMapping(value = {"/"})
+@RequestMapping(value = {"/api/" + CONSTANTS.VERSION + "/"})
 public class root {
 
     @GetMapping(value={""})
