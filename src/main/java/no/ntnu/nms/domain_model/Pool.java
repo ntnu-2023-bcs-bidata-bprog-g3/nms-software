@@ -35,4 +35,10 @@ public class Pool implements java.io.Serializable {
         );
     }
 
+    public String jsonify() {
+        return String.format(
+                "{\"id\": %d,\"mediaFunction\": \"%s\"}",
+                this.getId(), this.getMediaFunction()
+        );
+    }
 }

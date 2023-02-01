@@ -59,4 +59,16 @@ public class PoolRegistry implements java.io.Serializable {
         return getPoolByMediaFunction(mediaFunction) != null;
     }
 
+    public String jsonify() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (Pool pool : poolList) {
+            sb.append(pool.jsonify());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("]");
+        return sb.toString();
+    }
+
 }
