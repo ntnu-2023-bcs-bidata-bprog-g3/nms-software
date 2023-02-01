@@ -15,7 +15,7 @@ public class SerializationUtil {
          * Serializes the given PoolRegistry object to the given file.
          * @param registry The PoolRegistry object to serialize.
          * @param file The file to serialize to.
-         * @throws IOException
+         * @throws IOException is thrown if the file cannot be created.
          */
         public static void serialize(PoolRegistry registry, String file) throws IOException {
             FileOutputStream fos = new FileOutputStream(file);
@@ -29,8 +29,8 @@ public class SerializationUtil {
          * Deserializes a PoolRegistry object from the given file.
          * @param file The file to deserialize from.
          * @return The deserialized PoolRegistry object.
-         * @throws IOException
-         * @throws ClassNotFoundException
+         * @throws IOException is thrown if the file does not exist.
+         * @throws ClassNotFoundException is thrown if the file does not contain a PoolRegistry object.
          */
         public static PoolRegistry deserialize(String file) throws IOException, ClassNotFoundException {
             FileInputStream fis = new FileInputStream(file);
