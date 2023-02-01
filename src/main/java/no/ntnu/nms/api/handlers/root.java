@@ -9,8 +9,8 @@ import static no.ntnu.nms.api.Constants.BASE_URL;
 public class root {
 
     @GetMapping(value={""})
-    public String rootGetter() {
-        return "This is the root handler";
+    public String rootEndpoint() {
+        return "This endpoint is not in use. Please check the documentation for available endpoints.";
     }
 
     @PostMapping(value={""})
