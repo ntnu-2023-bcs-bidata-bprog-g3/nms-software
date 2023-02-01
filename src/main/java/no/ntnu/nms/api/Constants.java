@@ -1,6 +1,6 @@
 package no.ntnu.nms.api;
 
-public class CONSTANTS {
+public final class Constants {
 
     public static final String VERSION = "v1";
 
