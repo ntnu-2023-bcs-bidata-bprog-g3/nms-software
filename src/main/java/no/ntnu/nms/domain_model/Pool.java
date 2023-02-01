@@ -1,7 +1,7 @@
 package no.ntnu.nms.domain_model;
 
 
-public class Pool {
+public class Pool implements java.io.Serializable {
 
     private Long id;
     private String mediaFunction;

@@ -3,7 +3,7 @@ package no.ntnu.nms.domain_model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class PoolRegistry {
+public class PoolRegistry implements java.io.Serializable {
 
     private static PoolRegistry instance = null;
 
