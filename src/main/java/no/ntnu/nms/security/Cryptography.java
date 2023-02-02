@@ -10,6 +10,23 @@ import no.ntnu.nms.domain_model.PoolRegistry;
 public class Cryptography {
 
     /**
+     * Encrypts a PoolRegistry object.
+     * @param poolreg The PoolRegistry object to encrypt.
+     * @param key The key to encrypt with.
+     * @return The encrypted PoolRegistry object.
+     * @see PoolRegistry
+     */
+    public static byte[] encrypt(PoolRegistry poolreg, byte[] key) {
+        //convert poolreg to byte array
+        byte[] data = SerializationUtils.serialize(poolreg);
+
+        //encrypt data with key
+        byte[] encrypted = xorWithKey(data, key);
+
+        return encrypted;
+    }
+
+    /**
      * XORs a byte array with a key.
      * @param input The byte array to XOR.
      * @param key The key to XOR with.
