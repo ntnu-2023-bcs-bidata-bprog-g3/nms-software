@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = {"/"})
-public class root {
+public class Root {
 
     @GetMapping(value={""})
     public String rootGetter() {
