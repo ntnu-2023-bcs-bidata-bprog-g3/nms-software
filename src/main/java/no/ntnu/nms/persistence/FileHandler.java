@@ -8,4 +8,19 @@ import java.io.ObjectOutputStream;
  * Utility class for serializing and deserializing PoolRegistry objects.
  */
 public class FileHandler {
+    /**
+     * Writes a byte array to a file.
+     * @param data The byte array to write.
+     */
+    public static void writeToFile(byte[] data) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("poolreg.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(data);
+            out.close();
+            fileOut.close();
+        } catch (IOException i) {
+            return;
+        }
+    }
 }
