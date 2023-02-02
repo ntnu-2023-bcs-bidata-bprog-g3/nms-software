@@ -38,9 +38,7 @@ public class FileHandler {
             in.close();
             fileIn.close();
             return data;
-        } catch (IOException i) {
-            return null;
-        } catch (ClassNotFoundException c) {
+        } catch (IOException | ClassNotFoundException i) {
             return null;
         }
     }
