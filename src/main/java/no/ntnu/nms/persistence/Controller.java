@@ -13,7 +13,7 @@ public class Controller {
      */
     public boolean savePoolReg(PoolRegistry poolreg) {
         byte[] encrypted = Cryptography.encrypt(poolreg, KeyGenerator.generateKey());
-        return FileHandler.writeToFile(encrypted);
+        return FileHandler.writeToFile(encrypted, "poolreg.ser");
     }
 
     /**
@@ -21,7 +21,7 @@ public class Controller {
      * @return The PoolRegistry object loaded from file.
      */
     public PoolRegistry loadPoolReg() {
-        byte[] encrypted = FileHandler.readFromFile();
+        byte[] encrypted = FileHandler.readFromFile("poolreg.ser");
         return Cryptography.decrypt(encrypted, KeyGenerator.generateKey());
     }
 
