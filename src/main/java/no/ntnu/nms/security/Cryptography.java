@@ -40,4 +40,24 @@ public class Cryptography {
         }
         return output;
     }
+
+    /**
+     * Decrypts a byte array.
+     * @param encrypted
+     * @param key
+     * @return The decrypted PoolRegistry object.
+     */
+    public static PoolRegistry decrypt(byte[] encrypted, byte[] key) {
+        if (encrypted == null) {
+            return null;
+        }
+        
+        //decrypt data with key
+        byte[] decrypted = xorWithKey(encrypted, key);
+
+        //convert byte array to poolreg
+        PoolRegistry poolreg = (PoolRegistry) SerializationUtils.deserialize(decrypted);
+
+        return poolreg;
+    }
 }
