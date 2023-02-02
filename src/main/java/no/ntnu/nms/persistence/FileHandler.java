@@ -13,7 +13,7 @@ public class FileHandler {
      * Writes a byte array to a file.
      * @param data The byte array to write.
      */
-    public static void writeToFile(byte[] data) {
+    public static boolean writeToFile(byte[] data) {
         try {
             FileOutputStream fileOut = new FileOutputStream("poolreg.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -21,9 +21,11 @@ public class FileHandler {
             out.close();
             fileOut.close();
         } catch (IOException i) {
-            return;
+            return false;
         }
+        return true;
     }
+
     /**
      * Reads a byte array from a file.
      * @return The byte array read from the file.
