@@ -118,8 +118,8 @@ public class Pool implements java.io.Serializable {
     @Override
     public String toString() {
         return String.format(
-                "Pool[id=%d, media function=%s]",
-                this.getId(), this.getMediaFunction()
+                "Pool[id=%d, media function=%s, time left=%d, description=%s]",
+                this.getId(), this.getMediaFunction(), this.getTimeLeftSeconds(), this.getDescription()
         );
     }
 
@@ -129,8 +129,12 @@ public class Pool implements java.io.Serializable {
      */
     public String jsonify() {
         return String.format(
-                "{\"id\": %d,\"mediaFunction\": \"%s\"}",
-                this.getId(), this.getMediaFunction()
+                "{\"id\": %d,\"mediaFunction\": \"%s\",\"timeLeftSeconds\": %d," +
+                        "\"description\": \"%s\"}",
+                this.getId(),
+                this.getMediaFunction(),
+                this.getTimeLeftSeconds(),
+                this.getDescription()
         );
     }
 }
