@@ -17,9 +17,9 @@ public class App {
         System.out.println("Application name: " + ctx.getDisplayName());
 
         PoolRegistry poolreg = PoolRegistry.getInstance();
-        poolreg.addPool(new Pool("test1"));
-        poolreg.addPool(new Pool("test2"));
-        poolreg.addPool(new Pool("test3"));
+        poolreg.addPool(new Pool("test1", 23, "A tester pool"));
+        poolreg.addPool(new Pool("test2", 23, "A tester pool"));
+        poolreg.addPool(new Pool("test3", 23, "A tester pool"));
 
     }
 }
