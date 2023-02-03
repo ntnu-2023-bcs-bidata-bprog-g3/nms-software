@@ -42,6 +42,32 @@ public class Pool implements java.io.Serializable {
     }
 
     /**
+     * Set the id of the pool.
+     * @param id {@link Long} id of the pool.
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTimeLeftSeconds(int timeLeftSeconds) {
+        if (timeLeftSeconds < 0)
+            throw new IllegalArgumentException("Time left in seconds cannot be negative");
+        this.timeLeftSeconds = timeLeftSeconds;
+    }
+
+    /**
+     * Set the media function of the pool.
+     * @param mediaFunction {@link String} media function of the pool.
+     */
+    public void setMediaFunction(String mediaFunction) {
+        this.mediaFunction = mediaFunction;
+    }
+
+    /**
      * Get the media function of the pool.
      * @return {@link String} media function of the pool.
      */
@@ -55,6 +81,22 @@ public class Pool implements java.io.Serializable {
      */
     public Long getId() {
         return this.id;
+    }
+
+    /**
+     * Get the time left in the pool, in seconds.
+     * @return {@link Integer} time left in the pool, in seconds.
+     */
+    public int getTimeLeftSeconds() {
+        return this.timeLeftSeconds;
+    }
+
+    /**
+     * Get the description of the pool.
+     * @return {@link String} description of the pool.
+     */
+    public String getDescription() {
+        return this.description;
     }
 
     /**
