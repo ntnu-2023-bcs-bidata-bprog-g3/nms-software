@@ -15,6 +15,14 @@ public class Pool implements java.io.Serializable {
      * The media function of the pool.
      */
     private String mediaFunction;
+    /**
+     * The time left in the pool, in second.
+     */
+    private int timeLeftSeconds;
+    /**
+     * The description of the pool.
+     */
+    private String description;
 
     /**
      * Constructor for a pool.
