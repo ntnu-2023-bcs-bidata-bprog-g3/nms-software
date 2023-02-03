@@ -4,6 +4,8 @@ import org.springframework.util.SerializationUtils;
 
 import no.ntnu.nms.domain_model.PoolRegistry;
 
+import java.util.Objects;
+
 /*
  * Utility class for encrypting and decrypting data.
  */
@@ -11,19 +13,16 @@ public class Cryptography {
 
     /**
      * Encrypts a PoolRegistry object.
-     * @param poolreg The PoolRegistry object to encrypt.
+     * @param obj The PoolRegistry object to encrypt.
      * @param key The key to encrypt with.
      * @return The encrypted PoolRegistry object.
      * @see PoolRegistry
      */
-    public static byte[] encrypt(PoolRegistry poolreg, byte[] key) {
-        //convert poolreg to byte array
-        byte[] data = SerializationUtils.serialize(poolreg);
-
-        //encrypt data with key
-        byte[] encrypted = xorWithKey(data, key);
-
-        return encrypted;
+    public static byte[] encrypt(Object obj, byte[] key) {
+        if (obj instanceof PoolRegistry) {
+            return xorWithKey(Objects.requireNonNull(SerializationUtils.serialize(obj)), key);
+        }
+        return xorWithKey((byte[]) obj, key);
     }
 
     /**
@@ -48,10 +47,8 @@ public class Cryptography {
      * @return The decrypted PoolRegistry object.
      */
     public static PoolRegistry decrypt(byte[] encrypted, byte[] key) {
-        if (encrypted == null) {
-            return null;
-        }
-        
+        if (encrypted == null) return null;
+
         //decrypt data with key
         byte[] decrypted = xorWithKey(encrypted, key);
 
@@ -59,5 +56,16 @@ public class Cryptography {
         PoolRegistry poolreg = (PoolRegistry) SerializationUtils.deserialize(decrypted);
 
         return poolreg;
+    }
+
+    /**
+     * Decrypts a byte array.
+     * @param encrypted
+     * @param key
+     * @return The decrypted byte array.
+     */
+    public static byte[] decryptBytes(byte[] encrypted, byte[] key) {
+        if (encrypted == null) return null;
+        return xorWithKey(encrypted, key);
     }
 }
