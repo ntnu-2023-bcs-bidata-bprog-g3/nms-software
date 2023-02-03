@@ -28,6 +28,7 @@ public class Pool implements java.io.Serializable {
      * Constructor for a pool.
      * @param mediaFunction {@link String} media function of the pool.
      * @param timeLeftSeconds {@link Integer} time left in the pool, in seconds.
+     * @param description {@link String} description of the media function in the pool.
      */
     public Pool(String mediaFunction, int timeLeftSeconds, String description) {
         setMediaFunction(mediaFunction);
@@ -49,13 +50,22 @@ public class Pool implements java.io.Serializable {
         this.id = id;
     }
 
+    /**
+     * Set the description of the pool.
+     * @param description {@link String} description of the pool.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Set the time left in the pool, in seconds.
+     * @param timeLeftSeconds {@link Integer} time left in the pool, in seconds.
+     */
     public void setTimeLeftSeconds(int timeLeftSeconds) {
-        if (timeLeftSeconds < 0)
+        if (timeLeftSeconds < 0) {
             throw new IllegalArgumentException("Time left in seconds cannot be negative");
+        }
         this.timeLeftSeconds = timeLeftSeconds;
     }
 
@@ -102,6 +112,8 @@ public class Pool implements java.io.Serializable {
     /**
      * Subtract time from the time left in the pool.
      * @param seconds {@link Integer} number of seconds to subtract.
+     *                               If negative, the time left will be set to 0.
+     * @return {@link Boolean} {@code true} if the time was subtracted,
      */
     public boolean subtractSeconds(int seconds) {
         if (seconds > 0 && seconds <= this.timeLeftSeconds) {
@@ -119,7 +131,10 @@ public class Pool implements java.io.Serializable {
     public String toString() {
         return String.format(
                 "Pool[id=%d, media function=%s, time left=%d, description=%s]",
-                this.getId(), this.getMediaFunction(), this.getTimeLeftSeconds(), this.getDescription()
+                this.getId(),
+                this.getMediaFunction(),
+                this.getTimeLeftSeconds(),
+                this.getDescription()
         );
     }
 
@@ -129,8 +144,8 @@ public class Pool implements java.io.Serializable {
      */
     public String jsonify() {
         return String.format(
-                "{\"id\": %d,\"mediaFunction\": \"%s\",\"timeLeftSeconds\": %d," +
-                        "\"description\": \"%s\"}",
+                "{\"id\": %d,\"mediaFunction\": \"%s\",\"timeLeftSeconds\": %d,"
+                        + "\"description\": \"%s\"}",
                 this.getId(),
                 this.getMediaFunction(),
                 this.getTimeLeftSeconds(),
