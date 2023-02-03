@@ -27,10 +27,18 @@ public class Pool implements java.io.Serializable {
     /**
      * Constructor for a pool.
      * @param mediaFunction {@link String} media function of the pool.
+     * @param timeLeftSeconds {@link Integer} time left in the pool, in seconds.
      */
-    public Pool(String mediaFunction) {
+    public Pool(String mediaFunction, int timeLeftSeconds, String description) {
         setMediaFunction(mediaFunction);
         setId((long) (Math.random() * 1000000000000000000L));
+        setDescription(description);
+        try {
+            setTimeLeftSeconds(timeLeftSeconds);
+        } catch (IllegalArgumentException e) {
+            // TODO: Add logging
+            setTimeLeftSeconds(0);
+        }
     }
 
     /**
