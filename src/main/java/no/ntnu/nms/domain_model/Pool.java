@@ -100,19 +100,15 @@ public class Pool implements java.io.Serializable {
     }
 
     /**
-     * Set the media function of the pool.
-     * @param mediaFunction {@link String} media function of the pool.
+     * Subtract time from the time left in the pool.
+     * @param seconds {@link Integer} number of seconds to subtract.
      */
-    public void setMediaFunction(String mediaFunction) {
-        this.mediaFunction = mediaFunction;
-    }
-
-    /**
-     * Set the id of the pool.
-     * @param id {@link Long} id of the pool.
-     */
-    public void setId(Long id) {
-        this.id = id;
+    public boolean subtractSeconds(int seconds) {
+        if (seconds > 0 && seconds <= this.timeLeftSeconds) {
+            this.timeLeftSeconds -= seconds;
+            return true;
+        }
+        return false;
     }
 
     /**
