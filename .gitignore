@@ -1,6 +1,9 @@
+# Application specific files
+*.ser
+*.md5
+
 ### VisualStudioCode ###
 .vscode
-
 
 # MacOS directory file
 .DS_Store
