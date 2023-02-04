@@ -7,6 +7,7 @@ import no.ntnu.nms.security.KeyGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -34,5 +35,17 @@ public class Controller {
     public static PoolRegistry loadPoolReg() {
         byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
         return Cryptography.decrypt(encrypted, KeyGenerator.generateKey());
+    }
+
+    /**
+     * Deletes the PoolRegistry file.
+     */
+    private static void deletePoolReg() {
+        Path path = Paths.get(POOL_REGISTRY_FILE_DIRECTORY_PATH);
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
