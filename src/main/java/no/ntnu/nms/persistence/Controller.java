@@ -11,6 +11,9 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utility class for saving and loading PoolRegistry objects.
+ */
 public class Controller {
 
     public static final String POOL_REGISTRY_FILE_DIRECTORY_PATH = "poolreg.ser";
