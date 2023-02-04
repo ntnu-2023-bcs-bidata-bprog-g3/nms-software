@@ -23,7 +23,7 @@ public class Controller {
      * @param poolreg The PoolRegistry object to save.
      * @return True if the PoolRegistry object was saved successfully, false otherwise.
      */
-    public static boolean savePoolReg(PoolRegistry poolreg) {
+    private static boolean savePoolReg(PoolRegistry poolreg) {
         byte[] encrypted = Cryptography.encrypt(poolreg, KeyGenerator.generateKey());
         return FileHandler.writeToFile(encrypted, POOL_REGISTRY_FILE_DIRECTORY_PATH);
     }
@@ -32,7 +32,7 @@ public class Controller {
      * Loads a PoolRegistry object from file.
      * @return The PoolRegistry object loaded from file.
      */
-    public static PoolRegistry loadPoolReg() {
+    private static PoolRegistry loadPoolReg() {
         byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
         return Cryptography.decrypt(encrypted, KeyGenerator.generateKey());
     }
