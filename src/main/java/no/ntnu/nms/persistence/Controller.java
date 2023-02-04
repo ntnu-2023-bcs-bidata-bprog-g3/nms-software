@@ -1,15 +1,13 @@
 package no.ntnu.nms.persistence;
 
 import no.ntnu.nms.domain_model.PoolRegistry;
+import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
 import no.ntnu.nms.security.KeyGenerator;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Utility class for saving and loading PoolRegistry objects.
@@ -36,32 +34,5 @@ public class Controller {
     public static PoolRegistry loadPoolReg() {
         byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
         return Cryptography.decrypt(encrypted, KeyGenerator.generateKey());
-    }
-
-    //function that calculates checksum of a file
-    public static String checksum(String path) throws RuntimeException {
-        byte[] data;
-        try {
-            data = Files.readAllBytes(Paths.get(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: Add logging
-            return null;
-        }
-        byte[] hash;
-        try {
-            hash = MessageDigest.getInstance("MD5").digest(data);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            // TODO: Add logging
-            return null;
-        }
-        try {
-            return new BigInteger(1, hash).toString(16);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            // TODO: Add logging
-            return null;
-        }
     }
 }
