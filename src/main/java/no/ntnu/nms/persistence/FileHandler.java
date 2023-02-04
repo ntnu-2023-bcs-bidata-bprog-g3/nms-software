@@ -1,9 +1,6 @@
 package no.ntnu.nms.persistence;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+
 /**
  * Utility class for serializing and deserializing PoolRegistry objects.
  */
@@ -18,7 +15,9 @@ public class FileHandler {
             FileOutputStream fileOut = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(data);
+            out.flush();        // with or without flush??
             out.close();
+            fileOut.flush();    // with or without flush??
             fileOut.close();
         } catch (IOException i) {
             return false;
