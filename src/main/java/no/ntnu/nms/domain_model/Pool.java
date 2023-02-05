@@ -1,11 +1,25 @@
 package no.ntnu.nms.domain_model;
 
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
+
 /**
  * A Pool object represents a pool of a media function.
  *
  */
-public class Pool implements java.io.Serializable {
+public class Pool implements Serializable {
+
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.changes.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.changes.removePropertyChangeListener(listener);
+    }
 
     /**
      * The id of the pool with the given media function.
