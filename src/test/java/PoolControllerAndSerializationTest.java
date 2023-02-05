@@ -28,7 +28,7 @@ public class PoolControllerAndSerializationTest {
 
         PoolRegistry secondPoolreg = Controller.loadPoolRegAndCheckChecksum();
         if (secondPoolreg == null) {
-            fail("Loading failed");
+            fail("Loading of PoolReg failed");
         }
 
         assertEquals("A tester pool", secondPoolreg.getPoolByMediaFunction("test1")
@@ -43,7 +43,7 @@ public class PoolControllerAndSerializationTest {
 
         PoolRegistry thirdPoolreg = Controller.loadPoolRegAndCheckChecksum();
         if (thirdPoolreg == null) {
-            fail("Loading failed");
+            fail("Loading of PoolReg failed");
         }
 
         assertEquals("A new description", thirdPoolreg.getPoolByMediaFunction("test1")
