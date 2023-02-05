@@ -15,8 +15,8 @@ import java.nio.file.Paths;
  */
 public class Controller {
 
-    public static final String POOL_REGISTRY_FILE_DIRECTORY_PATH = "poolreg.ser";
-    public static final String POOL_REGISTRY_FILE_CHECKSUM_PATH = "poolreg.ser.md5";
+    public static final String POOL_REGISTRY_FILE_DIRECTORY_PATH = "pools/poolreg.ser";
+    public static final String POOL_REGISTRY_FILE_CHECKSUM_PATH = "pools/poolreg.ser.md5";
 
     /**
      * Saves a PoolRegistry object to file and calculates a checksum, in addition to writing the
