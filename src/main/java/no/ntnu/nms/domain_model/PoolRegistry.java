@@ -1,5 +1,9 @@
 package no.ntnu.nms.domain_model;
 
+import no.ntnu.nms.persistence.Controller;
+
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -7,7 +11,17 @@ import java.util.Iterator;
  * Registry for all pools.
  * Singleton class.
  */
-public class PoolRegistry implements java.io.Serializable {
+public class PoolRegistry implements Serializable {
+
+    /**
+     * PropertyChangeListener for the registry.
+     * Saves the registry to file when a change is made.
+     */
+    private final transient PropertyChangeListener pcl = evt -> {
+        if (evt.getOldValue() != evt.getNewValue()) {
+            Controller.savePoolRegAndChecksum();
+        }
+    };
 
     /**
      * Singleton instance.
@@ -44,6 +58,8 @@ public class PoolRegistry implements java.io.Serializable {
      */
     public void addPool(Pool pool) {
         poolList.add(pool);
+        pool.addPropertyChangeListener(pcl);
+        Controller.savePoolRegAndChecksum();
     }
 
     /**
@@ -74,6 +90,7 @@ public class PoolRegistry implements java.io.Serializable {
      */
     public void removePool(Pool pool) {
         poolList.remove(pool);
+        pool.removePropertyChangeListener(pcl);
     }
 
     /**
