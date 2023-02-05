@@ -21,14 +21,13 @@ public class Controller {
     /**
      * Saves a PoolRegistry object to file and calculates a checksum, in addition to writing the
      * checksum to file.
-     * @param poolreg {@link PoolRegistry} The PoolRegistry object to save.
      * @return {@link Boolean} True if the PoolRegistry object was saved successfully,
      * false otherwise.
      */
-    public static boolean savePoolRegAndChecksum(PoolRegistry poolreg) {
+    public static boolean savePoolRegAndChecksum() {
         deletePoolReg();    // Deletes the old pool file. If it is deleted, but failed to write new,
                             // the old would be outdated anyway
-        boolean success = savePoolReg(poolreg);
+        boolean success = savePoolReg();
         if (success) {
             try {
                 String checksum = Checksum.checksum(POOL_REGISTRY_FILE_DIRECTORY_PATH);
@@ -69,11 +68,10 @@ public class Controller {
 
     /**
      * Saves a PoolRegistry object to file.
-     * @param poolreg The PoolRegistry object to save.
      * @return True if the PoolRegistry object was saved successfully, false otherwise.
      */
-    private static boolean savePoolReg(PoolRegistry poolreg) {
-        byte[] encrypted = Cryptography.encrypt(poolreg, KeyGenerator.KEY);
+    private static boolean savePoolReg() {
+        byte[] encrypted = Cryptography.encrypt(PoolRegistry.getInstance(), KeyGenerator.KEY);
         return FileHandler.writeToFile(encrypted, POOL_REGISTRY_FILE_DIRECTORY_PATH);
     }
 
