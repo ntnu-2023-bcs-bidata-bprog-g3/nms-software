@@ -7,6 +7,11 @@ import java.security.NoSuchAlgorithmException;
  * Utility class for generating a key for encryption/decryption.
  */
 public class KeyGenerator {
+
+    // The key used for encryption/decryption.
+    public static final byte[] KEY = generateKey();
+
+
     // The number of iterations to perform when generating the key.
     private static final int ITERATION_COUNT = 1000;
     // The length of the key in bits.
