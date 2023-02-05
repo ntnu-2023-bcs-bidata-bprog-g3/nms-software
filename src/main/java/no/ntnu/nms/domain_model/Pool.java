@@ -61,7 +61,9 @@ public class Pool implements Serializable {
      * @param id {@link Long} id of the pool.
      */
     public void setId(Long id) {
+        Long oldId = this.id;
         this.id = id;
+        changes.firePropertyChange("change", oldId, id);
     }
 
     /**
@@ -69,7 +71,9 @@ public class Pool implements Serializable {
      * @param description {@link String} description of the pool.
      */
     public void setDescription(String description) {
+        String oldDescription = this.description;
         this.description = description;
+        changes.firePropertyChange("change", oldDescription, description);
     }
 
     /**
@@ -80,7 +84,9 @@ public class Pool implements Serializable {
         if (timeLeftSeconds < 0) {
             throw new IllegalArgumentException("Time left in seconds cannot be negative");
         }
+        int oldTimeLeftSeconds = this.timeLeftSeconds;
         this.timeLeftSeconds = timeLeftSeconds;
+        changes.firePropertyChange("change", oldTimeLeftSeconds, timeLeftSeconds);
     }
 
     /**
@@ -88,7 +94,10 @@ public class Pool implements Serializable {
      * @param mediaFunction {@link String} media function of the pool.
      */
     public void setMediaFunction(String mediaFunction) {
+        String oldMediaFunction = this.mediaFunction;
         this.mediaFunction = mediaFunction;
+        changes.firePropertyChange("change", oldMediaFunction, mediaFunction);
+
     }
 
     /**
@@ -131,7 +140,10 @@ public class Pool implements Serializable {
      */
     public boolean subtractSeconds(int seconds) {
         if (seconds > 0 && seconds <= this.timeLeftSeconds) {
+            int oldTimeLeftSeconds = this.timeLeftSeconds;
             this.timeLeftSeconds -= seconds;
+            changes.firePropertyChange("change", oldTimeLeftSeconds,
+                    this.timeLeftSeconds);
             return true;
         }
         return false;
