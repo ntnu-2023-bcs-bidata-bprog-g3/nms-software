@@ -7,46 +7,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PoolControllerAndSerializationTest {
 
-
     /**
-     * Tests the pool controller and serialization.
+     * Test that the pool registry can be loaded from file and that the state of the registry is
+     * preserved because of the change listeners.
      */
     @Test
-    public void testPoolControllerAndSerialization() {
+    public void listenerAndStateChangeTest() {
         PoolRegistry originalPoolreg = PoolRegistry.getInstance();
-        originalPoolreg.addPool(new Pool("test1", 23
-                , "A tester pool"));
-        originalPoolreg.addPool(new Pool("test2", 23
-                , "A tester pool"));
-        originalPoolreg.addPool(new Pool("test3", 23
-                , "A tester pool"));
+        originalPoolreg.addPool(new Pool("test1", 23,
+                "A tester pool"));
 
         assertEquals("A tester pool", originalPoolreg.getPoolByMediaFunction("test1")
                 .getDescription());
 
-        Controller.savePoolRegAndChecksum(originalPoolreg);
+        originalPoolreg.getPoolByMediaFunction("test1").setDescription("A new description");
 
         PoolRegistry secondPoolreg = Controller.loadPoolRegAndCheckChecksum();
         if (secondPoolreg == null) {
             fail("Loading of PoolReg failed");
         }
 
-        assertEquals("A tester pool", secondPoolreg.getPoolByMediaFunction("test1")
-                .getDescription());
-
-        secondPoolreg.getPoolByMediaFunction("test1").setDescription("A new description");
-
         assertEquals("A new description", secondPoolreg.getPoolByMediaFunction("test1")
-                .getDescription());
-
-        Controller.savePoolRegAndChecksum(secondPoolreg);
-
-        PoolRegistry thirdPoolreg = Controller.loadPoolRegAndCheckChecksum();
-        if (thirdPoolreg == null) {
-            fail("Loading of PoolReg failed");
-        }
-
-        assertEquals("A new description", thirdPoolreg.getPoolByMediaFunction("test1")
                 .getDescription());
     }
 }
