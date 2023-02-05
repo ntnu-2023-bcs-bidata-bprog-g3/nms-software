@@ -33,7 +33,7 @@ public class Controller {
             try {
                 String checksum = Checksum.checksum(POOL_REGISTRY_FILE_DIRECTORY_PATH);
                 success = FileHandler.writeToFile(Cryptography.encrypt(checksum.getBytes(),
-                        KeyGenerator.generateKey()), POOL_REGISTRY_FILE_CHECKSUM_PATH);
+                        KeyGenerator.KEY), POOL_REGISTRY_FILE_CHECKSUM_PATH);
             } catch (RuntimeException e) {
                 return false;
             }
@@ -56,7 +56,7 @@ public class Controller {
                 String checksum = Checksum.checksum(POOL_REGISTRY_FILE_DIRECTORY_PATH);
                 byte[] encryptedChecksum = FileHandler.readFromFile(POOL_REGISTRY_FILE_CHECKSUM_PATH);
                 String checksumFromFile = new String(Cryptography.decryptBytes(encryptedChecksum,
-                        KeyGenerator.generateKey()));
+                        KeyGenerator.KEY));
                 if (!checksum.equals(checksumFromFile)) {
                     return null;
                 }
@@ -73,7 +73,7 @@ public class Controller {
      * @return True if the PoolRegistry object was saved successfully, false otherwise.
      */
     private static boolean savePoolReg(PoolRegistry poolreg) {
-        byte[] encrypted = Cryptography.encrypt(poolreg, KeyGenerator.generateKey());
+        byte[] encrypted = Cryptography.encrypt(poolreg, KeyGenerator.KEY);
         return FileHandler.writeToFile(encrypted, POOL_REGISTRY_FILE_DIRECTORY_PATH);
     }
 
@@ -83,7 +83,7 @@ public class Controller {
      */
     private static PoolRegistry loadPoolReg() {
         byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-        return Cryptography.decrypt(encrypted, KeyGenerator.generateKey());
+        return Cryptography.decrypt(encrypted, KeyGenerator.KEY);
     }
 
     /**
