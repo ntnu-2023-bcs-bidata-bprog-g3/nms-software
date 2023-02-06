@@ -1,5 +1,7 @@
 package no.ntnu.nms.security;
 
+import no.ntnu.nms.persistence.FileHandler;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -40,5 +42,16 @@ public class Checksum {
             // TODO: Add logging
             return null;
         }
+    }
+
+    public static boolean compareChecksum(String fileDirectory, String checksumDirectory) {
+        String checksum = Checksum.getChecksumFromFile(fileDirectory);
+        byte[] decryptedChecksumFromFile = Cryptography.decryptBytes(FileHandler
+                .readFromFile(checksumDirectory), KeyGenerator.KEY);
+        if (decryptedChecksumFromFile == null || checksum == null) {
+            return false;
+        }
+        String checksumFromFile = new String(decryptedChecksumFromFile);
+        return checksum.equals(checksumFromFile);
     }
 }

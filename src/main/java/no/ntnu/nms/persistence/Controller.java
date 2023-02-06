@@ -50,19 +50,10 @@ public class Controller {
      */
     public static PoolRegistry loadPoolRegAndCheckChecksum() {
         PoolRegistry poolreg = loadPoolReg();
-        if (poolreg != null) {
-            try {
-                String checksum = Checksum.checksum(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-                byte[] encryptedChecksum = FileHandler.readFromFile(POOL_REGISTRY_FILE_CHECKSUM_PATH);
-                String checksumFromFile = new String(Cryptography.decryptBytes(encryptedChecksum,
-                        KeyGenerator.KEY));
-                if (!checksum.equals(checksumFromFile)) {
-                    return null;
-                }
-            } catch (RuntimeException e) {
-                return null;
-            }
-        }
+        if (poolreg == null) return null;
+        if (!Checksum.compareChecksum(POOL_REGISTRY_FILE_DIRECTORY_PATH,
+                POOL_REGISTRY_FILE_CHECKSUM_PATH)) return null;
+        PoolRegistry.updatePoolRegistryInstance(poolreg);
         return poolreg;
     }
 
