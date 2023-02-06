@@ -1,11 +1,9 @@
-### VisualStudioCode ###
-.vscode/*
-.vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
-.vscode/*.code-snippets
+# Application specific files
+*.ser
+*.md5
 
+### VisualStudioCode ###
+.vscode
 
 # MacOS directory file
 .DS_Store

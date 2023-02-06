@@ -2,17 +2,21 @@ package no.ntnu.nms.api.handlers;
 
 import org.springframework.web.bind.annotation.*;
 
+import static no.ntnu.nms.api.Constants.BASE_URL;
+
+/**
+ * root is a handler for the root API endpoint, which is not in use.
+ */
 @RestController
-@RequestMapping(value = {"/"})
+@RequestMapping(value = {BASE_URL})
 public class Root {
 
+    /**
+     * Root endpoint handler method for a request of method GET.
+     * @return {@link String} a message that the endpoint is not in use.
+     */
     @GetMapping(value={""})
-    public String rootGetter() {
-        return "This is the root handler";
-    }
-
-    @PostMapping(value={""})
-    public String rootPost(@RequestBody String postString) {
-        return "You posted: " + postString;
+    public String rootEndpoint() {
+        return "This endpoint is not in use. Please check the documentation for available endpoints.";
     }
 }
