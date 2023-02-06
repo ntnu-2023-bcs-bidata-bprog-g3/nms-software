@@ -9,7 +9,7 @@ import static no.ntnu.nms.api.Constants.BASE_URL;
  */
 @RestController
 @RequestMapping(value = {BASE_URL})
-public class root {
+public class Root {
 
     /**
      * Root endpoint handler method for a request of method GET.
