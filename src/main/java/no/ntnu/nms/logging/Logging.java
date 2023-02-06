@@ -16,7 +16,7 @@ import java.util.logging.SimpleFormatter;
  */
 public class Logging {
 
-    private static final String LOG_PATH = "./logs/src/";
+    private static final String LOG_PATH = "./logs/";
 
     /**
      * Logger object to be returned when getter is called.
