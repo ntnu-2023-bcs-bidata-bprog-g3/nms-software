@@ -27,6 +27,8 @@ public class PoolControllerAndSerializationTest {
             fail("Loading of PoolReg failed");
         }
 
+        assertNotSame(originalPoolreg, secondPoolreg);
+
         assertEquals("A new description", secondPoolreg.getPoolByMediaFunction("test1")
                 .getDescription());
     }
