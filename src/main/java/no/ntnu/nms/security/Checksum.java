@@ -16,7 +16,7 @@ public class Checksum {
      * @param path {@link String} The path to the file to calculate the checksum of.
      * @return {@link String} The checksum of the file.
      */
-    public static String checksum(String path) {
+    public static String getChecksumFromFile(String path) {
         byte[] data;
         try {
             data = Files.readAllBytes(Paths.get(path));

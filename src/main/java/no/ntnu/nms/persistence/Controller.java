@@ -30,7 +30,7 @@ public class Controller {
         boolean success = savePoolReg();
         if (success) {
             try {
-                String checksum = Checksum.checksum(POOL_REGISTRY_FILE_DIRECTORY_PATH);
+                String checksum = Checksum.getChecksumFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
                 success = FileHandler.writeToFile(Cryptography.encrypt(checksum.getBytes(),
                         KeyGenerator.KEY), POOL_REGISTRY_FILE_CHECKSUM_PATH);
             } catch (RuntimeException e) {
