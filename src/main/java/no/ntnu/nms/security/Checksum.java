@@ -18,30 +18,19 @@ public class Checksum {
      * @param path {@link String} The path to the file to calculate the checksum of.
      * @return {@link String} The checksum of the file.
      */
-    public static String getChecksumFromFile(String path) {
-        byte[] data;
+
+    public static String loadFromFile(String path) {
+        byte[] data, hash;
         try {
             data = Files.readAllBytes(Paths.get(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: Add logging
-            return null;
-        }
-        byte[] hash;
-        try {
             hash = MessageDigest.getInstance("MD5").digest(data);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            // TODO: Add logging
-            return null;
-        }
-        try {
             return new BigInteger(1, hash).toString(16);
-        } catch (NumberFormatException e) {
+        } catch (IOException | NoSuchAlgorithmException | NumberFormatException e) {
+            //TODO: Add logging
             e.printStackTrace();
-            // TODO: Add logging
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -50,9 +39,9 @@ public class Checksum {
      * @param checksumDirectory The path to the file containing the checksum.
      * @return {@link Boolean} True if the checksums match, false otherwise.
      */
-    public static boolean compareChecksum(String fileDirectory, String checksumDirectory) {
-        String checksum = Checksum.getChecksumFromFile(fileDirectory);
-        byte[] decryptedChecksumFromFile = Cryptography.decryptBytes(FileHandler
+    public static boolean compare(String fileDirectory, String checksumDirectory) {
+        String checksum = Checksum.loadFromFile(fileDirectory);
+        byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
                 .readFromFile(checksumDirectory), KeyGenerator.KEY);
         if (decryptedChecksumFromFile == null || checksum == null) {
             return false;
