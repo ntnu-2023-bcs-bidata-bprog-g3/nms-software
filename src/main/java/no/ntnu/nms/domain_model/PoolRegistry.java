@@ -52,6 +52,16 @@ public class PoolRegistry implements Serializable {
     }
 
     /**
+     * Update the singleton instance of the registry. Used when loading from file.
+     * @param poolRegistry {@link PoolRegistry} new instance of the registry.
+     */
+    public static void updatePoolRegistryInstance(PoolRegistry poolRegistry) {
+        if (poolRegistry != null && poolRegistry != instance) {
+            instance = poolRegistry;
+        }
+    }
+
+    /**
      * Add a pool to the registry.
      * Needs to be reimplemented to use the serialization utilities
      * @param pool {@link Pool} to add to the registry.
