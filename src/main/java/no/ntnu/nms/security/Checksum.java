@@ -19,7 +19,7 @@ public class Checksum {
      * @return {@link String} The checksum of the file.
      */
 
-    public static String loadFromFile(String path) {
+    public static String generateFromFile(String path) {
         byte[] data, hash;
         try {
             data = Files.readAllBytes(Paths.get(path));
@@ -40,7 +40,7 @@ public class Checksum {
      * @return {@link Boolean} True if the checksums match, false otherwise.
      */
     public static boolean compare(String fileDirectory, String checksumDirectory) {
-        String checksum = Checksum.loadFromFile(fileDirectory);
+        String checksum = Checksum.generateFromFile(fileDirectory);
         byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
                 .readFromFile(checksumDirectory), KeyGenerator.KEY);
         if (decryptedChecksumFromFile == null || checksum == null) {
