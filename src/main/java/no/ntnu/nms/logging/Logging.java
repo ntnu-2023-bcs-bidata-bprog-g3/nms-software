@@ -32,7 +32,7 @@ public class Logging {
      */
     public static void setUpLogger(String logLevel) throws IOException {
         Files.createDirectories(Paths.get(LOG_PATH));
-        Handler fh = new FileHandler("nms_software.log", 5242880, 5, true);
+        Handler fh = new FileHandler(LOG_PATH + "nms_software.log", 5242880, 5, true);
         fh.setFormatter(new SimpleFormatter());
         logger = Logger.getLogger("src");
         logger.setUseParentHandlers(false);
