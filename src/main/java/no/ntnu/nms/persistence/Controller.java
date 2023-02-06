@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.springframework.util.SerializationUtils;
+
 /**
  * Utility class for saving and loading PoolRegistry objects.
  */
@@ -30,8 +32,8 @@ public class Controller {
         boolean success = savePoolReg();
         if (success) {
             try {
-                String checksum = Checksum.getChecksumFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-                success = FileHandler.writeToFile(Cryptography.encrypt(checksum.getBytes(),
+                String checksum = Checksum.loadFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
+                success = FileHandler.writeToFile(Cryptography.xorWithKey(checksum.getBytes(),
                         KeyGenerator.KEY), POOL_REGISTRY_FILE_CHECKSUM_PATH);
             } catch (RuntimeException e) {
                 return false;
@@ -51,7 +53,7 @@ public class Controller {
     public static PoolRegistry loadPoolRegAndCheckChecksum() {
         PoolRegistry poolreg = loadPoolReg();
         if (poolreg == null) return null;
-        if (!Checksum.compareChecksum(POOL_REGISTRY_FILE_DIRECTORY_PATH,
+        if (!Checksum.compare(POOL_REGISTRY_FILE_DIRECTORY_PATH,
                 POOL_REGISTRY_FILE_CHECKSUM_PATH)) return null;
         PoolRegistry.updatePoolRegistryInstance(poolreg);
         return poolreg;
@@ -62,7 +64,7 @@ public class Controller {
      * @return True if the PoolRegistry object was saved successfully, false otherwise.
      */
     private static boolean savePoolReg() {
-        byte[] encrypted = Cryptography.encrypt(PoolRegistry.getInstance(), KeyGenerator.KEY);
+        byte[] encrypted = Cryptography.xorWithKey(SerializationUtils.serialize(PoolRegistry.getInstance()), KeyGenerator.KEY);
         return FileHandler.writeToFile(encrypted, POOL_REGISTRY_FILE_DIRECTORY_PATH);
     }
 
@@ -72,7 +74,7 @@ public class Controller {
      */
     private static PoolRegistry loadPoolReg() {
         byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-        return Cryptography.decrypt(encrypted, KeyGenerator.KEY);
+        return (PoolRegistry) SerializationUtils.deserialize(((byte[]) Cryptography.xorWithKey(encrypted, KeyGenerator.KEY)));
     }
 
     /**
