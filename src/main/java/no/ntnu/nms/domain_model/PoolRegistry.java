@@ -101,6 +101,7 @@ public class PoolRegistry implements Serializable {
     public void removePool(Pool pool) {
         poolList.remove(pool);
         pool.removePropertyChangeListener(pcl);
+        Controller.savePoolRegAndChecksum();
     }
 
     /**
