@@ -3,8 +3,6 @@ package no.ntnu.nms.logging;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -34,9 +32,7 @@ public class Logging {
      */
     public static void setUpLogger(String logLevel) throws IOException {
         Files.createDirectories(Paths.get(LOG_PATH));
-        String timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-                .format(Calendar.getInstance().getTime());
-        Handler fh = new FileHandler(LOG_PATH + timeFormat + ".log", true);
+        Handler fh = new FileHandler("nms_software.log", 5242880, 5, true);
         fh.setFormatter(new SimpleFormatter());
         logger = Logger.getLogger("src");
         logger.setUseParentHandlers(false);
