@@ -44,6 +44,12 @@ public class Checksum {
         }
     }
 
+    /**
+     * Compares the checksum of a file to the checksum stored in another file.
+     * @param fileDirectory The path to the file to calculate the checksum of.
+     * @param checksumDirectory The path to the file containing the checksum.
+     * @return {@link Boolean} True if the checksums match, false otherwise.
+     */
     public static boolean compareChecksum(String fileDirectory, String checksumDirectory) {
         String checksum = Checksum.getChecksumFromFile(fileDirectory);
         byte[] decryptedChecksumFromFile = Cryptography.decryptBytes(FileHandler
