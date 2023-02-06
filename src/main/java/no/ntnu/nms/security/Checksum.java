@@ -54,7 +54,10 @@ public class Checksum {
         String checksum = Checksum.getChecksumFromFile(fileDirectory);
         byte[] decryptedChecksumFromFile = Cryptography.decryptBytes(FileHandler
                 .readFromFile(checksumDirectory), KeyGenerator.KEY);
-        return (!(decryptedChecksumFromFile == null || checksum == null)
-                && checksum.equals(new String(decryptedChecksumFromFile)));
+        if (decryptedChecksumFromFile == null || checksum == null) {
+            return false;
+        }
+        String checksumFromFile = new String(decryptedChecksumFromFile);
+        return checksum.equals(checksumFromFile);
     }
 }
