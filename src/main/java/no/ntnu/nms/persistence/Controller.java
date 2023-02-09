@@ -1,6 +1,7 @@
 package no.ntnu.nms.persistence;
 
 import no.ntnu.nms.domain_model.PoolRegistry;
+import no.ntnu.nms.file_handler.FileHandler;
 import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
 import no.ntnu.nms.security.KeyGenerator;

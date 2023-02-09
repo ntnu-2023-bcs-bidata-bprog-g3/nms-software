@@ -1,6 +1,6 @@
 package no.ntnu.nms.security;
 
-import no.ntnu.nms.persistence.FileHandler;
+import no.ntnu.nms.file_handler.FileHandler;
 
 import java.io.IOException;
 import java.math.BigInteger;
