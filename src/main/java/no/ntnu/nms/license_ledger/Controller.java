@@ -74,6 +74,15 @@ public class Controller {
      */
     public static boolean addLicenseToLedger(String licensePath) {
         if (ledgerNotValid()) return false;
+        byte[] license = FileHandler.readFromFile(licensePath);
+        if (license == null) return false;
+        String licenseString = new String(license);
+        byte[] oldLedger = Cryptography.xorWithKey(FileHandler.readFromFile(LEDGER_PATH), KeyGenerator.KEY);
+        if (oldLedger == null) return false;
+        String oldLedgerString = (String) SerializationUtils.deserialize(oldLedger);
+        String newLedgerString = oldLedgerString + "\n" + licenseString;
+        byte[] newLedger = Cryptography.xorWithKey(SerializationUtils.serialize(newLedgerString), KeyGenerator.KEY);
+        if (!FileHandler.writeToFile(newLedger, LEDGER_PATH)) return false;
         return updateLedgerHash();
     }
 }
