@@ -1,0 +1,31 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches:
+      - "**"
+    pull_request:
+      - "**"
+
+permissions: write-all
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'corretto'
+          cache: maven
+      - name: Build and run tests
+        run: mvn --batch-mode --fail-at-end package
+      - name: Surefire Report
+        if: ${{ always() }}
+        uses: ScaCap/action-surefire-report@v1.3.0
+        with:
+          report_paths: 'target/surefire-reports/TEST-*.xml'
