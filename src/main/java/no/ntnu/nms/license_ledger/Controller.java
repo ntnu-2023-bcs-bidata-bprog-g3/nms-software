@@ -1,4 +1,7 @@
+package no.ntnu.nms.license_ledger;
+
 import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
 import no.ntnu.nms.security.KeyGenerator;
 import org.springframework.util.SerializationUtils;
@@ -39,6 +42,17 @@ public class Controller {
      */
     private static String getLedgerHash() {
         return (Files.notExists(Path.of(LEDGER_PATH))) ?  null : (String) SerializationUtils.deserialize(Cryptography.xorWithKey(FileHandler.readFromFile(LEDGER_PATH), KeyGenerator.KEY));
+    }
+
+    /**
+     * Checks if the ledger is invalid.
+     * @return {@link Boolean} True if the ledger is invalid, false otherwise.
+     */
+    private static boolean ledgerNotValid() {
+        String oldHash;
+        if ((oldHash = getLedgerHash()) == null) return true;
+        String currentHash = Checksum.generateFromFile(LEDGER_PATH);
+        return !oldHash.equals(currentHash);
     }
 
 
