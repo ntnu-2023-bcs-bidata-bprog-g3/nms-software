@@ -15,6 +15,10 @@ public class ZipUtil {
      * The name of the signature file.
      */
     private static final String SIGNATURE = LICENSE_FILE + ".signature";
+    /**
+     * The name of the public key file.
+     */
+    private static final String PUBLIC_KEY = "public_key.pem";
 
 
     /**
@@ -26,15 +30,17 @@ public class ZipUtil {
     public String unzipper(ZipFile zipFile) {
         ZipEntry licenseEntry;
         ZipEntry signatureEntry;
+        ZipEntry publicKeyEntry;
 
         try {
             licenseEntry = zipFile.getEntry(LICENSE_FILE);
             signatureEntry = zipFile.getEntry(SIGNATURE);
+            publicKeyEntry = zipFile.getEntry(PUBLIC_KEY);
         } catch (IllegalStateException ignored) {
             return "Failed to unzip file";
         }
 
-        if (licenseEntry == null || signatureEntry == null) {
+        if (licenseEntry == null || signatureEntry == null || publicKeyEntry == null) {
             return "Zip file does not contain necessary files";
         }
 
