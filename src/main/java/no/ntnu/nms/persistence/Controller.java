@@ -27,23 +27,19 @@ public class Controller {
      * false otherwise.
      */
     public static boolean savePoolRegAndChecksum() {
-        deletePoolReg();    // Deletes the old pool file. If it is deleted, but failed to write new,
-                            // the old would be outdated anyway
-        boolean success = savePoolReg();
-        if (success) {
-            try {
-                String checksum = Checksum.generateFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-                success = FileHandler.writeToFile(Cryptography.xorWithKey(checksum.getBytes(),
-                        KeyGenerator.KEY), POOL_REGISTRY_FILE_CHECKSUM_PATH);
-            } catch (RuntimeException e) {
-                return false;
-            }
+        boolean successSave = savePoolReg();
+        boolean successWriteChecksum = true;
+        if (successSave) {
+            String checksum = Checksum.generateFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
+            successWriteChecksum = FileHandler.writeToFile(Cryptography.xorWithKey(checksum.getBytes(),
+                    KeyGenerator.KEY), POOL_REGISTRY_FILE_CHECKSUM_PATH);
         }
-        if (!success) {
+        if (!successWriteChecksum || !successSave) {
             // TODO: ADD LOGGING!!!!
             System.out.println("Major important error!");
+            return false;
         }
-        return success;
+        return true;
     }
 
     /**
