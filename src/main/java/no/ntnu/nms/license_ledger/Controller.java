@@ -55,5 +55,17 @@ public class Controller {
         return !oldHash.equals(currentHash);
     }
 
+    /**
+     * Updates the ledger checksum.
+     * @return {@link Boolean} True if the ledger checksum was updated successfully, false otherwise.
+     */
+    private static boolean updateLedgerHash() {
+        if (ledgerNotValid()) return false;
+        String checksum = Checksum.generateFromFile(LEDGER_PATH);
+        if (checksum == null) return false;
+        byte[] encryptedNewHash = Cryptography.xorWithKey(checksum.getBytes(), KeyGenerator.KEY);
+        return FileHandler.writeToFile(encryptedNewHash, LEDGER_HASH_PATH);
+    }
+
 
 }
