@@ -67,5 +67,13 @@ public class Controller {
         return FileHandler.writeToFile(encryptedNewHash, LEDGER_HASH_PATH);
     }
 
-
+    /**
+     * Adds a license to the ledger.
+     * @param licensePath The path to the license file.
+     * @return {@link Boolean} True if the license was added successfully, false otherwise.
+     */
+    public static boolean addLicenseToLedger(String licensePath) {
+        if (ledgerNotValid()) return false;
+        return updateLedgerHash();
+    }
 }
