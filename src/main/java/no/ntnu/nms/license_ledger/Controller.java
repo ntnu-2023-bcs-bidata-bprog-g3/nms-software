@@ -36,6 +36,22 @@ public class Controller {
      */
     private static final String LEDGER_HASH_PATH = LEDGER_DIR + LEDGER_HASH_NAME;
 
+    /*
+    public static boolean createInitialLedgerFiles() {
+        if (Files.notExists(Path.of(LEDGER_PATH))) {
+            try {
+                Files.createFile(Path.of(LEDGER_PATH));
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        if (Files.notExists(Path.of(LEDGER_HASH_PATH))) {
+            return updateLedgerHash();
+        }
+        return true;
+    }
+    */
+
     /**
      * Gets the ledger checksum.
      * @return {@link String} The ledger checksum, null if the ledger does not exist.
