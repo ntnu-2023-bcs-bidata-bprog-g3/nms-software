@@ -18,8 +18,15 @@ import org.springframework.util.SerializationUtils;
  */
 public class Controller {
 
-    public static final String POOL_REGISTRY_FILE_DIRECTORY_PATH = "pools/poolreg.ser";
-    public static final String POOL_REGISTRY_FILE_CHECKSUM_PATH = "pools/poolreg.ser.md5";
+    private static final String POOL_REGISTRY_DIR = "data/pool/";
+
+    private static final String POOL_REGISTRY_NAME = "poolreg.ser";
+    private static final String POOL_REGISTRY_CHECKSUM_NAME = POOL_REGISTRY_NAME + ".md5";
+
+    private static final String POOL_REGISTRY_FILE_DIRECTORY_PATH = POOL_REGISTRY_DIR
+            + POOL_REGISTRY_NAME;
+    private static final String POOL_REGISTRY_FILE_CHECKSUM_PATH = POOL_REGISTRY_DIR
+            + POOL_REGISTRY_CHECKSUM_NAME;
 
     /**
      * Saves a PoolRegistry object to file and calculates a checksum, in addition to writing the
