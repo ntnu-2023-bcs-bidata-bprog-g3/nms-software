@@ -43,13 +43,16 @@ public class Checksum {
      * @return {@link Boolean} True if the checksums match, false otherwise.
      */
     public static boolean compare(String fileDirectory, String checksumDirectory) {
-        String checksum = Checksum.generateFromFile(fileDirectory);
-        byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
-                .readFromFile(checksumDirectory), KeyGenerator.KEY);
-        if (decryptedChecksumFromFile == null || checksum == null) {
-            return false;
+        try {
+            String checksum = Checksum.generateFromFile(fileDirectory);
+            byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
+                    .readFromFile(checksumDirectory), KeyGenerator.KEY);
+            String checksumFromFile = new String(decryptedChecksumFromFile);
+            return checksum.equals(checksumFromFile);
+        } catch (CryptographyException | FileHandlerException e) {
+            // TODO: Add logging
+            System.exit(1);
         }
-        String checksumFromFile = new String(decryptedChecksumFromFile);
-        return checksum.equals(checksumFromFile);
+        return true;
     }
 }
