@@ -1,8 +1,10 @@
 package no.ntnu.nms.domain_model;
 
+import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.persistence.Controller;
 
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,14 +21,14 @@ public class PoolRegistry implements Serializable {
      */
     private final transient PropertyChangeListener pcl = evt -> {
         if (evt.getOldValue() != evt.getNewValue()) {
-            Controller.savePoolRegAndChecksum();
+            updatePoolReg();
         }
     };
 
     /**
      * Singleton instance.
      */
-    private static PoolRegistry instance = null;
+    public static PoolRegistry instance = null;
 
     /**
      * List of all pools, used by the registry
@@ -36,7 +38,7 @@ public class PoolRegistry implements Serializable {
     /**
      * Private constructor to prevent instantiation.
      */
-    private PoolRegistry() {
+    public PoolRegistry() {
         poolList = new ArrayList<>();
     }
 
@@ -46,7 +48,7 @@ public class PoolRegistry implements Serializable {
      */
     public static PoolRegistry getInstance() {
         if (instance == null) {
-            instance = new PoolRegistry();
+            Controller.loadPoolRegAndCheckChecksum();
         }
         return instance;
     }
@@ -69,7 +71,7 @@ public class PoolRegistry implements Serializable {
     public void addPool(Pool pool) {
         poolList.add(pool);
         pool.addPropertyChangeListener(pcl);
-        Controller.savePoolRegAndChecksum();
+        updatePoolReg();
     }
 
     /**
@@ -142,9 +144,17 @@ public class PoolRegistry implements Serializable {
             sb.append(pool.jsonify());
             sb.append(",");
         }
-        sb.deleteCharAt(sb.length() - 1);
+        if (instance.getPoolCount() > 0) sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
         return sb.toString();
     }
 
+    private void updatePoolReg() {
+        try {
+            Controller.savePoolRegAndChecksum();
+        } catch (FileHandlerException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
 }
