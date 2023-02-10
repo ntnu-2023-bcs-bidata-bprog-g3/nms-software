@@ -14,27 +14,19 @@ public class FileHandler {
      * @param data The byte array to write.
      */
     public static boolean writeToFile(byte[] data, String path) {
-        // Check if directory exists, if not create it
-        if (path.contains("/") || path.contains("\\")) {
-            Path directory = Paths.get(path.substring(0, path.lastIndexOf("/")));
-            if (Files.notExists(directory)) {
-                try {
-                    Files.createDirectories(directory);
-                } catch (IOException e) {
-                    return false;
-                }
-            }
-        }
-        // Write to file
         try {
-            FileOutputStream fileOut = new FileOutputStream(path);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(data);
-            out.flush();        // with or without flush??
-            out.close();
-            fileOut.flush();    // with or without flush??
-            fileOut.close();
-        } catch (IOException i) {
+            // Check if directory exists, if not create it
+            Path directory = Paths.get(path.substring(0, path.lastIndexOf(File.separator)));
+            if (Files.notExists(directory)) {
+                Files.createDirectories(directory);
+            }
+            // Write to file
+            try (FileOutputStream fileOut = new FileOutputStream(path);
+                 ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(data);
+            }
+        } catch (IOException e) {
+            //TODO: Add logging.
             return false;
         }
         return true;
