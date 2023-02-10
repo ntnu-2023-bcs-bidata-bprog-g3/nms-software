@@ -1,5 +1,7 @@
 package no.ntnu.nms.security;
 
+import no.ntnu.nms.exception.CryptographyException;
+import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.file_handler.FileHandler;
 
 import java.io.IOException;
@@ -19,18 +21,19 @@ public class Checksum {
      * @return {@link String} The checksum of the file.
      */
 
-    public static String generateFromFile(String path) {
+    public static String generateFromFile(String path) throws CryptographyException {
         byte[] data, hash;
         try {
             data = Files.readAllBytes(Paths.get(path));
             hash = MessageDigest.getInstance("MD5").digest(data);
             return new BigInteger(1, hash).toString(16);
-        } catch (IOException | NoSuchAlgorithmException | NumberFormatException e) {
-            //TODO: Add logging
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new CryptographyException("Failed to read file: " + e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new CryptographyException("Failed to create message digester: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            throw new CryptographyException("Failed to create hash: " + e.getMessage());
         }
-
-        return null;
     }
 
     /**
