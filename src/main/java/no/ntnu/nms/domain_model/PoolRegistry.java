@@ -101,22 +101,7 @@ public class PoolRegistry implements Serializable {
     public void removePool(Pool pool) {
         poolList.remove(pool);
         pool.removePropertyChangeListener(pcl);
-        Controller.savePoolRegAndChecksum();
-    }
-
-    /**
-     * Remove a pool from the registry by its media function.
-     * @param mediaFunction {@link String} media function of the pool to remove.
-     */
-    public void removePoolByMediaFunction(String mediaFunction) {
-        poolList.removeIf(pool -> pool.getMediaFunction().equals(mediaFunction));
-    }
-
-    /**
-     * Remove all pools from the registry.
-     */
-    public void removeAllPools() {
-        poolList.clear();
+        updatePoolReg();
     }
 
     /**
