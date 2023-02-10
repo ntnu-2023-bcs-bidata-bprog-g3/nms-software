@@ -80,16 +80,4 @@ public class Controller {
         byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
         return (PoolRegistry) SerializationUtils.deserialize(((byte[]) Cryptography.xorWithKey(encrypted, KeyGenerator.KEY)));
     }
-
-    /**
-     * Deletes the PoolRegistry file.
-     */
-    private static void deletePoolReg() {
-        Path path = Paths.get(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-        try {
-            Files.deleteIfExists(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
