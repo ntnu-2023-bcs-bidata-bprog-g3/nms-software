@@ -1,8 +1,11 @@
 package no.ntnu.nms.file_handler;
+import no.ntnu.nms.exception.FileHandlerException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Utility class for serializing and deserializing PoolRegistry objects.
@@ -34,20 +37,17 @@ ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
         }
     }
 
-    /**
+  /**
      * Reads a byte array from a file.
      * @return The byte array read from the file.
      */
-    public static byte[] readFromFile(String path) {
-        try {
-            FileInputStream fileIn = new FileInputStream(path);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            byte[] data = (byte[]) in.readObject();
-            in.close();
-            fileIn.close();
-            return data;
-        } catch (IOException | ClassNotFoundException i) {
-            return null;
+    public static byte[] readFromFile(String path) throws FileHandlerException {
+        try (FileInputStream fileIn = new FileInputStream(path); ObjectInputStream in = new ObjectInputStream(fileIn)) {
+            return (byte[]) in.readObject();
+        } catch (IOException e) {
+            throw new FileHandlerException("Failed to open and read file: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new FileHandlerException("File contains serialized object of non-Poolregiostry: " + e.getMessage());
         }
-    }
+    }  
 }
