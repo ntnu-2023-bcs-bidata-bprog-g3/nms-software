@@ -1,15 +1,15 @@
 package no.ntnu.nms.persistence;
 
 import no.ntnu.nms.domain_model.PoolRegistry;
+import no.ntnu.nms.exception.CryptographyException;
+import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.file_handler.FileHandler;
 import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
 import no.ntnu.nms.security.KeyGenerator;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 import org.springframework.util.SerializationUtils;
 
@@ -31,23 +31,25 @@ public class Controller {
     /**
      * Saves a PoolRegistry object to file and calculates a checksum, in addition to writing the
      * checksum to file.
-     * @return {@link Boolean} True if the PoolRegistry object was saved successfully,
-     * false otherwise.
      */
-    public static boolean savePoolRegAndChecksum() {
-        boolean successSave = savePoolReg();
-        boolean successWriteChecksum = true;
-        if (successSave) {
-            String checksum = Checksum.generateFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-            successWriteChecksum = FileHandler.writeToFile(Cryptography.xorWithKey(checksum.getBytes(),
-                    KeyGenerator.KEY), POOL_REGISTRY_FILE_CHECKSUM_PATH);
+    public static void savePoolRegAndChecksum() throws FileHandlerException {
+        try {
+            FileHandler.backup(POOL_REGISTRY_FILE_CHECKSUM_PATH);
+            FileHandler.backup(POOL_REGISTRY_FILE_DIRECTORY_PATH);
+        } catch (IOException e) {
+            throw new FileHandlerException("Failed to back up pool registry");
         }
-        if (!successWriteChecksum || !successSave) {
-            // TODO: ADD LOGGING!!!!
-            System.out.println("Major important error!");
-            return false;
+        byte[] encryptedPoolRegistry, checksum;
+        try {
+            encryptedPoolRegistry = Cryptography.xorWithKey(SerializationUtils.serialize(PoolRegistry.getInstance()), KeyGenerator.KEY);
+            FileHandler.writeToFile(encryptedPoolRegistry, POOL_REGISTRY_FILE_DIRECTORY_PATH);
+            checksum = Cryptography.xorWithKey(Checksum.generateFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH).getBytes(), KeyGenerator.KEY);
+        } catch (CryptographyException e) {
+            throw new FileHandlerException("Failed to perform encryption " + e.getMessage());
         }
-        return true;
+        FileHandler.writeToFile(checksum, POOL_REGISTRY_FILE_CHECKSUM_PATH);
+        FileHandler.deleteBackup(POOL_REGISTRY_FILE_CHECKSUM_PATH);
+        FileHandler.deleteBackup(POOL_REGISTRY_FILE_DIRECTORY_PATH);
     }
 
     /**
