@@ -50,4 +50,18 @@ ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             throw new FileHandlerException("File contains serialized object of non-Poolregiostry: " + e.getMessage());
         }
     }  
+
+    /**
+     * Creates a backup of a file
+     * @param path The path to the file to back up
+     * @throws IOException if there is an error writing the backup file
+     */
+    public static void backup(String path) throws IOException {
+        Path source = Path.of(path);
+        if (Files.exists(source)) {
+            Path backupPath = Path.of(path + ".bak");
+            Files.move(source, backupPath, StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
 }
