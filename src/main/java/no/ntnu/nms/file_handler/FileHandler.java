@@ -13,23 +13,25 @@ public class FileHandler {
      * Writes a byte array to a file.
      * @param data The byte array to write.
      */
-    public static boolean writeToFile(byte[] data, String path) {
+    public static void writeToFile(byte[] data, String path) throws FileHandlerException {
         try {
             // Check if directory exists, if not create it
             Path directory = Paths.get(path.substring(0, path.lastIndexOf(File.separator)));
             if (Files.notExists(directory)) {
                 Files.createDirectories(directory);
             }
-            // Write to file
-            try (FileOutputStream fileOut = new FileOutputStream(path);
-                 ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-                out.writeObject(data);
-            }
+        } catch (IOException e) {
+            throw new FileHandlerException("Failed to create directory: " + path + ". " + e.getMessage());
+        }
+
+        // Write to file
+        try (FileOutputStream fileOut = new FileOutputStream(path);
+ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(data);
         } catch (IOException e) {
             //TODO: Add logging.
-            return false;
+            throw new FileHandlerException("Failed to write to file: " + e.getMessage());
         }
-        return true;
     }
 
     /**
