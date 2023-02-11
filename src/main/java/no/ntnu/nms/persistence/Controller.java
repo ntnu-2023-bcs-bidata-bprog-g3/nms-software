@@ -54,32 +54,20 @@ public class Controller {
 
     /**
      * Loads a PoolRegistry object from file and checks the checksum.
-     * @return {@link PoolRegistry} The PoolRegistry object loaded from file, null if failed.
      */
-    public static PoolRegistry loadPoolRegAndCheckChecksum() {
-        PoolRegistry poolreg = loadPoolReg();
-        if (poolreg == null) return null;
-        if (!Checksum.compare(POOL_REGISTRY_FILE_DIRECTORY_PATH,
-                POOL_REGISTRY_FILE_CHECKSUM_PATH)) return null;
+    public static void loadPoolRegAndCheckChecksum() {
+        PoolRegistry poolreg = null;
+        try {
+            byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
+            if (encrypted == null) throw new FileHandlerException("Failed to read pool registry");
+            poolreg = (PoolRegistry) SerializationUtils.deserialize(Cryptography.xorWithKey(encrypted, KeyGenerator.KEY));
+            if (poolreg == null) throw new FileHandlerException("Failed to decrypt pool registry");
+            if (!Checksum.compare(POOL_REGISTRY_FILE_DIRECTORY_PATH, POOL_REGISTRY_FILE_CHECKSUM_PATH)) throw new FileHandlerException("Failed to compare old and new checksum");
+        } catch (FileHandlerException e) {
+            // TODO: ADD LOGGING USING e.message()
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
         PoolRegistry.updatePoolRegistryInstance(poolreg);
-        return poolreg;
-    }
-
-    /**
-     * Saves a PoolRegistry object to file.
-     * @return True if the PoolRegistry object was saved successfully, false otherwise.
-     */
-    private static boolean savePoolReg() {
-        byte[] encrypted = Cryptography.xorWithKey(SerializationUtils.serialize(PoolRegistry.getInstance()), KeyGenerator.KEY);
-        return FileHandler.writeToFile(encrypted, POOL_REGISTRY_FILE_DIRECTORY_PATH);
-    }
-
-    /**
-     * Loads a PoolRegistry object from file.
-     * @return The PoolRegistry object loaded from file.
-     */
-    private static PoolRegistry loadPoolReg() {
-        byte[] encrypted = FileHandler.readFromFile(POOL_REGISTRY_FILE_DIRECTORY_PATH);
-        return (PoolRegistry) SerializationUtils.deserialize(((byte[]) Cryptography.xorWithKey(encrypted, KeyGenerator.KEY)));
     }
 }
