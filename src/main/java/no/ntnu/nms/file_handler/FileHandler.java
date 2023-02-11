@@ -64,4 +64,16 @@ ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
         }
     }
 
+    public static void deleteBackup(String path) {
+        Path source = Path.of(path);
+        if (Files.exists(source)) {
+            Path backupPath = Path.of(path + ".bak");
+            try {
+                Files.deleteIfExists(backupPath);
+            } catch (IOException e) {
+                //TODO :ADD LOGGING, but not further actions??
+            }
+        }
+    }
+
 }
