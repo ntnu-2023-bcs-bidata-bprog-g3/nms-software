@@ -1,5 +1,7 @@
 package no.ntnu.nms.security;
 
+import no.ntnu.nms.exception.CryptographyException;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -27,7 +29,7 @@ public class KeyGenerator {
      * @return The generated key.
      * @throws RuntimeException if the SHA-256 algorithm is not available.
      */
-    public static byte[] generateKey() {
+    public static byte[] generateKey() throws CryptographyException {
         byte[] salt = new byte[16];
         byte[] key = new byte[KEY_LENGTH / 8];
         try {
@@ -46,7 +48,7 @@ public class KeyGenerator {
             }
             System.arraycopy(input, 0, key, 0, key.length);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new CryptographyException("Failed to generate key: " + e.getMessage());
         }
         return key;
     }
