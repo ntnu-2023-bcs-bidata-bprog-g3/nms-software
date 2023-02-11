@@ -1,5 +1,7 @@
 package no.ntnu.nms.license_ledger;
 
+import no.ntnu.nms.exception.FileHandlerException;
+import no.ntnu.nms.exception.LedgerException;
 import no.ntnu.nms.file_handler.FileHandler;
 import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
@@ -33,13 +35,13 @@ public abstract class LicenseLedgerController {
         this.ledgerHashPath = ledgerDir + LEDGER_HASH_NAME;
     }
 
-    protected LicenseLedgerController(String ledgerDir) {
+    protected LicenseLedgerController(String ledgerDir) throws FileHandlerException {
         this.setLedgerPath(ledgerDir);
         this.setLedgerHashPath(ledgerDir);
         try {
             this.createInitialLedgerFiles();
         } catch (FileExistsException e) {
-            //TODO: ADD IVANS EXCEPTIONS HANDLING
+            throw new FileHandlerException(e.getMessage());
         }
     }
 
@@ -80,11 +82,11 @@ public abstract class LicenseLedgerController {
      * Updates the ledger checksum.
      * @return {@link Boolean} True if the ledger checksum was updated successfully, false otherwise.
      */
-    private boolean updateLedgerHash() {
+    private void updateLedgerHash() {
         String checksum = Checksum.generateFromFile(ledgerPath);
-        if (checksum == null) return false;
+        if (checksum == null) throw new LedgerException("");
         byte[] encryptedNewHash = Cryptography.xorWithKey(checksum.getBytes(), KeyGenerator.KEY);
-        return FileHandler.writeToFile(encryptedNewHash, ledgerHashPath);
+        FileHandler.writeToFile(encryptedNewHash, ledgerHashPath);
     }
 
     /**
@@ -102,7 +104,8 @@ public abstract class LicenseLedgerController {
         String oldLedgerString = (String) SerializationUtils.deserialize(oldLedger);
         String newLedgerString = oldLedgerString + "\n" + licenseString;
         byte[] newLedger = Cryptography.xorWithKey(SerializationUtils.serialize(newLedgerString), KeyGenerator.KEY);
-        if (!FileHandler.writeToFile(newLedger, ledgerPath)) return false;
-        return updateLedgerHash();
+        FileHandler.writeToFile(newLedger, ledgerPath);
+        updateLedgerHash();
+        return true;
     }
 }
