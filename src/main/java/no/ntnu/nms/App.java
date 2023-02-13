@@ -30,5 +30,11 @@ public class App {
         poolreg.addPool(new Pool("test2", 23, "A tester pool"));
         poolreg.addPool(new Pool("test3", 23, "A tester pool"));
 
+        /*
+        Issues:
+        - PoolRegistry.instance is public: it should absolutely not be public, mostly because of the singelton pattern.
+        - There is no hidden / standard way of bootstrapping the license ledger, the same as the pool registry file.
+         */
+
     }
 }
