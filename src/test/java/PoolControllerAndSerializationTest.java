@@ -1,11 +1,3 @@
-import no.ntnu.nms.domain_model.Pool;
-import no.ntnu.nms.domain_model.PoolRegistry;
-import no.ntnu.nms.persistence.Controller;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 //TODO: Fix this test
 public class PoolControllerAndSerializationTest {
 
