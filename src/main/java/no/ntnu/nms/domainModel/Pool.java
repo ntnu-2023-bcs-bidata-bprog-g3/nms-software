@@ -1,4 +1,4 @@
-package no.ntnu.nms.domain_model;
+package no.ntnu.nms.domainModel;
 
 
 import java.beans.PropertyChangeListener;

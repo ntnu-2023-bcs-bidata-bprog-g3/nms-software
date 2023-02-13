@@ -1,6 +1,6 @@
 package no.ntnu.nms.persistence;
 
-import no.ntnu.nms.domain_model.PoolRegistry;
+import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.file_handler.FileHandler;

@@ -1,4 +1,4 @@
-package no.ntnu.nms.domain_model;
+package no.ntnu.nms.domainModel;
 
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.persistence.Controller;

@@ -1,6 +1,6 @@
 package no.ntnu.nms;
 
-import no.ntnu.nms.domain_model.PoolRegistry;
+import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.persistence.Controller;
 
 public class Init {
