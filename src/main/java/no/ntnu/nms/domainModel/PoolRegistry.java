@@ -4,7 +4,6 @@ import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.persistence.Controller;
 
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
