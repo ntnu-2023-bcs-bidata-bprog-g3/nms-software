@@ -1,4 +1,4 @@
-package no.ntnu.nms.license_ledger;
+package no.ntnu.nms.licenseLedger;
 
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LedgerException;

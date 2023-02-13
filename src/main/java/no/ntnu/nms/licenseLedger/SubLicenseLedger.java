@@ -1,4 +1,4 @@
-package no.ntnu.nms.license_ledger;
+package no.ntnu.nms.licenseLedger;
 
 public class SubLicenseLedger extends LicenseLedgerController {
 
