@@ -1,6 +1,9 @@
 package no.ntnu.nms.security;
 
-import no.ntnu.nms.persistence.FileHandler;
+import no.ntnu.nms.exception.CryptographyException;
+import no.ntnu.nms.exception.FileHandlerException;
+import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.logging.Logging;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -13,24 +16,29 @@ import java.security.NoSuchAlgorithmException;
  * Utility class for calculating checksums.
  */
 public class Checksum {
+
     /**
      * Calculates the checksum of a file.
      * @param path {@link String} The path to the file to calculate the checksum of.
      * @return {@link String} The checksum of the file.
      */
 
-    public static String generateFromFile(String path) {
+    public static String generateFromFile(String path) throws CryptographyException {
         byte[] data, hash;
         try {
             data = Files.readAllBytes(Paths.get(path));
             hash = MessageDigest.getInstance("MD5").digest(data);
             return new BigInteger(1, hash).toString(16);
-        } catch (IOException | NoSuchAlgorithmException | NumberFormatException e) {
-            //TODO: Add logging
-            e.printStackTrace();
+        } catch (IOException e) {
+            Logging.getLogger().warning("Failed to read file: " + e.getMessage());
+            throw new CryptographyException("Failed to read file: " + e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            Logging.getLogger().warning("Failed to create message digester: " + e.getMessage());
+            throw new CryptographyException("Failed to create message digester: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            Logging.getLogger().warning("Failed to create hash: " + e.getMessage());
+            throw new CryptographyException("Failed to create hash: " + e.getMessage());
         }
-
-        return null;
     }
 
     /**
@@ -40,13 +48,16 @@ public class Checksum {
      * @return {@link Boolean} True if the checksums match, false otherwise.
      */
     public static boolean compare(String fileDirectory, String checksumDirectory) {
-        String checksum = Checksum.generateFromFile(fileDirectory);
-        byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
-                .readFromFile(checksumDirectory), KeyGenerator.KEY);
-        if (decryptedChecksumFromFile == null || checksum == null) {
-            return false;
+        try {
+            String checksum = Checksum.generateFromFile(fileDirectory);
+            byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
+                    .readFromFile(checksumDirectory), KeyGenerator.KEY);
+            String checksumFromFile = new String(decryptedChecksumFromFile);
+            return checksum.equals(checksumFromFile);
+        } catch (CryptographyException | FileHandlerException e) {
+            Logging.getLogger().severe("Unable to compare checksums. Core functionality affected.");
+            System.exit(1);
         }
-        String checksumFromFile = new String(decryptedChecksumFromFile);
-        return checksum.equals(checksumFromFile);
+        return true;
     }
 }

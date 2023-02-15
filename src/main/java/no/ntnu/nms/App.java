@@ -1,7 +1,5 @@
 package no.ntnu.nms;
 
-import no.ntnu.nms.domain_model.Pool;
-import no.ntnu.nms.domain_model.PoolRegistry;
 import no.ntnu.nms.logging.Logging;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,12 +21,5 @@ public class App {
 
         // Starts the API WebServer and hosts the API from the ApiApp class.
         ApplicationContext ctx = SpringApplication.run(App.class, args);
-        System.out.println("Application name: " + ctx.getDisplayName());
-
-        PoolRegistry poolreg = PoolRegistry.getInstance();
-        poolreg.addPool(new Pool("test1", 23, "A tester pool"));
-        poolreg.addPool(new Pool("test2", 23, "A tester pool"));
-        poolreg.addPool(new Pool("test3", 23, "A tester pool"));
-
     }
 }

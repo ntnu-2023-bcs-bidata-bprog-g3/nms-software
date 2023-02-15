@@ -1,5 +1,6 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +28,16 @@ public class LicenseHandler {
      */
     @PostMapping(value={""})
     public String licensePost(@RequestBody Optional<MultipartFile> file) throws IOException {
-
+        Logging.getLogger().info("License endpoint called");
         if (file.isEmpty() || file.get().getSize() == 0) {
+            Logging.getLogger().info("No file uploaded");
             return "{\"error\": \"No file uploaded\"}";
         }
 
         MultipartFile realFile = file.get();
 
         if (!Objects.equals(FilenameUtils.getExtension(realFile.getOriginalFilename()), "zip")) {
+            Logging.getLogger().info(realFile.getName() + " is not a zip file");
             return "{\"error\": \"" + realFile.getName() + " is not a zip file\"}";
         }
 
