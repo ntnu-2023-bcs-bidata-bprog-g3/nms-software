@@ -24,10 +24,14 @@ public class PoolRegistry implements Serializable {
         }
     };
 
+    private static final String poolRegistryDir = "data/pool/";
+    private static final String poolRegistryName = "poolreg.ser";
+    private static final String poolRegistryPath = poolRegistryDir + poolRegistryName;
+
     /**
      * Singleton instance.
      */
-    public static PoolRegistry instance = null;
+    private static PoolRegistry instance = null;
 
     /**
      * List of all pools, used by the registry
@@ -37,8 +41,18 @@ public class PoolRegistry implements Serializable {
     /**
      * Private constructor to prevent instantiation.
      */
-    public PoolRegistry() {
+    private PoolRegistry() {
         poolList = new ArrayList<>();
+    }
+
+    /**
+     * Init function used for setting up the application
+     */
+    public static void init() {
+        if (instance == null) {
+            instance = new PoolRegistry();
+            Controller.saveToFile(instance, poolRegistryPath, true);
+        }
     }
 
     /**
@@ -47,8 +61,9 @@ public class PoolRegistry implements Serializable {
      */
     public static PoolRegistry getInstance() {
         if (instance == null) {
-            Controller.loadPoolRegAndCheckChecksum();
+            Controller.loadFromFile(poolRegistryPath);
         }
+
         return instance;
     }
 
@@ -150,7 +165,7 @@ public class PoolRegistry implements Serializable {
 
     private void updatePoolReg() {
         try {
-            Controller.savePoolRegAndChecksum();
+            Controller.saveToFile(this, poolRegistryPath, true);
         } catch (FileHandlerException e) {
             System.out.println(e.getMessage());
             System.exit(1);
