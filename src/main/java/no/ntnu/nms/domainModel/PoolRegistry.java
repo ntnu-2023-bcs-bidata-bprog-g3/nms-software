@@ -1,7 +1,7 @@
 package no.ntnu.nms.domainModel;
 
 import no.ntnu.nms.exception.FileHandlerException;
-import no.ntnu.nms.persistence.Controller;
+import no.ntnu.nms.persistence.PersistenceController;
 
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
@@ -51,7 +51,7 @@ public class PoolRegistry implements Serializable {
     public static void init() {
         if (instance == null) {
             instance = new PoolRegistry();
-            Controller.saveToFile(instance, poolRegistryPath, true);
+            PersistenceController.saveToFile(instance, poolRegistryPath, true);
         }
     }
 
@@ -61,7 +61,7 @@ public class PoolRegistry implements Serializable {
      */
     public static PoolRegistry getInstance() {
         if (instance == null) {
-            Controller.loadFromFile(poolRegistryPath);
+            PersistenceController.loadFromFile(poolRegistryPath);
         }
 
         return instance;
@@ -165,7 +165,7 @@ public class PoolRegistry implements Serializable {
 
     private void updatePoolReg() {
         try {
-            Controller.saveToFile(this, poolRegistryPath, true);
+            PersistenceController.saveToFile(this, poolRegistryPath, true);
         } catch (FileHandlerException e) {
             System.out.println(e.getMessage());
             System.exit(1);

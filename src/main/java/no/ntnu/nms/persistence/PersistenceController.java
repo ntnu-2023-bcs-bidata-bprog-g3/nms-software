@@ -16,7 +16,7 @@ import org.springframework.util.SerializationUtils;
 /**
  * Utility class for saving and loading PoolRegistry objects.
  */
-public class Controller {
+public class PersistenceController {
 
     /**
      * Saves a PoolRegistry object to file and calculates a checksum, in addition to writing the

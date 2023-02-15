@@ -3,7 +3,7 @@ package no.ntnu.nms.licenseLedger;
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LedgerException;
-import no.ntnu.nms.persistence.Controller;
+import no.ntnu.nms.persistence.PersistenceController;
 import no.ntnu.nms.security.Checksum;
 
 /**
@@ -27,7 +27,7 @@ public class LicenseLedger {
     public static void init() {
         if (instance == null) {
             instance = new LicenseLedger(LEDGER_PATH);
-            Controller.saveToFile("", LEDGER_PATH, false);
+            PersistenceController.saveToFile("", LEDGER_PATH, false);
         }
     }
 
@@ -70,7 +70,7 @@ public class LicenseLedger {
             throw new LedgerException("Failed to read license: " + licensePath);
         }
         try {
-            Controller.appendToFile(checksum, ledgerPath);
+            PersistenceController.appendToFile(checksum, ledgerPath);
         } catch (FileHandlerException e) {
             throw new LedgerException("Failed to append to ledger: " + e.getMessage());
         }
@@ -89,7 +89,7 @@ public class LicenseLedger {
         } catch (CryptographyException e) {
             throw new LedgerException("Failed to read license: " + licensePath);
         }
-        return Controller.loadLedger(ledgerPath).contains(checksum);
+        return PersistenceController.loadLedger(ledgerPath).contains(checksum);
     }
 
     /**
@@ -98,6 +98,6 @@ public class LicenseLedger {
      * @throws LedgerException If the ledger cannot be loaded.
      */
     public String getLedger() throws LedgerException {
-        return Controller.loadLedger(this.ledgerPath);
+        return PersistenceController.loadLedger(this.ledgerPath);
     }
 }

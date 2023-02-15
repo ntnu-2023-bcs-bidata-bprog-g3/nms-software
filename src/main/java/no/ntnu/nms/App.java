@@ -4,7 +4,7 @@ import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.licenseLedger.LicenseLedger;
 import no.ntnu.nms.logging.Logging;
-import no.ntnu.nms.persistence.Controller;
+import no.ntnu.nms.persistence.PersistenceController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -37,7 +37,7 @@ public class App {
         topledger.addLicenseToLedger("data/temp/license.txt");
         topledger.addLicenseToLedger("data/temp/license.txt");
 
-        System.out.println(Controller.loadLedger("data/temp/license.txt"));
+        System.out.println(PersistenceController.loadLedger("data/temp/license.txt"));
 
     }
 }
