@@ -1,11 +1,14 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.zip.ZipInputStream;
 
 import static no.ntnu.nms.api.Constants.BASE_URL;
 
@@ -23,7 +26,7 @@ public class LicenseHandler {
      * @return {@link String} a message that the file was uploaded.
      */
     @PostMapping(value={""})
-    public String licensePost(@RequestBody Optional<MultipartFile> file) {
+    public String licensePost(@RequestBody Optional<MultipartFile> file) throws IOException {
 
         if (file.isEmpty() || file.get().getSize() == 0) {
             return "{\"error\": \"No file uploaded\"}";
@@ -32,11 +35,12 @@ public class LicenseHandler {
         MultipartFile realFile = file.get();
 
         if (!Objects.equals(FilenameUtils.getExtension(realFile.getOriginalFilename()), "zip")) {
-            return "{\"error\": \"" + realFile.getOriginalFilename() + " is not a zip file\"}";
+            return "{\"error\": \"" + realFile.getName() + " is not a zip file\"}";
         }
 
-        // Implement the zip file parser here
+        LicenseParser parser = new LicenseParser(new ZipInputStream(file.get().getInputStream()));
+        parser.parse();
 
-        return "Successfully uploaded " + realFile.getOriginalFilename();
+        return "Successfully uploaded " + realFile.getName();
     }
 }
