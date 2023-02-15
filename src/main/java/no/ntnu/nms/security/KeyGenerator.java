@@ -25,7 +25,7 @@ public class KeyGenerator {
     private static final int MAGIC_NUMBER = 69;
 
 
-    /*
+    /**
      * Generates a key for encryption/decryption.
      * @return The generated key.
      * @throws RuntimeException if the SHA-256 algorithm is not available.

@@ -2,7 +2,7 @@ package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
 
-/*
+/**
  * Utility class for encrypting and decrypting data.
  */
 public class Cryptography {
