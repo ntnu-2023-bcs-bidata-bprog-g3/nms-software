@@ -1,5 +1,7 @@
 package no.ntnu.nms.parser;
 
+import no.ntnu.nms.exception.ParserException;
+
 import java.io.File;
 import java.util.zip.ZipInputStream;
 
@@ -9,14 +11,14 @@ public class LicenseParser {
     private final File signatureFile;
     private final File publicKeyFile;
 
-    public LicenseParser(ZipInputStream inputStream) throws IllegalArgumentException {
+    public LicenseParser(ZipInputStream inputStream) throws ParserException {
         File[] files = ZipUtil.unzipper(inputStream);
         licenseFile = files[0];
         signatureFile = files[1];
         publicKeyFile = files[2];
 
         if (licenseFile == null || signatureFile == null || publicKeyFile == null) {
-            throw new IllegalArgumentException("The path does not contain the required files");
+            throw new ParserException("The Zip file does not contain the required files");
         }
     }
 

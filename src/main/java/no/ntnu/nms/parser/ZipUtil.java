@@ -1,5 +1,6 @@
 package no.ntnu.nms.parser;
 
+import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.logging.Logging;
 
 import java.io.*;
@@ -48,7 +49,8 @@ public class ZipUtil {
                 throw new IOException("Zip file is missing a file");
             }
         } catch (IOException e) {
-            Logging.getLogger().severe("Failed");
+            Logging.getLogger().severe("Failed to unzip the file" + e.getMessage());
+            throw new ParserException("Failed to unzip the file: " + e.getMessage());
         }
         return new File[]{licenseFile, signatureFile, publicKeyFile};
     }
