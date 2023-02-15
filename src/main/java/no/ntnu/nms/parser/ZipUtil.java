@@ -31,15 +31,12 @@ public class ZipUtil {
                 switch (entry.getName()) {
                     case "license.json":
                         licenseFile = new File(entry.getName());
-                        //Files.copy(inputStream, licenseFile.toPath());
                         break;
                     case "license_sign.json":
                         signatureFile = new File(entry.getName());
-                        //Files.copy(inputStream, signatureFile.toPath());
                         break;
                     case "public_key.pem":
                         publicKeyFile = new File(entry.getName());
-                        //Files.copy(inputStream, publicKeyFile.toPath());
                         break;
                     default:
                         throw new IOException("Zip file contains an unknown file: " + entry.getName());
