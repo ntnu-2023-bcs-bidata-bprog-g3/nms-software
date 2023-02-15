@@ -3,6 +3,7 @@ package no.ntnu.nms.security;
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.logging.Logging;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -15,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
  * Utility class for calculating checksums.
  */
 public class Checksum {
+
     /**
      * Calculates the checksum of a file.
      * @param path {@link String} The path to the file to calculate the checksum of.
@@ -28,10 +30,13 @@ public class Checksum {
             hash = MessageDigest.getInstance("MD5").digest(data);
             return new BigInteger(1, hash).toString(16);
         } catch (IOException e) {
+            Logging.getLogger().warning("Failed to read file: " + e.getMessage());
             throw new CryptographyException("Failed to read file: " + e.getMessage());
         } catch (NoSuchAlgorithmException e) {
+            Logging.getLogger().warning("Failed to create message digester: " + e.getMessage());
             throw new CryptographyException("Failed to create message digester: " + e.getMessage());
         } catch (NumberFormatException e) {
+            Logging.getLogger().warning("Failed to create hash: " + e.getMessage());
             throw new CryptographyException("Failed to create hash: " + e.getMessage());
         }
     }
@@ -50,7 +55,7 @@ public class Checksum {
             String checksumFromFile = new String(decryptedChecksumFromFile);
             return checksum.equals(checksumFromFile);
         } catch (CryptographyException | FileHandlerException e) {
-            // TODO: Add logging
+            Logging.getLogger().severe("Unable to compare checksums. Core functionality affected.");
             System.exit(1);
         }
         return true;

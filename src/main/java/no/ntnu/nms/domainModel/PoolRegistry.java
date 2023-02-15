@@ -1,6 +1,7 @@
 package no.ntnu.nms.domainModel;
 
 import no.ntnu.nms.exception.FileHandlerException;
+import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
 
 import java.beans.PropertyChangeListener;
@@ -167,6 +168,8 @@ public class PoolRegistry implements Serializable {
         try {
             PersistenceController.saveToFile(this, poolRegistryPath, true);
         } catch (FileHandlerException e) {
+            Logging.getLogger().severe("Unable to update pool registry. " +
+                    "Core functionality has been affected. Error: " + e.getMessage());
             System.out.println(e.getMessage());
             System.exit(1);
         }
