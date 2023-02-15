@@ -34,10 +34,9 @@ public class App {
 
         LicenseLedger topledger = LicenseLedger.getInstance();
 
-        topledger.addLicenseToLedger("data/temp/license.txt");
-        topledger.addLicenseToLedger("data/temp/license.txt");
+        //topledger.addLicenseToLedger("data/temp/license.txt");
+        //topledger.addLicenseToLedger("data/temp/license.txt");
 
-        System.out.println(PersistenceController.loadLedger("data/temp/license.txt"));
-
+        System.out.println(topledger.getLedger());
     }
 }
