@@ -1,6 +1,8 @@
 package no.ntnu.nms.domainModel;
 
 
+import no.ntnu.nms.logging.Logging;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -15,10 +17,12 @@ public class Pool implements Serializable {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.changes.addPropertyChangeListener(listener);
+        Logging.getLogger().info("Pool registry change listener successfully added");
     }
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.changes.removePropertyChangeListener(listener);
+        Logging.getLogger().info("Pool registry change listener successfully removed");
     }
 
     /**
@@ -45,13 +49,14 @@ public class Pool implements Serializable {
      * @param description {@link String} description of the media function in the pool.
      */
     public Pool(String mediaFunction, int timeLeftSeconds, String description) {
+        Logging.getLogger().info("Creating new pool for mediafunction " + mediaFunction);
         setMediaFunction(mediaFunction);
         setId((long) (Math.random() * 1000000000000000000L));
         setDescription(description);
         try {
             setTimeLeftSeconds(timeLeftSeconds);
         } catch (IllegalArgumentException e) {
-            // TODO: Add logging
+            Logging.getLogger().warning("Time left in seconds cannot be negative. Setting 0");
             setTimeLeftSeconds(0);
         }
     }
@@ -82,6 +87,7 @@ public class Pool implements Serializable {
      */
     public void setTimeLeftSeconds(int timeLeftSeconds) {
         if (timeLeftSeconds < 0) {
+            Logging.getLogger().warning("Time left in seconds cannot be negative");
             throw new IllegalArgumentException("Time left in seconds cannot be negative");
         }
         int oldTimeLeftSeconds = this.timeLeftSeconds;

@@ -3,6 +3,7 @@ package no.ntnu.nms.licenseLedger;
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LedgerException;
+import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
 import no.ntnu.nms.security.Checksum;
 
@@ -67,11 +68,13 @@ public class LicenseLedger {
         try {
             checksum = Checksum.generateFromFile(licensePath);
         } catch (CryptographyException e) {
+            Logging.getLogger().warning("Failed to read license: " + licensePath);
             throw new LedgerException("Failed to read license: " + licensePath);
         }
         try {
             PersistenceController.appendToFile(checksum, ledgerPath);
         } catch (FileHandlerException e) {
+            Logging.getLogger().warning("Failed to append to ledger: " + e.getMessage());
             throw new LedgerException("Failed to append to ledger: " + e.getMessage());
         }
     }
@@ -87,6 +90,7 @@ public class LicenseLedger {
         try {
             checksum = Checksum.generateFromFile(licensePath);
         } catch (CryptographyException e) {
+            Logging.getLogger().warning("Failed to read license: " + licensePath);
             throw new LedgerException("Failed to read license: " + licensePath);
         }
         return PersistenceController.loadLedger(ledgerPath).contains(checksum);

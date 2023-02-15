@@ -1,6 +1,7 @@
 package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
+import no.ntnu.nms.logging.Logging;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -48,6 +49,7 @@ public class KeyGenerator {
             }
             System.arraycopy(input, 0, key, 0, key.length);
         } catch (NoSuchAlgorithmException e) {
+            Logging.getLogger().warning("Failed to generate key: " + e.getMessage());
             throw new CryptographyException("Failed to generate key: " + e.getMessage());
         }
         return key;

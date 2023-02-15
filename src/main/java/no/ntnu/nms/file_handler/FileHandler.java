@@ -1,5 +1,6 @@
 package no.ntnu.nms.file_handler;
 import no.ntnu.nms.exception.FileHandlerException;
+import no.ntnu.nms.logging.Logging;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -24,6 +25,7 @@ public class FileHandler {
                 Files.createDirectories(directory);
             }
         } catch (IOException e) {
+            Logging.getLogger().warning("Failed to create directory: " + path + ". " + e.getMessage());
             throw new FileHandlerException("Failed to create directory: " + path + ". " + e.getMessage());
         }
 
@@ -32,7 +34,7 @@ public class FileHandler {
 ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(data);
         } catch (IOException e) {
-            //TODO: Add logging.
+            Logging.getLogger().warning("Failed to write to file: " + e.getMessage());
             throw new FileHandlerException("Failed to write to file: " + e.getMessage());
         }
     }
@@ -45,8 +47,10 @@ ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
         try (FileInputStream fileIn = new FileInputStream(path); ObjectInputStream in = new ObjectInputStream(fileIn)) {
             return (byte[]) in.readObject();
         } catch (IOException e) {
+            Logging.getLogger().warning("Failed to open and read file: " + e.getMessage());
             throw new FileHandlerException("Failed to open and read file: " + e.getMessage());
         } catch (ClassNotFoundException e) {
+            Logging.getLogger().warning("File contains serialized object of non-Poolregiostry: " + e.getMessage());
             throw new FileHandlerException("File contains serialized object of non-Poolregiostry: " + e.getMessage());
         }
     }  
@@ -71,7 +75,7 @@ ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             try {
                 Files.deleteIfExists(backupPath);
             } catch (IOException e) {
-                //TODO :ADD LOGGING, but not further actions??
+                Logging.getLogger().info("Unable to delete backup. It wont affect core functionality");
             }
         }
     }
