@@ -30,7 +30,7 @@ public class PersistenceController {
             }
             FileHandler.backup(filePath);
         } catch (IOException e) {
-            throw new FileHandlerException("Failed to back up pool registry");
+            throw new FileHandlerException("Failed to back up file: " + e.getMessage());
         }
         byte[] encryptedPoolRegistry, checksum;
         try {
