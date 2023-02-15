@@ -1,6 +1,5 @@
-# Application specific files
-*.ser
-*.md5
+data/
+logs/
 
 ### VisualStudioCode ###
 .vscode

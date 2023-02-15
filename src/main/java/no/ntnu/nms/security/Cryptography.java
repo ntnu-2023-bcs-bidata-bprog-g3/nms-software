@@ -1,6 +1,8 @@
 package no.ntnu.nms.security;
 
-/*
+import no.ntnu.nms.exception.CryptographyException;
+
+/**
  * Utility class for encrypting and decrypting data.
  */
 public class Cryptography {
@@ -11,8 +13,8 @@ public class Cryptography {
      * @param key The key to XOR with.
      * @return The XORed byte array.
      */
-    public static byte[] xorWithKey(byte[] input, byte[] key) {
-        if (input == null) return null;
+    public static byte[] xorWithKey(byte[] input, byte[] key) throws CryptographyException {
+        if (input == null) throw new CryptographyException("Failed to decrypt/encrypt: input is null");
         
         byte[] output = new byte[input.length];
         for (int i = 0; i < input.length; i++) {

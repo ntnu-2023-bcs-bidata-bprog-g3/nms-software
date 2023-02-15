@@ -1,6 +1,8 @@
-package no.ntnu.nms.domain_model;
+package no.ntnu.nms.domainModel;
 
-import no.ntnu.nms.persistence.Controller;
+import no.ntnu.nms.exception.FileHandlerException;
+import no.ntnu.nms.logging.Logging;
+import no.ntnu.nms.persistence.PersistenceController;
 
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
@@ -19,9 +21,13 @@ public class PoolRegistry implements Serializable {
      */
     private final transient PropertyChangeListener pcl = evt -> {
         if (evt.getOldValue() != evt.getNewValue()) {
-            Controller.savePoolRegAndChecksum();
+            updatePoolReg();
         }
     };
+
+    private static final String poolRegistryDir = "data/pool/";
+    private static final String poolRegistryName = "poolreg.ser";
+    private static final String poolRegistryPath = poolRegistryDir + poolRegistryName;
 
     /**
      * Singleton instance.
@@ -41,13 +47,24 @@ public class PoolRegistry implements Serializable {
     }
 
     /**
+     * Init function used for setting up the application
+     */
+    public static void init() {
+        if (instance == null) {
+            instance = new PoolRegistry();
+            PersistenceController.saveToFile(instance, poolRegistryPath, true);
+        }
+    }
+
+    /**
      * Get the singleton instance of the registry.
      * @return {@link PoolRegistry} getter for the singleton instance.
      */
     public static PoolRegistry getInstance() {
         if (instance == null) {
-            instance = new PoolRegistry();
+            PersistenceController.loadFromFile(poolRegistryPath);
         }
+
         return instance;
     }
 
@@ -69,7 +86,7 @@ public class PoolRegistry implements Serializable {
     public void addPool(Pool pool) {
         poolList.add(pool);
         pool.addPropertyChangeListener(pcl);
-        Controller.savePoolRegAndChecksum();
+        updatePoolReg();
     }
 
     /**
@@ -101,22 +118,7 @@ public class PoolRegistry implements Serializable {
     public void removePool(Pool pool) {
         poolList.remove(pool);
         pool.removePropertyChangeListener(pcl);
-        Controller.savePoolRegAndChecksum();
-    }
-
-    /**
-     * Remove a pool from the registry by its media function.
-     * @param mediaFunction {@link String} media function of the pool to remove.
-     */
-    public void removePoolByMediaFunction(String mediaFunction) {
-        poolList.removeIf(pool -> pool.getMediaFunction().equals(mediaFunction));
-    }
-
-    /**
-     * Remove all pools from the registry.
-     */
-    public void removeAllPools() {
-        poolList.clear();
+        updatePoolReg();
     }
 
     /**
@@ -157,9 +159,19 @@ public class PoolRegistry implements Serializable {
             sb.append(pool.jsonify());
             sb.append(",");
         }
-        sb.deleteCharAt(sb.length() - 1);
+        if (instance.getPoolCount() > 0) sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
         return sb.toString();
     }
 
+    private void updatePoolReg() {
+        try {
+            PersistenceController.saveToFile(this, poolRegistryPath, true);
+        } catch (FileHandlerException e) {
+            Logging.getLogger().severe("Unable to update pool registry. " +
+                    "Core functionality has been affected. Error: " + e.getMessage());
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
 }

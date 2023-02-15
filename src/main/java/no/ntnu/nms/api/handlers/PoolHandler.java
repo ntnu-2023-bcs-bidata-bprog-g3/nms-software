@@ -1,11 +1,12 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.logging.Logging;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import static no.ntnu.nms.api.Constants.BASE_URL;
 
-import no.ntnu.nms.domain_model.PoolRegistry;
+import no.ntnu.nms.domainModel.PoolRegistry;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -24,11 +25,13 @@ public class PoolHandler {
     @GetMapping(value={"/{mediaFunction}"})
     @ResponseStatus(HttpStatus.OK)
     public String poolGetter(@PathVariable String mediaFunction) {
+        Logging.getLogger().info("Pool endpoint called with media function " + mediaFunction);
         try {
             return PoolRegistry.getInstance()
                     .getPoolByMediaFunction(mediaFunction)
                     .jsonify();
         } catch (NullPointerException e) {
+            Logging.getLogger().info("Failed to find pool with media function " + mediaFunction);
             return "{\"error\": \"No pool with media function " + mediaFunction + " found\"}";
         }
 
@@ -41,7 +44,9 @@ public class PoolHandler {
     @GetMapping(value={"/all"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllPools() {
+        Logging.getLogger().info("Pool endpoint called for all");
         if (!PoolRegistry.getInstance().getPoolList().hasNext()) {
+            Logging.getLogger().info("No pools found");
             return "{\"error\": \"No pools found\"}";
         }
         return PoolRegistry.getInstance().jsonify();

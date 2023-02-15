@@ -1,5 +1,6 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.logging.Logging;
 import org.springframework.web.bind.annotation.*;
 
 import static no.ntnu.nms.api.Constants.BASE_URL;
@@ -17,6 +18,7 @@ public class Root {
      */
     @GetMapping(value={""})
     public String rootEndpoint() {
+        Logging.getLogger().info("Root endpoint called");
         return "This endpoint is not in use. Please check the documentation for available endpoints.";
     }
 }
