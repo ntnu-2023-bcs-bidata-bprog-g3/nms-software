@@ -1,11 +1,12 @@
 package no.ntnu.nms.parser;
 
+import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.logging.Logging;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.zip.*;
 
 /**
@@ -19,31 +20,34 @@ public class ZipUtil {
      *
      * @param inputStream {@link ZipFile} the {@link ZipInputStream} of the zip file to unzip
      */
-    public static String unzipper(ZipInputStream inputStream) throws IOException {
-        String dirName = String.valueOf(Math.random() * 1000000000000000000L);
-        Path path = Paths.get("data/temp/" + dirName);
+    public static String unzipper(ZipInputStream inputStream) throws ParserException, IOException {
+        String dirName = String.valueOf(Math.floor(Math.random() * (Math.pow(10, 8))));
+        final Path dir = Path.of("data/temp/" + dirName);
         for (ZipEntry entry; (entry = inputStream.getNextEntry()) != null; ) {
-            Path resolvedPath = path.resolve(entry.getName());
-            if (entry.isDirectory()) {
-                throw new IOException("ZipFile contains directories");
+            try {
+                if (entry.isDirectory() || entry.getName().contains("/")) {
+                    continue; //ignore the directories in the zipfile
+                }
+                Path resolvedPath = dir.resolve(entry.getName());
+                switch (entry.getName()) {
+                    case "license.json":
+                        Logging.getLogger().info("Found license.json");
+                        break;
+                    case "license.json.signature":
+                        Logging.getLogger().info("Found license.json.signature");
+                        break;
+                    case "root-pubkey.pem":
+                        Logging.getLogger().info("Found public_key.pem");
+                        break;
+                    default:
+                        throw new ParserException("Invalid file in zip file: " + entry.getName());
+                }
+                Files.createDirectories(resolvedPath.getParent());
+                Files.copy(inputStream, resolvedPath);
+            } catch (ParserException e) {
+                FileUtils.deleteDirectory(new File("data/temp/" + dirName));
+                throw new ParserException("Failed to unzip files: " + e.getMessage());
             }
-
-            switch (entry.getName()) {
-                case "license.json":
-                    Logging.getLogger().info("Found license.json");
-                    break;
-                case "license.json.signature":
-                    Logging.getLogger().info("Found license.json.signature");
-                    break;
-                case "public_key.pem":
-                    Logging.getLogger().info("Found public_key.pem");
-                    break;
-                default:
-                    continue;
-            }
-
-            Files.createDirectories(resolvedPath.getParent());
-            Files.copy(inputStream, resolvedPath);
         }
         return dirName;
     }
