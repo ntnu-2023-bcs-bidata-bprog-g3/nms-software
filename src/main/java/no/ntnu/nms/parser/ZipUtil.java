@@ -2,7 +2,6 @@ package no.ntnu.nms.parser;
 
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.logging.Logging;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -45,7 +44,6 @@ public class ZipUtil {
                 Files.createDirectories(resolvedPath.getParent());
                 Files.copy(inputStream, resolvedPath);
             } catch (ParserException e) {
-                FileUtils.deleteDirectory(new File("data/temp/" + dirName));
                 throw new ParserException("Failed to unzip files: " + e.getMessage());
             }
         }

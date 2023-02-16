@@ -41,6 +41,9 @@ public class LicenseParser {
             this.dirName = ZipUtil.unzipper(inputStream);
         } catch (IOException e) {
             throw new ParserException("Failed to unzip files: " + e.getMessage());
+        } catch (ParserException e) {
+            deleteFiles();
+            throw e;
         }
 
         assignFiles(dirName);
