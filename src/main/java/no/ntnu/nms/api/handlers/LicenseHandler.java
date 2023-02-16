@@ -1,5 +1,6 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FilenameUtils;
@@ -41,9 +42,13 @@ public class LicenseHandler {
             return "{\"error\": \"" + realFile.getName() + " is not a zip file\"}";
         }
 
-        LicenseParser parser = new LicenseParser(new ZipInputStream(file.get().getInputStream()));
-        parser.parse();
-
-        return "Successfully uploaded " + realFile.getName();
+        LicenseParser parser = new LicenseParser();
+        try {
+            parser.parse(new ZipInputStream(realFile.getInputStream()));
+        } catch (ParserException e) {
+            Logging.getLogger().info("Failed to parse license file: " + e.getMessage());
+            return "{\"error\": \"" + e.getMessage() + "\"}";
+        }
+        return "{\"message\": \"File uploaded :)\"}";
     }
 }
