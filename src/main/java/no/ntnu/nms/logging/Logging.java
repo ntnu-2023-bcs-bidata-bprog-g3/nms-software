@@ -3,11 +3,7 @@ package no.ntnu.nms.logging;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.*;
 
 /**
  * Logger class for the application.
@@ -31,9 +27,23 @@ public class Logging {
      * @throws IOException thrown if there is an error with creating or writing to the file.
      */
     public static void setUpLogger(String logLevel) throws IOException {
+        SimpleFormatter formatter = new SimpleFormatter() {
+            private static final String format = "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$s %2$s %5$s%6$s";
+
+            @Override
+            public synchronized String format(LogRecord lr) {
+                return String.format(format,
+                        lr.getMillis(),
+                        lr.getSourceClassName(),
+                        lr.getSourceMethodName(),
+                        lr.getLevel().getLocalizedName(),
+                        lr.getMessage(),
+                        System.lineSeparator());
+            }
+        };
         Files.createDirectories(Paths.get(LOG_PATH));
         Handler fh = new FileHandler(LOG_PATH + "nms_software.log", 5242880, 5, true);
-        fh.setFormatter(new SimpleFormatter());
+        fh.setFormatter(formatter);
         logger = Logger.getLogger("src");
         logger.setUseParentHandlers(false);
         logger.setLevel(Level.parse(logLevel));
