@@ -102,7 +102,9 @@ public class LicenseParser {
         if (pool == null) {
             PoolRegistry.getInstance().addPool(new Pool(name, duration, description));
         } else {
-            PoolRegistry.getInstance().getPoolByMediaFunction(name).addSeconds(duration);
+            if (!PoolRegistry.getInstance().getPoolByMediaFunction(name).addSeconds(duration)) {
+                throw new ParserException("Could not add seconds to pool");
+            }
         }
     }
 
