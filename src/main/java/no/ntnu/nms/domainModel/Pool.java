@@ -155,6 +155,22 @@ public class Pool implements Serializable {
         return false;
     }
 
+
+    /**
+     * Add time to the time left in the pool
+     * @param seconds {@link Integer} number of seconds to add.
+     */
+    public boolean addSeconds(int seconds) {
+        if (seconds > 0) {
+            int oldTimeLeftSeconds = this.timeLeftSeconds;
+            this.timeLeftSeconds += seconds;
+            changes.firePropertyChange("change", oldTimeLeftSeconds,
+                    this.timeLeftSeconds);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Get a string representation of the pool.
      * @return {@link String} string representation of the pool.
