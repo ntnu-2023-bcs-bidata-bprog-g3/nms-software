@@ -1,9 +1,11 @@
 package no.ntnu.nms.parser;
 
-import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.logging.Logging;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.zip.*;
 
 /**
@@ -14,41 +16,35 @@ public class ZipUtil {
     /**
      * Unzip a zip file and return a message if the file is not valid. Handles
      * the license file and signature file from the Zip file.
-     * @param inputStream {@link ZipFile} the {@link ZipInputStream} of the zip file to unzip.
-     * @return File[] an array of the license file, signature file and public key file.
+     *
+     * @param inputStream {@link ZipFile} the {@link ZipInputStream} of the zip file to unzip
      */
-    public static File[] unzipper(ZipInputStream inputStream) {
-
-        File licenseFile = null;
-        File signatureFile = null;
-        File publicKeyFile = null;
-
-        try {
-            for (ZipEntry entry; (entry = inputStream.getNextEntry()) != null; ) {
-                if (entry.isDirectory()) {
-                    throw new IOException("Zip file contains a directory");
-                }
-                switch (entry.getName()) {
-                    case "license.json":
-                        licenseFile = new File(entry.getName());
-                        break;
-                    case "license_sign.json":
-                        signatureFile = new File(entry.getName());
-                        break;
-                    case "public_key.pem":
-                        publicKeyFile = new File(entry.getName());
-                        break;
-                    default:
-                        throw new IOException("Zip file contains an unknown file: " + entry.getName());
-                }
+    public static String unzipper(ZipInputStream inputStream) throws IOException {
+        String dirName = String.valueOf(Math.random() * 1000000000000000000L);
+        Path path = Paths.get("data/temp/" + dirName);
+        for (ZipEntry entry; (entry = inputStream.getNextEntry()) != null; ) {
+            Path resolvedPath = path.resolve(entry.getName());
+            if (entry.isDirectory()) {
+                throw new IOException("ZipFile contains directories");
             }
-            if (licenseFile == null || signatureFile == null || publicKeyFile == null) {
-                throw new IOException("Zip file is missing a file");
+
+            switch (entry.getName()) {
+                case "license.json":
+                    Logging.getLogger().info("Found license.json");
+                    break;
+                case "license.json.signature":
+                    Logging.getLogger().info("Found license.json.signature");
+                    break;
+                case "public_key.pem":
+                    Logging.getLogger().info("Found public_key.pem");
+                    break;
+                default:
+                    continue;
             }
-        } catch (IOException e) {
-            Logging.getLogger().severe("Failed to unzip the file" + e.getMessage());
-            throw new ParserException("Failed to unzip the file: " + e.getMessage());
+
+            Files.createDirectories(resolvedPath.getParent());
+            Files.copy(inputStream, resolvedPath);
         }
-        return new File[]{licenseFile, signatureFile, publicKeyFile};
+        return dirName;
     }
 }
