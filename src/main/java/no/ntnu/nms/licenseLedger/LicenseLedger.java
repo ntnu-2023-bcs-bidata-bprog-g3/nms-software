@@ -39,7 +39,9 @@ public class LicenseLedger {
      */
     private LicenseLedger(String ledgerDir) throws FileHandlerException {
             this.setLedgerPath(ledgerDir);
-        }public static LicenseLedger getInstance() {
+        }
+
+    public static LicenseLedger getInstance() {
         if (instance == null) {
             instance = new LicenseLedger(LEDGER_PATH);
         }
