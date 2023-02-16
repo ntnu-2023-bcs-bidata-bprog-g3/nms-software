@@ -1,6 +1,7 @@
 package no.ntnu.nms;
 
 import no.ntnu.nms.logging.Logging;
+import no.ntnu.nms.parser.LicenseParser;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -21,5 +22,6 @@ public class App {
 
         // Starts the API WebServer and hosts the API from the ApiApp class.
         ApplicationContext ctx = SpringApplication.run(App.class, args);
+        if (LicenseParser.verifyFiles()) LicenseParser.parse();
     }
 }
