@@ -173,6 +173,14 @@ public class Pool implements Serializable {
     }
 
     /**
+     * Get the property change support.
+     * @return {@link PropertyChangeSupport} property change support of the pool.
+     */
+    public PropertyChangeSupport getChanges() {
+        return this.changes;
+    }
+
+    /**
      * Get a string representation of the pool.
      * @return {@link String} string representation of the pool.
      */
