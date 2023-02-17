@@ -16,7 +16,7 @@ public class App {
             Logging.setUpLogger("ALL");
         } catch (IOException e) {
             System.out.println("Could not initialize logger: " + e.getMessage());
-            System.exit(0);
+            System.exit(1);
         }
 
         // Starts the API WebServer and hosts the API from the ApiApp class.
