@@ -30,7 +30,7 @@ public class KeyGenerator {
      * @return The generated key.
      * @throws RuntimeException if the SHA-256 algorithm is not available.
      */
-    public static byte[] generateKey() throws CryptographyException {
+    private static byte[] generateKey() throws CryptographyException {
         byte[] salt = new byte[16];
         byte[] key = new byte[KEY_LENGTH / 8];
         try {
