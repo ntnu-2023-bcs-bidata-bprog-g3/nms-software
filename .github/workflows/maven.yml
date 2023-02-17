@@ -23,6 +23,10 @@ jobs:
           java-version: '11'
           distribution: 'corretto'
           cache: maven
+      - name: CLOC
+        run: |
+          sudo apt-get install cloc -y
+          cloc src
       - name: Build and run tests
         run: mvn --batch-mode --fail-at-end package
       - name: Surefire Report
