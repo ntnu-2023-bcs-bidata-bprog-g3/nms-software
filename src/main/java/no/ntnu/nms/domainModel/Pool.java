@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class Pool implements Serializable {
 
-    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport changes;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.changes.addPropertyChangeListener(listener);
@@ -49,6 +49,7 @@ public class Pool implements Serializable {
      * @param description {@link String} description of the media function in the pool.
      */
     public Pool(String mediaFunction, int timeLeftSeconds, String description) {
+        this.changes = new PropertyChangeSupport(this);
         Logging.getLogger().info("Creating new pool for mediafunction " + mediaFunction);
         setMediaFunction(mediaFunction);
         setId((long) (Math.random() * 1000000000000000000L));
