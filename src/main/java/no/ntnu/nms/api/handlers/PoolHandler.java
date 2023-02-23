@@ -42,7 +42,7 @@ public class PoolHandler {
      * Get all pools.
      * @return {@link String} JSON representation of all pools.
      */
-    @GetMapping(value={"/all"})
+    @GetMapping(value={"/all"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllPools() {
         Logging.getLogger().info("Pool endpoint called for all");
