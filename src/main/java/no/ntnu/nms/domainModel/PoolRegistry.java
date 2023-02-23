@@ -162,7 +162,7 @@ public class PoolRegistry implements Serializable {
      */
     public String jsonify() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{[");
+        sb.append("{\"pools\":[");
         for (Pool pool : poolList) {
             sb.append(pool.jsonify());
             sb.append(",");
