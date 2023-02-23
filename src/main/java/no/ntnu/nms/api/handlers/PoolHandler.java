@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 /**
  * PoolHandler is a handler for the pool API endpoint.
  */
+@CrossOrigin
 @RestController
 @RequestMapping(value = {BASE_URL + "/pool"})
 public class PoolHandler {

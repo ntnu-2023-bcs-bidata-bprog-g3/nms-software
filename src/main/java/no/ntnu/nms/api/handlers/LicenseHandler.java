@@ -18,6 +18,7 @@ import static no.ntnu.nms.api.Constants.BASE_URL;
  * LicenseHandler is a handler for the license API endpoint.
  * It is used to upload a license file and calls the parser.
  */
+@CrossOrigin
 @RestController
 @RequestMapping(value = {BASE_URL + "/license"})
 public class LicenseHandler {
