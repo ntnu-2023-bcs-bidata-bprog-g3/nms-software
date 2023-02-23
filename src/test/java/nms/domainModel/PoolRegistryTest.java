@@ -3,10 +3,13 @@ package nms.domainModel;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.logging.Logging;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
@@ -22,6 +25,9 @@ public class PoolRegistryTest {
 
     @BeforeAll
     public static void init() {
+        try {
+            Logging.setUpLogger("ALL");
+        } catch (IOException ignore) {}
         PoolRegistry.init();
     }
 
