@@ -149,11 +149,11 @@ public class PoolRegistry implements Serializable {
     }
 
     /**
-     * Get the size of the pool list.
-     * @return {@link int} size of the pool list.
+     * Clear the registry.
      */
-    public int getSize() {
-        return poolList.size();
+    public void clear() {
+        poolList.clear();
+        updatePoolReg();
     }
 
     /**
