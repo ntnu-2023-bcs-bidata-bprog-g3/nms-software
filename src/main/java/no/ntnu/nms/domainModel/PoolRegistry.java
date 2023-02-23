@@ -154,13 +154,13 @@ public class PoolRegistry implements Serializable {
      */
     public String jsonify() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append("{[");
         for (Pool pool : poolList) {
             sb.append(pool.jsonify());
             sb.append(",");
         }
         if (instance.getPoolCount() > 0) sb.deleteCharAt(sb.length() - 1);
-        sb.append("]");
+        sb.append("]}");
         return sb.toString();
     }
 
