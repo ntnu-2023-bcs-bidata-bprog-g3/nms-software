@@ -149,6 +149,14 @@ public class PoolRegistry implements Serializable {
     }
 
     /**
+     * Get the size of the pool list.
+     * @return {@link int} size of the pool list.
+     */
+    public int getSize() {
+        return poolList.size();
+    }
+
+    /**
      * Get a JSON representation of the registry.
      * @return {@link String} JSON representation of the registry.
      */
