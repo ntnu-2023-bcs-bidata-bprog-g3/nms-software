@@ -2,6 +2,7 @@ package nms.persistence;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import nms.Constants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,20 +18,22 @@ import java.util.List;
 
 public class PersistenceControllerTest {
 
-    private final String filePath = "test/poolregistry.ser";
-    private final String checksumPath = filePath + ".md5";
+    private static final String TEST_DIR = Constants.TEST_FILES_PATH + "persistenceController/";
+
+    private static final String filePath = TEST_DIR + "poolregistry.ser";
+    private static final String checksumPath = filePath + ".md5";
 
     @BeforeAll
     public static void init() {
-        PoolRegistry.init("test/poolreg.ser");
+        PoolRegistry.init(filePath);
     }
 
     @AfterAll
     public static void deInit() {
         try {
-            Files.deleteIfExists(Path.of("test/poolreg.ser"));
-            Files.deleteIfExists(Path.of("test/poolreg.ser.md5"));
-            Files.deleteIfExists(Path.of("test/"));
+            Files.deleteIfExists(Path.of(filePath));
+            Files.deleteIfExists(Path.of(filePath + ".md5"));
+            Files.deleteIfExists(Path.of(TEST_DIR));
         } catch (IOException ignore) {}
     }
 

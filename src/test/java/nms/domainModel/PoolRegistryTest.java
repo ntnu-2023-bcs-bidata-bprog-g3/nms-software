@@ -1,5 +1,6 @@
 package nms.domainModel;
 
+import nms.Constants;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.file_handler.FileHandler;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PoolRegistryTest {
 
+    private static final String TEST_DIR = Constants.TEST_FILES_PATH + "poolreg/";
+
     @AfterEach
         public void tearDown() {
         PoolRegistry.getInstance().clear();
@@ -29,24 +32,23 @@ public class PoolRegistryTest {
         try {
             Logging.setUpLogger("ALL");
         } catch (IOException ignore) {}
-        PoolRegistry.init("test/poolreg/poolreg.ser");
+        PoolRegistry.init(TEST_DIR + "poolreg.ser");
     }
 
     @AfterAll
     public static void deInit() {
         try {
-            Files.deleteIfExists(Path.of("test/poolreg/poolreg.ser"));
-            Files.deleteIfExists(Path.of("test/poolreg/poolreg.ser.md5"));
-            Files.deleteIfExists(Path.of("test/poolreg/"));
-            Files.deleteIfExists(Path.of("test/"));
+            Files.deleteIfExists(Path.of(TEST_DIR + "poolreg.ser"));
+            Files.deleteIfExists(Path.of(TEST_DIR + "poolreg.ser.md5"));
+            Files.deleteIfExists(Path.of(TEST_DIR + "poolreg/"));
         } catch (IOException ignore) {}
     }
 
     @Test
     public void TestInit() {
         assertNotNull(PoolRegistry.getInstance());
-        assertTrue(Files.exists(Path.of("test/poolreg/poolreg.ser")));
-        assertTrue(Files.exists(Path.of("test/poolreg/poolreg.ser.md5")));
+        assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser")));
+        assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser.md5")));
     }
 
     @Test
@@ -157,7 +159,7 @@ public class PoolRegistryTest {
         assertEquals(34, PoolRegistry.getInstance()
                 .getPoolList().next().getTimeLeftSeconds());
 
-        FileHandler.readFromFile("test/poolreg/poolreg.ser");
+        FileHandler.readFromFile(TEST_DIR + "poolreg.ser");
 
         assertEquals(34, PoolRegistry.getInstance()
                 .getPoolList().next().getTimeLeftSeconds());
