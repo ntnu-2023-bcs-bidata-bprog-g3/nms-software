@@ -79,7 +79,7 @@ public class PersistenceControllerTest {
     }
 
     @Test
-    public void testSaveToFileWithChecksum() {
+    public void testSaveToFileWithChecksum() throws IOException {
         // Create a new object to serialize
         List<Integer> list = Arrays.asList(1, 2, 3, 4);
 
@@ -91,15 +91,12 @@ public class PersistenceControllerTest {
         assertTrue(new File(checksumPath).exists());
 
         // Clean up
-        try {
-            Files.delete(Path.of(filePath));
-            Files.delete(Path.of(checksumPath));
-
-        } catch (IOException ignore) {}
+        Files.delete(Path.of(filePath));
+        Files.delete(Path.of(checksumPath));
     }
 
     @Test
-    public void testSaveToFileWithoutChecksum()  {
+    public void testSaveToFileWithoutChecksum() throws IOException {
         // Create a new object to serialize
         List<Integer> list = Arrays.asList(1, 2, 3, 4);
 
@@ -111,10 +108,7 @@ public class PersistenceControllerTest {
         assertFalse(new File(checksumPath).exists());
 
         // Clean up
-        try {
-            Files.delete(Path.of(filePath));
-            Files.delete(Path.of(checksumPath));
-
-        } catch (IOException ignore) {}
+        Files.delete(Path.of(filePath));
+        Files.delete(Path.of(checksumPath));
     }
 }
