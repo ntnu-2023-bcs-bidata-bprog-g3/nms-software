@@ -51,11 +51,9 @@ public class PoolRegistry implements Serializable {
      * Init function used for setting up the application
      */
     public static void init(String path) {
-        if (instance == null) {
-            storageFilePath = path;
-            instance = new PoolRegistry();
-            PersistenceController.saveToFile(instance, storageFilePath, true);
-        }
+        storageFilePath = path;
+        instance = new PoolRegistry();
+        PersistenceController.saveToFile(instance, storageFilePath, true);
     }
 
     /**
