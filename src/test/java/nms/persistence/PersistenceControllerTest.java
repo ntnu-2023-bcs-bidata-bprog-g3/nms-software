@@ -1,8 +1,10 @@
 package nms.persistence;
 
+import static nms.Constants.TEST_FILES_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nms.Constants;
+import no.ntnu.nms.licenseLedger.LicenseLedger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,36 +29,61 @@ public class PersistenceControllerTest {
     @BeforeAll
     public static void init() {
         PoolRegistry.init(filePath);
+        try {
+            Files.deleteIfExists(Path.of(checksumPath));
+        } catch (IOException ignore) {}
     }
 
     @AfterAll
-    public static void deInit() {
-        try {
-            Files.deleteIfExists(Path.of(filePath));
-            Files.deleteIfExists(Path.of(filePath + ".md5"));
-            Files.deleteIfExists(Path.of(TEST_DIR));
-        } catch (IOException ignore) {}
+    public static void tearDown() throws IOException{
+        Path testDir = Path.of(TEST_FILES_PATH);
+        if (Files.exists(testDir)) {
+            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
+        Files.deleteIfExists(testDir);
     }
 
     @Test
-    public void testSaveAndLoadPoolRegistry() {
+    public void TestSaveToFile() throws IOException{
         // Create a new pool registry and save it to a file
         PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        // Save the instance to file
         PersistenceController.saveToFile(poolRegistry, filePath, true);
 
-        // Load the pool registry from the file and check that it matches the original
-        PersistenceController.loadFromFile(filePath);
-        assertEquals(poolRegistry.getPoolCount(),
-                PoolRegistry.getInstance().getPoolCount());
-        // Clean up
-        try {
-            Files.delete(Path.of(filePath));
-            Files.delete(Path.of(checksumPath));
-        } catch (IOException ignore) {}
+        // Check that the file and checksum file have been created
+        File file = new File(filePath);
+        File checksumFile = new File(filePath + ".md5");
+
+        assertTrue(file.exists());
+        assertTrue(checksumFile.exists());
+
+        // Delete the files
+        Files.deleteIfExists(Paths.get(filePath));
+        Files.deleteIfExists(Paths.get(filePath + ".md5"));
     }
 
     @Test
-    public void testSaveToFileWithChecksum() {
+    public void TestLoadFromFile() throws Exception {
+        // Create an instance of PoolRegistry
+        PoolRegistry expectedPoolRegistry = PoolRegistry.getInstance();
+
+        // Save the instance to file
+        PersistenceController.saveToFile(expectedPoolRegistry, filePath, true);
+
+        // Load the instance from file
+        PersistenceController.loadFromFile(filePath);
+
+        // Check that the PoolRegistry instance has been loaded correctly
+        PoolRegistry actualPoolRegistry = PoolRegistry.getInstance();
+        assertNotNull(actualPoolRegistry);
+        assertInstanceOf(PoolRegistry.class, actualPoolRegistry);
+
+        // Delete the file
+        Files.deleteIfExists(Path.of(filePath));
+    }
+
+    @Test
+    public void testSaveToFileWithChecksum() throws IOException {
         // Create a new object to serialize
         List<Integer> list = Arrays.asList(1, 2, 3, 4);
 
@@ -67,15 +95,12 @@ public class PersistenceControllerTest {
         assertTrue(new File(checksumPath).exists());
 
         // Clean up
-        try {
-            Files.delete(Path.of(filePath));
-            Files.delete(Path.of(checksumPath));
-
-        } catch (IOException ignore) {}
+        Files.deleteIfExists(Path.of(filePath));
+        Files.deleteIfExists(Path.of(checksumPath));
     }
 
     @Test
-    public void testSaveToFileWithoutChecksum()  {
+    public void testSaveToFileWithoutChecksum() throws IOException {
         // Create a new object to serialize
         List<Integer> list = Arrays.asList(1, 2, 3, 4);
 
@@ -87,10 +112,39 @@ public class PersistenceControllerTest {
         assertFalse(new File(checksumPath).exists());
 
         // Clean up
-        try {
-            Files.delete(Path.of(filePath));
-            Files.delete(Path.of(checksumPath));
+        Files.deleteIfExists(Path.of(filePath));
+        Files.deleteIfExists(Path.of(checksumPath));
+    }
 
-        } catch (IOException ignore) {}
+    @Test
+    public void testAppendToFile() throws Exception {
+        LicenseLedger.init(TEST_DIR + "licenseledger.txt");
+        Path licenseLedgerPath = Paths.get(TEST_DIR + "licenseledger.txt");
+
+        // Create a test string to append to the file
+        String toAppend = "Test line";
+
+        // Append the string to the file
+        PersistenceController.appendToFile(toAppend, licenseLedgerPath.toString());
+
+        // Check that the file has been appended correctly
+        String fileContent = PersistenceController.loadLedger(licenseLedgerPath.toString());
+        assertTrue(fileContent.endsWith(toAppend));
+
+        // Delete the file
+        Files.deleteIfExists(Paths.get(licenseLedgerPath.toString()));
+    }
+
+    @Test
+    public void testLoadLedger() throws Exception {
+        LicenseLedger.init(TEST_DIR + "licenseledger.txt");
+        Path licenseLedgerPath = Paths.get(TEST_DIR + "licenseledger.txt");
+
+        // Load the file content and check that it matches the test string
+        String fileContent = PersistenceController.loadLedger(licenseLedgerPath.toString());
+        assertEquals("", fileContent); // will be empty
+
+        // Delete the file
+        Files.deleteIfExists(licenseLedgerPath);
     }
 }

@@ -19,7 +19,6 @@ public class LicenseParser {
 
     private File licenseFile;
     private File signatureFile;
-    private File publicKeyFile;
 
     private String dirName;
 
@@ -36,14 +35,12 @@ public class LicenseParser {
     public LicenseParser() {
         licenseFile = null;
         signatureFile = null;
-        publicKeyFile = null;
         dirName = null;
     }
 
     private void assignFiles(String dirName) {
         this.licenseFile = new File("data/temp/" + dirName + "/license.json");
         this.signatureFile = new File("data/temp/" + dirName + "/license.json.signature");
-        this.publicKeyFile = new File("data/temp/" + dirName + "/root-pubkey.pem");
     }
 
     public void parse(ZipInputStream inputStream) throws ParserException {
@@ -125,7 +122,7 @@ public class LicenseParser {
      * Verify the signature of the license file
      */
     private void verifyFiles() throws ParserException {
-        if (!licenseFile.exists() || !signatureFile.exists() || !publicKeyFile.exists()) {
+        if (!licenseFile.exists() || !signatureFile.exists()) {
             throw new ParserException("Could not find all files");
         }
 

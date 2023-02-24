@@ -31,7 +31,6 @@ public class LicenseLedger {
      * Init function used for setting up the storage files
      */
     public static void init(String ledgerPath) {
-        if (instance == null) {
             if (ledgerPath == null) {
                 instance = new LicenseLedger(LEDGER_PATH);
                 PersistenceController.saveToFile("", LEDGER_PATH, false);
@@ -39,7 +38,6 @@ public class LicenseLedger {
                 instance = new LicenseLedger(ledgerPath);
                 PersistenceController.saveToFile("", ledgerPath, false);
             }
-        }
     }
 
     /**
