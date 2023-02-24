@@ -30,6 +30,12 @@ public class LfaRegistryHandler {
         return LfaRegistry.getInstance().jsonify();
     }
 
+    /**
+     * Register a new LFA.
+     * @param name {@link String} name of the LFA.
+     * @param request {@link HttpServletRequest} the request.
+     * @return {@link String} JSON representation of the result.
+     */
     @PostMapping(value={"/register"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String registerLfa(@RequestParam String name, HttpServletRequest request) {
