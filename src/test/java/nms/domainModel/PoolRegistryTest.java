@@ -41,7 +41,7 @@ public class PoolRegistryTest {
         try {
             Files.deleteIfExists(Path.of(TEST_DIR + "poolreg.ser"));
             Files.deleteIfExists(Path.of(TEST_DIR + "poolreg.ser.md5"));
-            Files.deleteIfExists(Path.of(TEST_DIR + "poolreg/"));
+            Files.deleteIfExists(Path.of(TEST_DIR));
         } catch (IOException ignore) {}
     }
 
