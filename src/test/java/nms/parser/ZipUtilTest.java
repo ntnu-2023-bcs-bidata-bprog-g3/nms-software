@@ -1,11 +1,13 @@
 package nms.parser;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.parser.ZipUtil;
 
+import static nms.Constants.TEST_FILES_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
@@ -21,6 +23,15 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipUtilTest {
 
+
+    @AfterAll
+    public static void tearDown() throws IOException{
+        Path testDir = Path.of(TEST_FILES_PATH);
+        if (Files.exists(testDir)) {
+            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
+        Files.deleteIfExists(testDir);
+    }
 
     @Test
     public void TestUnzipperSuccess() throws IOException, ParserException {
