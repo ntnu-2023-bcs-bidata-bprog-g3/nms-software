@@ -23,7 +23,6 @@ public class ZipUtil {
     public static String unzipper(ZipInputStream inputStream) throws ParserException, IOException {
         String dirName = String.valueOf(Math.abs(((int) Math.pow(10, 8))
                 + (new Random().nextInt(9 * (int) Math.pow(10, 8)))));
-        System.out.println("Dirname: " + dirName);
         final Path dir = Path.of("data/temp/" + dirName);
         for (ZipEntry entry; (entry = inputStream.getNextEntry()) != null; ) {
             try {
