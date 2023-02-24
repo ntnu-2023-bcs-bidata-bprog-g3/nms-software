@@ -28,6 +28,9 @@ public class PersistenceControllerTest {
     @BeforeAll
     public static void init() {
         PoolRegistry.init(filePath);
+        try {
+            Files.deleteIfExists(Path.of(checksumPath));
+        } catch (IOException ignore) {}
     }
 
     @AfterAll
@@ -75,7 +78,7 @@ public class PersistenceControllerTest {
         assertInstanceOf(PoolRegistry.class, actualPoolRegistry);
 
         // Delete the file
-        Files.deleteIfExists(Paths.get(filePath));
+        Files.deleteIfExists(Path.of(filePath));
     }
 
     @Test
@@ -91,8 +94,8 @@ public class PersistenceControllerTest {
         assertTrue(new File(checksumPath).exists());
 
         // Clean up
-        Files.delete(Path.of(filePath));
-        Files.delete(Path.of(checksumPath));
+        Files.deleteIfExists(Path.of(filePath));
+        Files.deleteIfExists(Path.of(checksumPath));
     }
 
     @Test
@@ -108,8 +111,8 @@ public class PersistenceControllerTest {
         assertFalse(new File(checksumPath).exists());
 
         // Clean up
-        Files.delete(Path.of(filePath));
-        Files.delete(Path.of(checksumPath));
+        Files.deleteIfExists(Path.of(filePath));
+        Files.deleteIfExists(Path.of(checksumPath));
     }
 
     @Test
