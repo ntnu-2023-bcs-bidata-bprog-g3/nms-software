@@ -6,19 +6,9 @@ package no.ntnu.nms.exception;
 public class FileHandlerException extends RuntimeException {
     /**
      * Constructor for FileHandlerException.
-     * @param message
+     * @param message the message to be displayed
      */
     public FileHandlerException(String message) {
             super(message);
         }
-
-    /**
-     * Constructor for FileHandlerException.
-     * @param message
-     * @param cause
-     */
-    public FileHandlerException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
 }
