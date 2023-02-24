@@ -36,7 +36,7 @@ public class FileHandlerTest {
     @Test
     public void TestReadAdnWrite() {
         String test = "testString";
-        FileHandler.writeToFile(SerializationUtils.serialize(test), "data/test/test.txt");
+        FileHandler.writeToFile(SerializationUtils.serialize(test), "test/test.txt");
         String read = (String) SerializationUtils.deserialize(
                 FileHandler.readFromFile("test/test.txt"));
         assertEquals(test, read);
@@ -45,7 +45,7 @@ public class FileHandlerTest {
     @Test
     public void TestBackup() {
         String test = "testString";
-        FileHandler.writeToFile(SerializationUtils.serialize(test), "data/test/test.txt");
+        FileHandler.writeToFile(SerializationUtils.serialize(test), "test/test.txt");
         String read = (String) SerializationUtils.deserialize(
                 FileHandler.readFromFile("test/test.txt"));
         assertEquals(test, read);
@@ -63,7 +63,7 @@ public class FileHandlerTest {
     @Test
     public void TestDeleteBackup() {
         String test = "testString";
-        FileHandler.writeToFile(SerializationUtils.serialize(test), "data/test/test.txt");
+        FileHandler.writeToFile(SerializationUtils.serialize(test), "test/test.txt");
         String read = (String) SerializationUtils.deserialize(
                 FileHandler.readFromFile("test/test.txt"));
         assertEquals(test, read);
