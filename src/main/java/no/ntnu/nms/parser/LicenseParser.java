@@ -125,19 +125,33 @@ public class LicenseParser {
      * Verify the signature of the license file
      */
     private void verifyFiles() throws ParserException {
-
         if (!licenseFile.exists() || !signatureFile.exists() || !publicKeyFile.exists()) {
             throw new ParserException("Could not find all files");
         }
 
-        String command = "openssl dgst -sha256 -verify root-pubkey.pem -signature license.json.signature license.json";
         try {
+            // Create a temporary file with the contents of the publicKey string
+            File publicKeyTempFile = File.createTempFile("publicKey", ".pem");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(publicKeyTempFile));
+            writer.write(publicKey);
+            writer.close();
+
+            String command = String.format("openssl dgst -sha256 -verify %s -signature %s %s",
+                    publicKeyTempFile.getAbsolutePath(),
+                    signatureFile.getAbsolutePath(),
+                    licenseFile.getAbsolutePath());
+
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.directory(new File("data/temp/" + dirName));
-            //Assume Unix
+            // Assume Unix
             processBuilder.command("sh", "-c", command);
             Process process = processBuilder.start();
-            if (process.waitFor() != 0) throw new ParserException("Could not verify license");
+            if (process.waitFor() != 0) {
+                throw new ParserException("Could not verify license");
+            }
+
+            // Delete the temporary file
+            publicKeyTempFile.delete();
         } catch (Exception e) {
             throw new ParserException("Error while verifying files: " + e.getMessage());
         }
