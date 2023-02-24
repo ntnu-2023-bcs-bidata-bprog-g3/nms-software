@@ -6,7 +6,7 @@ import no.ntnu.nms.licenseLedger.LicenseLedger;
 
 public class Init {
     public static void main(String[] args) {
-        PoolRegistry.init("data/test/pool_test.ser");
-        LicenseLedger.init("data/test/ledger_test.txt");
+        PoolRegistry.init("test/pool_test.ser");
+        LicenseLedger.init("test/ledger_test.txt");
     }
 }

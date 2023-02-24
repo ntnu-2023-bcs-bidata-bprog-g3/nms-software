@@ -29,24 +29,24 @@ public class PoolRegistryTest {
         try {
             Logging.setUpLogger("ALL");
         } catch (IOException ignore) {}
-        PoolRegistry.init("data/test/poolreg/poolreg.ser");
+        PoolRegistry.init("test/poolreg/poolreg.ser");
     }
 
     @AfterAll
     public static void deInit() {
         try {
-            Files.deleteIfExists(Path.of("data/test/poolreg/poolreg.ser"));
-            Files.deleteIfExists(Path.of("data/test/poolreg/poolreg.ser.md5"));
-            Files.deleteIfExists(Path.of("data/test/poolreg/"));
-            Files.deleteIfExists(Path.of("data/test/"));
+            Files.deleteIfExists(Path.of("test/poolreg/poolreg.ser"));
+            Files.deleteIfExists(Path.of("test/poolreg/poolreg.ser.md5"));
+            Files.deleteIfExists(Path.of("test/poolreg/"));
+            Files.deleteIfExists(Path.of("test/"));
         } catch (IOException ignore) {}
     }
 
     @Test
     public void TestInit() {
         assertNotNull(PoolRegistry.getInstance());
-        assertTrue(Files.exists(Path.of("data/test/poolreg/poolreg.ser")));
-        assertTrue(Files.exists(Path.of("data/test/poolreg/poolreg.ser.md5")));
+        assertTrue(Files.exists(Path.of("test/poolreg/poolreg.ser")));
+        assertTrue(Files.exists(Path.of("test/poolreg/poolreg.ser.md5")));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class PoolRegistryTest {
         assertEquals(34, PoolRegistry.getInstance()
                 .getPoolList().next().getTimeLeftSeconds());
 
-        FileHandler.readFromFile("data/test/poolreg/poolreg.ser");
+        FileHandler.readFromFile("test/poolreg/poolreg.ser");
 
         assertEquals(34, PoolRegistry.getInstance()
                 .getPoolList().next().getTimeLeftSeconds());

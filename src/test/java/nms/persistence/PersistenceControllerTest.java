@@ -2,6 +2,8 @@ package nms.persistence;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.persistence.PersistenceController;
@@ -17,6 +19,20 @@ public class PersistenceControllerTest {
 
     private final String filePath = "test/poolregistry.ser";
     private final String checksumPath = filePath + ".md5";
+
+    @BeforeAll
+    public static void init() {
+        PoolRegistry.init("test/poolreg.ser");
+    }
+
+    @AfterAll
+    public static void deInit() {
+        try {
+            Files.deleteIfExists(Path.of("test/poolreg.ser"));
+            Files.deleteIfExists(Path.of("test/poolreg.ser.md5"));
+            Files.deleteIfExists(Path.of("test/"));
+        } catch (IOException ignore) {}
+    }
 
     @Test
     public void testSaveAndLoadPoolRegistry() {

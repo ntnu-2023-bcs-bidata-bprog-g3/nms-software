@@ -27,9 +27,9 @@ public class FileHandlerTest {
     @AfterEach
     public void tearDown() {
         try {
-            Files.deleteIfExists(Path.of("data/test/test.txt"));
-            Files.deleteIfExists(Path.of("data/test/test.txt.bak"));
-            Files.deleteIfExists(Path.of("data/test"));
+            Files.deleteIfExists(Path.of("test/test.txt"));
+            Files.deleteIfExists(Path.of("test/test.txt.bak"));
+            Files.deleteIfExists(Path.of("test"));
         } catch (IOException ignore) {}
     }
 
@@ -38,7 +38,7 @@ public class FileHandlerTest {
         String test = "testString";
         FileHandler.writeToFile(SerializationUtils.serialize(test), "data/test/test.txt");
         String read = (String) SerializationUtils.deserialize(
-                FileHandler.readFromFile("data/test/test.txt"));
+                FileHandler.readFromFile("test/test.txt"));
         assertEquals(test, read);
     }
 
@@ -47,16 +47,16 @@ public class FileHandlerTest {
         String test = "testString";
         FileHandler.writeToFile(SerializationUtils.serialize(test), "data/test/test.txt");
         String read = (String) SerializationUtils.deserialize(
-                FileHandler.readFromFile("data/test/test.txt"));
+                FileHandler.readFromFile("test/test.txt"));
         assertEquals(test, read);
 
         try {
-            FileHandler.backup("data/test/test.txt");
+            FileHandler.backup("test/test.txt");
         } catch (IOException e) {
             fail("Failed to backup file");
         }
         read = (String) SerializationUtils.deserialize(
-                FileHandler.readFromFile("data/test/test.txt.bak"));
+                FileHandler.readFromFile("test/test.txt.bak"));
 
         assertEquals(test, read);
     }
@@ -65,23 +65,23 @@ public class FileHandlerTest {
         String test = "testString";
         FileHandler.writeToFile(SerializationUtils.serialize(test), "data/test/test.txt");
         String read = (String) SerializationUtils.deserialize(
-                FileHandler.readFromFile("data/test/test.txt"));
+                FileHandler.readFromFile("test/test.txt"));
         assertEquals(test, read);
 
         try {
-            FileHandler.backup("data/test/test.txt");
+            FileHandler.backup("test/test.txt");
         } catch (IOException e) {
             fail("Failed to backup file");
         }
         read = (String) SerializationUtils.deserialize(
-                FileHandler.readFromFile("data/test/test.txt.bak"));
+                FileHandler.readFromFile("test/test.txt.bak"));
 
         assertEquals(test, read);
 
-        assertTrue(Files.exists(Path.of("data/test/test.txt.bak")));
+        assertTrue(Files.exists(Path.of("test/test.txt.bak")));
 
-        FileHandler.deleteBackup("data/test/test.txt");
+        FileHandler.deleteBackup("test/test.txt");
 
-        assertFalse(Files.exists(Path.of("data/test/test.txt.bak")));
+        assertFalse(Files.exists(Path.of("test/test.txt.bak")));
     }
 }
