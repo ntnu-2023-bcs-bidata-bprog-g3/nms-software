@@ -69,7 +69,12 @@ public class LicenseLedgerTest {
     }
 
     @Test
-    public void TestTest() {
-        assertEquals(1, 1);
+    void testLicenseIsInLedger() throws Exception {
+        // Add a license to the ledger
+        no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
+        // Verify that the license is in the ledger
+        Assertions.assertTrue(no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().licenseIsInLedger(LICENSE_PATH));
+        // Verify that a different license is not in the ledger
+        Assertions.assertFalse(no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().licenseIsInLedger(OTHER_LICENSE_PATH));
     }
 }
