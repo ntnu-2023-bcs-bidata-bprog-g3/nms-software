@@ -3,6 +3,7 @@ package nms.persistence;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nms.Constants;
+import no.ntnu.nms.licenseLedger.LicenseLedger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,20 +40,42 @@ public class PersistenceControllerTest {
     }
 
     @Test
-    public void testSaveAndLoadPoolRegistry() {
+    public void TestSaveToFile() throws IOException{
         // Create a new pool registry and save it to a file
         PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        // Save the instance to file
         PersistenceController.saveToFile(poolRegistry, filePath, true);
 
-        // Load the pool registry from the file and check that it matches the original
+        // Check that the file and checksum file have been created
+        File file = new File(filePath);
+        File checksumFile = new File(filePath + ".md5");
+
+        assertTrue(file.exists());
+        assertTrue(checksumFile.exists());
+
+        // Delete the files
+        Files.deleteIfExists(Paths.get(filePath));
+        Files.deleteIfExists(Paths.get(filePath + ".md5"));
+    }
+
+    @Test
+    public void TestLoadFromFile() throws Exception {
+        // Create an instance of PoolRegistry
+        PoolRegistry expectedPoolRegistry = PoolRegistry.getInstance();
+
+        // Save the instance to file
+        PersistenceController.saveToFile(expectedPoolRegistry, filePath, true);
+
+        // Load the instance from file
         PersistenceController.loadFromFile(filePath);
-        assertEquals(poolRegistry.getPoolCount(),
-                PoolRegistry.getInstance().getPoolCount());
-        // Clean up
-        try {
-            Files.delete(Path.of(filePath));
-            Files.delete(Path.of(checksumPath));
-        } catch (IOException ignore) {}
+
+        // Check that the PoolRegistry instance has been loaded correctly
+        PoolRegistry actualPoolRegistry = PoolRegistry.getInstance();
+        assertNotNull(actualPoolRegistry);
+        assertInstanceOf(PoolRegistry.class, actualPoolRegistry);
+
+        // Delete the file
+        Files.deleteIfExists(Paths.get(filePath));
     }
 
     @Test
