@@ -1,5 +1,6 @@
 package nms.persistence;
 
+import static nms.Constants.TEST_FILES_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nms.Constants;
@@ -35,7 +36,7 @@ public class PersistenceControllerTest {
 
     @AfterAll
     public static void tearDown() throws IOException{
-        Path testDir = Path.of(TEST_DIR);
+        Path testDir = Path.of(TEST_FILES_PATH);
         if (Files.exists(testDir)) {
             Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
         }
