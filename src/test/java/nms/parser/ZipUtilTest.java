@@ -71,5 +71,22 @@ public class ZipUtilTest {
         zipStream.write(data);
         zipStream.closeEntry();
     }
+
+    @Test
+    public void TestUnzipperInvalidFile() throws IOException {
+        // Create a zip file containing an invalid file
+        byte[] invalidFileData = "invalid data".getBytes(StandardCharsets.UTF_8);
+        byte[] zipData = createZipFile("invalid.txt", invalidFileData);
+
+        // Unzip the file and verify that a ParserException is thrown
+        try (ZipInputStream inputStream = new ZipInputStream(new ByteArrayInputStream(zipData))) {
+            Assertions.assertThrows(ParserException.class, () -> ZipUtil.unzipper(inputStream));
+        } finally {
+            // Clean up
+            Path dir = Path.of("data/temp/" + "invalid.txt");
+            if (Files.exists(dir)) {
+                Files.walk(dir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            }
+        }
     }
 }
