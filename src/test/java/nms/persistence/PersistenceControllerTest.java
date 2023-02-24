@@ -131,4 +131,16 @@ public class PersistenceControllerTest {
         Files.deleteIfExists(Paths.get(licenseLedgerPath.toString()));
     }
 
+    @Test
+    public void testLoadLedger() throws Exception {
+        LicenseLedger.init(TEST_DIR + "licenseledger.txt");
+        Path licenseLedgerPath = Paths.get(TEST_DIR + "licenseledger.txt");
+
+        // Load the file content and check that it matches the test string
+        String fileContent = PersistenceController.loadLedger(licenseLedgerPath.toString());
+        assertEquals("", fileContent); // will be empty
+
+        // Delete the file
+        Files.deleteIfExists(licenseLedgerPath);
+    }
 }
