@@ -28,14 +28,14 @@ public class PoolRegistryTest {
         try {
             Logging.setUpLogger("ALL");
         } catch (IOException ignore) {}
-        PoolRegistry.init();
+        PoolRegistry.init("test/poolreg/poolreg.ser");
     }
 
     @Test
     public void TestInit() {
         assertNotNull(PoolRegistry.getInstance());
-        assertTrue(Files.exists(Path.of("data/pool/poolreg.ser")));
-        assertTrue(Files.exists(Path.of("data/pool/poolreg.ser.md5")));
+        assertTrue(Files.exists(Path.of("test/poolreg/poolreg.ser")));
+        assertTrue(Files.exists(Path.of("test/poolreg/poolreg.ser.md5")));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class PoolRegistryTest {
         assertEquals(34, PoolRegistry.getInstance()
                 .getPoolList().next().getTimeLeftSeconds());
 
-        FileHandler.readFromFile("data/pool/poolreg.ser");
+        FileHandler.readFromFile("test/poolreg/poolreg.ser");
 
         assertEquals(34, PoolRegistry.getInstance()
                 .getPoolList().next().getTimeLeftSeconds());
