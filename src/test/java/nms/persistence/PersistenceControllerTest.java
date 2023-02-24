@@ -31,12 +31,12 @@ public class PersistenceControllerTest {
     }
 
     @AfterAll
-    public static void deInit() {
-        try {
-            Files.deleteIfExists(Path.of(filePath));
-            Files.deleteIfExists(Path.of(filePath + ".md5"));
-            Files.deleteIfExists(Path.of(TEST_DIR));
-        } catch (IOException ignore) {}
+    public static void tearDown() throws IOException{
+        Path testDir = Path.of(TEST_DIR);
+        if (Files.exists(testDir)) {
+            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
+        Files.deleteIfExists(testDir);
     }
 
     @Test
