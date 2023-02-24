@@ -65,4 +65,24 @@ public class LicenseParserTest {
 
         assertThrows(ParserException.class, () -> parser.parse(new ZipInputStream(new ByteArrayInputStream(bos.toByteArray()))));
     }
+
+
+    @Test
+    void TestParseValidFiles() {
+        //create ZipInputStream of data/temp/zip/files.zip
+        LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
+        ZipInputStream zis = null;
+        try {
+            zis = new ZipInputStream(new FileInputStream("src/main/resources/test/files.zip"));
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found" + e.getMessage());
+            return; //ignore test if file is not found
+        }
+
+        try {
+            parser.parse(zis);
+        } catch (ParserException e) {
+            fail();
+        }
+    }
 }
