@@ -25,10 +25,6 @@ public class PoolRegistry implements Serializable {
         }
     };
 
-    private static final String poolRegistryDir = "data/pool/";
-    private static final String poolRegistryName = "poolreg.ser";
-    private static final String poolRegistryPath = poolRegistryDir + poolRegistryName;
-
     /**
      * Singleton instance.
      */
@@ -40,6 +36,11 @@ public class PoolRegistry implements Serializable {
     private final ArrayList<Pool> poolList;
 
     /**
+     * Registry file path
+     */
+    private static String storageFilePath;
+
+    /**
      * Private constructor to prevent instantiation.
      */
     private PoolRegistry() {
@@ -49,10 +50,11 @@ public class PoolRegistry implements Serializable {
     /**
      * Init function used for setting up the application
      */
-    public static void init() {
+    public static void init(String path) {
         if (instance == null) {
+            storageFilePath = path;
             instance = new PoolRegistry();
-            PersistenceController.saveToFile(instance, poolRegistryPath, true);
+            PersistenceController.saveToFile(instance, storageFilePath, true);
         }
     }
 
@@ -62,9 +64,8 @@ public class PoolRegistry implements Serializable {
      */
     public static PoolRegistry getInstance() {
         if (instance == null) {
-            PersistenceController.loadFromFile(poolRegistryPath);
+            PersistenceController.loadFromFile(storageFilePath);
         }
-
         return instance;
     }
 
@@ -174,7 +175,7 @@ public class PoolRegistry implements Serializable {
 
     private void updatePoolReg() {
         try {
-            PersistenceController.saveToFile(this, poolRegistryPath, true);
+            PersistenceController.saveToFile(this, storageFilePath, true);
         } catch (FileHandlerException e) {
             Logging.getLogger().severe("Unable to update pool registry. " +
                     "Core functionality has been affected. Error: " + e.getMessage());
