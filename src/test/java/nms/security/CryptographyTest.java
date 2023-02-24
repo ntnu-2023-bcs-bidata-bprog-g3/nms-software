@@ -20,7 +20,7 @@ public class CryptographyTest {
     }
 
     @Test
-    public void TestEncryption() {
+    public void TestXorWithKey() {
         byte[] encryptedMessage = null;
         try {
             encryptedMessage = Cryptography.xorWithKey(message.getBytes(),key);
@@ -29,14 +29,11 @@ public class CryptographyTest {
         }
 
         assertArrayEquals(new byte[]{69, 87, 64, 64}, encryptedMessage);
-    }
 
-    @Test
-    public void TestDecryption(){
         byte[] decryptedMessage = null;
         try {
-            decryptedMessage = Cryptography.xorWithKey(new byte[]{69, 87, 64, 64}, key);
-        } catch (Exception e) {
+            decryptedMessage = Cryptography.xorWithKey(encryptedMessage, key);
+        } catch (Exception ignore) {
             fail();
         }
 
