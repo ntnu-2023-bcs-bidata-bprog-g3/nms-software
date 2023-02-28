@@ -49,7 +49,7 @@ public class LicenseGenerator {
     private static Pool getPoolAndSubtract(String mediaFunction, int duration) throws LicenseGeneratorException {
         Pool pool;
         try {
-            pool = PoolRegistry.getInstance()
+            pool = PoolRegistry.getInstance(false)
                     .getPoolByMediaFunction(mediaFunction);
         } catch (NullPointerException e) {
             throw new LicenseGeneratorException("No pool with media function " + mediaFunction + " found");

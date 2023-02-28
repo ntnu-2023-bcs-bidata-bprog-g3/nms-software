@@ -21,7 +21,7 @@ public class PoolRegistryTest {
 
     @AfterEach
         public void tearDown() {
-        PoolRegistry.getInstance().clear();
+        PoolRegistry.getInstance(true).clear();
     }
 
     @BeforeAll
@@ -47,26 +47,26 @@ public class PoolRegistryTest {
 
     @Test
     public void TestInit() {
-        assertNotNull(PoolRegistry.getInstance());
+        assertNotNull(PoolRegistry.getInstance(true));
         assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser")));
         assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser.md5")));
     }
 
     @Test
     public void TestGetInstance() {
-        assertNotNull(PoolRegistry.getInstance());
+        assertNotNull(PoolRegistry.getInstance(true));
     }
 
     @Test
     public void TestSingleton() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
-        PoolRegistry poolRegistry2 = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
+        PoolRegistry poolRegistry2 = PoolRegistry.getInstance(true);
         assertEquals(poolRegistry, poolRegistry2);
     }
 
     @Test
     public void TestAddPool() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
 
         assertEquals(0, poolRegistry.getPoolCount());
 
@@ -77,7 +77,7 @@ public class PoolRegistryTest {
 
     @Test
     public void TestRemovePool() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         assertEquals(0, poolRegistry.getPoolCount());
         Pool pool = new Pool("test", 2, "test");
 
@@ -89,7 +89,7 @@ public class PoolRegistryTest {
 
     @Test
     public void TestGetPoolList() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         Pool pool = new Pool("test", 2, "test");
         poolRegistry.addPool(pool);
         Iterator<Pool> poolIterator = poolRegistry.getPoolList();
@@ -102,7 +102,7 @@ public class PoolRegistryTest {
 
     @Test
     public void TestGetPoolCount() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         assertEquals(0, poolRegistry.getPoolCount());
         poolRegistry.addPool(new Pool("test", 2, "test"));
         assertEquals(1, poolRegistry.getPoolCount());
@@ -110,7 +110,7 @@ public class PoolRegistryTest {
 
     @Test
     public void TestContainsPool() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         Pool pool = new Pool("test", 2, "test");
         Pool pool2 = new Pool("test2", 2, "test2");
         poolRegistry.addPool(pool);
@@ -121,7 +121,7 @@ public class PoolRegistryTest {
 
     @Test
     public void TestContainsPoolByMediaFunction() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         Pool pool = new Pool("test", 2, "test");
 
         assertFalse(poolRegistry.containsPoolByMediaFunction("test"));
@@ -133,7 +133,7 @@ public class PoolRegistryTest {
 
     @Test
     public void TestJsonify() {
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         Pool pool = new Pool("test", 2, "test");
 
         String jsonString = "{\"pools\":[]}";
@@ -150,19 +150,19 @@ public class PoolRegistryTest {
 
     @Test
     public void TestChangeListener() {
-        PoolRegistry poolreg = PoolRegistry.getInstance();
+        PoolRegistry poolreg = PoolRegistry.getInstance(true);
         Pool pool = new Pool("test", 2, "test");
         poolreg.addPool(pool);
 
         pool.addSeconds(32);
 
         assertEquals(34, pool.getTimeLeftSeconds());
-        assertEquals(34, PoolRegistry.getInstance()
+        assertEquals(34, PoolRegistry.getInstance(true)
                 .getPoolList().next().getTimeLeftSeconds());
 
         FileHandler.readFromFile(TEST_DIR + "poolreg.ser");
 
-        assertEquals(34, PoolRegistry.getInstance()
+        assertEquals(34, PoolRegistry.getInstance(true)
                 .getPoolList().next().getTimeLeftSeconds());
 
     }

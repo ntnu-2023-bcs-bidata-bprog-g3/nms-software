@@ -108,11 +108,11 @@ public class LicenseParser {
             throw new ParserException("There was an error reading the license file" + e.getMessage());
         }
         LicenseLedger.getInstance().addLicenseToLedger(licenseFile.getPath());
-        Pool pool = PoolRegistry.getInstance().getPoolByMediaFunction(name);
+        Pool pool = PoolRegistry.getInstance(false).getPoolByMediaFunction(name);
         if (pool == null) {
-            PoolRegistry.getInstance().addPool(new Pool(name, duration, description));
+            PoolRegistry.getInstance(false).addPool(new Pool(name, duration, description));
         } else {
-            if (!PoolRegistry.getInstance().getPoolByMediaFunction(name).addSeconds(duration)) {
+            if (!PoolRegistry.getInstance(false).getPoolByMediaFunction(name).addSeconds(duration)) {
                 throw new ParserException("Could not add seconds to pool");
             }
         }

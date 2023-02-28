@@ -46,7 +46,7 @@ public class PersistenceControllerTest {
     @Test
     public void TestSaveToFile() throws IOException{
         // Create a new pool registry and save it to a file
-        PoolRegistry poolRegistry = PoolRegistry.getInstance();
+        PoolRegistry poolRegistry = PoolRegistry.getInstance(true);
         // Save the instance to file
         PersistenceController.saveToFile(poolRegistry, filePath, true);
 
@@ -65,7 +65,7 @@ public class PersistenceControllerTest {
     @Test
     public void TestLoadFromFile() throws Exception {
         // Create an instance of PoolRegistry
-        PoolRegistry expectedPoolRegistry = PoolRegistry.getInstance();
+        PoolRegistry expectedPoolRegistry = PoolRegistry.getInstance(true);
 
         // Save the instance to file
         PersistenceController.saveToFile(expectedPoolRegistry, filePath, true);
@@ -74,7 +74,7 @@ public class PersistenceControllerTest {
         PersistenceController.loadFromFile(filePath);
 
         // Check that the PoolRegistry instance has been loaded correctly
-        PoolRegistry actualPoolRegistry = PoolRegistry.getInstance();
+        PoolRegistry actualPoolRegistry = PoolRegistry.getInstance(true);
         assertNotNull(actualPoolRegistry);
         assertInstanceOf(PoolRegistry.class, actualPoolRegistry);
 
