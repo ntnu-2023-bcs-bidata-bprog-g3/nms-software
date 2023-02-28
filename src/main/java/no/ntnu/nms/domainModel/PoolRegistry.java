@@ -1,5 +1,6 @@
 package no.ntnu.nms.domainModel;
 
+import no.ntnu.nms.CustomerConstants;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
@@ -38,12 +39,13 @@ public class PoolRegistry implements Serializable {
     /**
      * Registry file path
      */
-    private static String storageFilePath;
+    private final String storageFilePath;
 
     /**
      * Private constructor to prevent instantiation.
      */
-    private PoolRegistry() {
+    private PoolRegistry(String path) {
+        storageFilePath = path;
         poolList = new ArrayList<>();
     }
 
@@ -51,18 +53,19 @@ public class PoolRegistry implements Serializable {
      * Init function used for setting up the application
      */
     public static void init(String path) {
-        storageFilePath = path;
-        instance = new PoolRegistry();
-        PersistenceController.saveToFile(instance, storageFilePath, true);
+        instance = new PoolRegistry(path);
+        PersistenceController.saveToFile(instance, instance.storageFilePath, true);
     }
 
     /**
      * Get the singleton instance of the registry.
      * @return {@link PoolRegistry} getter for the singleton instance.
      */
-    public static PoolRegistry getInstance() {
+    public static PoolRegistry getInstance(boolean isTest) {
         if (instance == null) {
-            PersistenceController.loadFromFile(storageFilePath);
+            String path = isTest ? CustomerConstants.TEST_DATA_PATH : CustomerConstants.PROD_DATA_PATH;
+            path += "pool/poolreg.ser";
+            PersistenceController.loadFromFile(path);
         }
         return instance;
     }
