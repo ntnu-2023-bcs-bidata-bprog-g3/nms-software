@@ -41,8 +41,7 @@ public class LfaRegistryHandler {
     public String registerLfa(@RequestParam String name, HttpServletRequest request) {
         Logging.getLogger().info("LFA endpoint called for register");
         try {
-            LfaRegistry.getInstance().addLfa(request.getRemoteAddr()
-                    + request.getRemotePort(), name);
+            LfaRegistry.getInstance().addLfa(request.getRemoteAddr() + ":8443", name);
             return "{\"success\": \"LFA registered with name " + name + "\"}";
         } catch (LfaRegistryException e) {
             Logging.getLogger().info("Failed to register LFA with name " + name + ": "
