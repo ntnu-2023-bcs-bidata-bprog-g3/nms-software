@@ -13,11 +13,20 @@ import java.nio.file.StandardCopyOption;
  */
 public class FileHandler {
 
-    /**
-     * Writes a byte array to a file.
-     * @param data The byte array to write.
-     */
-    public static void writeToFile(byte[] data, String path) throws FileHandlerException {
+    public static void writeStringToFile(String data, String path) throws FileHandlerException {
+        createDir(path);
+
+        // Write to file
+        try (FileWriter writer = new FileWriter(path)) {
+            writer.write(data);
+        } catch (IOException e) {
+            Logging.getLogger().warning("Failed to write to file: " + e.getMessage());
+            throw new FileHandlerException("Failed to write to file: " + e.getMessage());
+        }
+
+    }
+
+    private static void createDir(String path) {
         try {
             // Check if directory exists, if not create it
             Path directory = Paths.get(path.substring(0, path.lastIndexOf(File.separator)));
@@ -28,6 +37,14 @@ public class FileHandler {
             Logging.getLogger().warning("Failed to create directory: " + path + ". " + e.getMessage());
             throw new FileHandlerException("Failed to create directory: " + path + ". " + e.getMessage());
         }
+    }
+
+    /**
+     * Writes a byte array to a file.
+     * @param data The byte array to write.
+     */
+    public static void writeToFile(byte[] data, String path) throws FileHandlerException {
+        createDir(path);
 
         // Write to file
         try (FileOutputStream fileOut = new FileOutputStream(path);
