@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LicenseGeneratorException;
+import no.ntnu.nms.file_handler.FileHandler;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,39 +18,56 @@ import java.time.LocalTime;
 
 public class LicenseGenerator {
 
-    /*
-    {
-    "info": {
-        "date": "2021-08-03 07:49:51",
-        "customer": "TV2",
-        "issuer": "Nevion",
-        "uid": "fur21o1-12590521mf-155125"
-    },
-    "license": {
-        "name": "J2KHDX",
-        "duration": 100,
-        "description": "J2K HD Encoders/Decoders"
-    }
-}
-     */
-
-    private static final String TEMP_FILE_PATH = "data/license/temp.json";
+    private static final String TEMP_FILE_PATH = "data/sublicense/";
 
 
-    public static void generateLicense(String ip, String mediafunction, int duration) {
+    public static String generateLicense(String ip, String mediafunction, int duration) throws LicenseGeneratorException {
         if (ip == null ||ip.length() == 0 || mediafunction == null
                 || mediafunction.length() == 0 || duration < 1) {
-            throw new LicenseGeneratorException("Failed to generate license: Invalid input");
+            throw new LicenseGeneratorException("Invalid input");
         }
         Pool pool;
         try {
             pool = getPoolAndSubtract(mediafunction, duration);
         } catch (LicenseGeneratorException e) {
-            throw new LicenseGeneratorException("Failed to generate license:" + e.getMessage());
+            throw new LicenseGeneratorException(e.getMessage());
         }
 
-        String content = generateString(pool, duration);
+        int uid = (int) (Math.random() * 1000000000);
+        String path = TEMP_FILE_PATH + uid + "/";
 
+        try {
+            writeToFile(path, generateString(pool, duration));
+            signFile(path + "license.json");
+        } catch (LicenseGeneratorException e) {
+            throw new LicenseGeneratorException(e.getMessage());
+        }
+
+        return path;
+    }
+
+    private static void signFile(String path) throws LicenseGeneratorException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", "openssl dgst -sha256 -sign intermediate-pk.key -out " + path + ".signature "  + path);
+        try {
+            Process process = processBuilder.inheritIO().start();
+            int returnCode = process.waitFor();
+            System.out.println(Arrays.toString(process.getInputStream().readAllBytes()));
+            if (returnCode != 0) {
+                throw new LicenseGeneratorException("Failed to sign file");
+            }
+        } catch (Exception e) {
+            throw new LicenseGeneratorException("Failed to sign file: " + e.getMessage());
+        }
+    }
+
+    private static void writeToFile(String path, String content) throws LicenseGeneratorException {
+        //write to file
+        try {
+            FileHandler.writeStringToFile(content, path + "license.json");
+        } catch (FileHandlerException e) {
+            throw new LicenseGeneratorException("Failed to write to file: " + e.getMessage());
+        }
     }
 
     private static Pool getPoolAndSubtract(String mediaFunction, int duration) throws LicenseGeneratorException {
@@ -91,9 +110,5 @@ public class LicenseGenerator {
         } catch (JsonProcessingException e) {
             throw new LicenseGeneratorException("Failed to generate string: " + e.getMessage());
         }
-    }
-
-    private static void writeToFile(String content) {
-        // TODO: Implement method
     }
 }
