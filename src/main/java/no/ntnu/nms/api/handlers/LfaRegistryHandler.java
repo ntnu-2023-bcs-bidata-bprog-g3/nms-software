@@ -22,7 +22,7 @@ public class LfaRegistryHandler {
      * Get all LFA.
      * @return {@link String} JSON representation of all LFA.
      */
-    @GetMapping(value={"/"}, produces = {"application/json"})
+    @GetMapping(value={""}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllLfa() {
         Logging.getLogger().info("LFA endpoint called for all");
