@@ -77,10 +77,11 @@ public class LfaRegistry {
      * @return {@link String} JSON representation of the LFA map
      */
     public String jsonify() {
+        StringBuilder json = new StringBuilder("{\"lfas\": [");
+
         if (lfaMap.isEmpty()) {
-            return "{\"lfa\": []}";
+            return json.append("]}").toString();
         }
-        StringBuilder json = new StringBuilder("{\"lfa\": [");
         for (String ip : lfaMap.keySet()) {
             json.append("{\"ip\": \"").append(ip).append("\",\"name\": \"").append(lfaMap.get(ip)).append("\"},");
         }
