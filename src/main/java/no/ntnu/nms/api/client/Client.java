@@ -32,6 +32,7 @@ public class Client {
                     .build();
             final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create()
                     .setSslContext(sslcontext)
+                    .setHostnameVerifier((hostname, session) -> true)
                     .build();
             final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
                     .setSSLSocketFactory(sslSocketFactory)
