@@ -47,14 +47,14 @@ public class LfaRegistryHandler {
             return "{\"error\": \"No LFA found\"}";
         }
         JSONObject lfasBeforeLicense = new JSONObject(LfaRegistry.getInstance().jsonify());
-        JSONArray lfasWithLicense = new JSONObject("{\"lfas\": []}").getJSONArray("lfas");
+        JSONObject lfasWithLicense = new JSONObject("{\"lfas\": []}");
         for (Object currentLfa : lfasBeforeLicense.getJSONArray("lfas")) {
             JSONObject lfaJson = (JSONObject) currentLfa;
             JSONArray lfaLicenses = Client.getLfaLicenses(lfaJson.getString("ip"));
             if (lfaLicenses != null) {
                 lfaJson.put("licenses", lfaLicenses);
             }
-            lfasWithLicense.put(lfaJson);
+            lfasWithLicense.getJSONArray("lfas").put(lfaJson);
         }
         return lfasWithLicense.toString();
     }
