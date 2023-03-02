@@ -113,7 +113,6 @@ public class Client {
         if (body == null) {
             return null;
         }
-        System.out.println(body);
         return new JSONObject(body).getJSONArray("licenses");
     }
 

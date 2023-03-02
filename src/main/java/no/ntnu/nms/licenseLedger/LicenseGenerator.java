@@ -10,7 +10,6 @@ import no.ntnu.nms.file_handler.FileHandler;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -50,7 +49,6 @@ public class LicenseGenerator {
         try {
             Process process = processBuilder.inheritIO().start();
             int returnCode = process.waitFor();
-            System.out.println(Arrays.toString(process.getInputStream().readAllBytes()));
             if (returnCode != 0) {
                 throw new LicenseGeneratorException("Failed to sign file");
             }
@@ -103,7 +101,6 @@ public class LicenseGenerator {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            System.out.println(objectMapper.writeValueAsString(licenseMap));
             return objectMapper.writeValueAsString(licenseMap);
         } catch (JsonProcessingException e) {
             throw new LicenseGeneratorException("Failed to generate string: " + e.getMessage());
