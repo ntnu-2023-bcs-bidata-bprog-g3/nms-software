@@ -1,9 +1,16 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.api.client.Client;
+import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.exception.ParserException;
+import no.ntnu.nms.lfa.LfaRegistry;
+import no.ntnu.nms.licenseLedger.LicenseGenerator;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.hc.core5.http.HttpException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,5 +58,56 @@ public class LicenseHandler {
             return "{\"error\": \"" + e.getMessage() + "\"}";
         }
         return "{\"message\": \"File uploaded :)\"}";
+    }
+
+    /**
+     * Generate a sub-license and upload it to the LFA.
+     * @param payload {@link String} the payload containing the LFA IP, media function and duration.
+     * @return {@link String} a message that the sub-license was generated.
+     */
+    @PostMapping(value={"/lfa"})
+    public String generateSubLicense(@RequestBody String payload) {
+        JSONObject body;
+
+        String ip;
+        String mediaFunction;
+        int duration;
+        try {
+            body = new JSONObject(payload);
+            ip = body.getString("ip");
+            mediaFunction = body.getString("mediaFunction");
+            duration = body.getInt("duration");
+        } catch (JSONException e) {
+            Logging.getLogger().info("Failed to parse payload: " + e.getMessage());
+            return "{\"error\": \"Failed to parse payload\"}";
+        }
+
+        if (Objects.equals(ip, "") || Objects.equals(mediaFunction, "") || duration == 0) {
+            Logging.getLogger().info("Missing parameter values");
+            return "{\"error\": \"Missing parameter values\"}";
+        }
+
+        LfaRegistry.getInstance().refreshLfaMap();
+        if (!LfaRegistry.getInstance().lfaInRegistry(ip)) {
+            Logging.getLogger().info("LFA not in registry");
+            return "{\"error\": \"LFA not in registry\"}";
+        }
+
+        String path;
+        try {
+            path = LicenseGenerator.generateLicense(ip, mediaFunction, duration);
+        } catch (LicenseGeneratorException e) {
+            Logging.getLogger().info("Failed to generate sub-license: " + e.getMessage());
+            return "{\"error\": \"Failed to generate sub-license: " + e.getMessage() + "\"}";
+        }
+
+        try {
+            Client.uploadLicense(ip, path);
+        } catch (HttpException e) {
+            Logging.getLogger().info("Failed to upload sub-license: " + e.getMessage());
+            return "{\"error\": \"Failed to upload sub-license: \n" + e.getMessage() + "\"}";
+        }
+
+        return "{\"message\": \"Sub-license generated :)\"}";
     }
 }
