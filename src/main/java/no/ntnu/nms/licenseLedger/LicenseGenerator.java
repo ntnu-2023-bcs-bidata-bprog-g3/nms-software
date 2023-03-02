@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
-import java.time.LocalTime;
-
 public class LicenseGenerator {
 
     private static final String TEMP_FILE_PATH = "data/sublicense/";
