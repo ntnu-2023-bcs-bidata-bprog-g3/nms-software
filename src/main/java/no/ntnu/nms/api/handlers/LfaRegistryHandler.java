@@ -61,7 +61,8 @@ public class LfaRegistryHandler {
      */
     @PutMapping(value={"/register"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public String registerLfa(@RequestParam String name, @RequestParam String port, HttpServletRequest request) {
+    public String registerLfa(@RequestParam String name, @RequestParam String port,
+                              HttpServletRequest request) {
         Logging.getLogger().info("LFA endpoint called for register");
         try {
             LfaRegistry.getInstance().addLfa(request.getRemoteAddr() + ":" + port, name);
