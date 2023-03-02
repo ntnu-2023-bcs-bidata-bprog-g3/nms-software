@@ -47,7 +47,9 @@ public class LfaRegistryHandler {
         for (Object currentLfa : lfasBeforeLicense.getJSONArray("lfas")) {
             JSONObject lfaJson = (JSONObject) currentLfa;
             JSONArray lfaLicenses = Client.getLfaLicenses(lfaJson.getString("ip"));
-            lfaJson.put("licenses", lfaLicenses);
+            if (lfaLicenses != null) {
+                lfaJson.put("licenses", lfaLicenses);
+            }
             lfasWithLicense.put(lfaJson);
         }
         return lfasWithLicense.toString();
