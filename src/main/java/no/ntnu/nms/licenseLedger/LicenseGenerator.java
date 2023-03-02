@@ -1,10 +1,15 @@
 package no.ntnu.nms.licenseLedger;
 
-import no.ntnu.nms.CustomerConstants;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import java.time.LocalTime;
@@ -60,25 +65,32 @@ public class LicenseGenerator {
     }
 
     private static String generateString(Pool pool, int duration) {
-        HashMap<String, String> info = new HashMap<>();
-        HashMap<String, String> license = new HashMap<>();
-        HashMap<String, String> completeLicense = new HashMap<>();
+        HashMap<String, Object> licenseMap = new HashMap<>();
+        HashMap<String, Object> infoMap = new HashMap<>();
+        ArrayList<HashMap<String, Object>> keysList = new ArrayList<>();
+        HashMap<String, Object> keyMap = new HashMap<>();
 
-        info.put("date", LocalTime.now().toString());
-        info.put("customer", CustomerConstants.CUSTOMER_NAME);
-        info.put("issuer", "NMS");
-        info.put("uid", String.valueOf((long) (Math.random() * 1000000000000000000L)));
+        infoMap.put("date", LocalDateTime.now().toString());
+        infoMap.put("customer", "TV2");
+        infoMap.put("issuer", "NMS");
+        infoMap.put("uid", pool.getId());
 
-        license.put("name", pool.getMediaFunction());
-        license.put("duration", String.valueOf(duration));
-        license.put("description", pool.getDescription());
+        keyMap.put("name", pool.getMediaFunction());
+        keyMap.put("duration", duration);
+        keyMap.put("description", pool.getDescription());
 
+        keysList.add(keyMap);
 
-        completeLicense.put("info", info.toString());
-        completeLicense.put("license", license.toString());
+        licenseMap.put("info", infoMap);
+        licenseMap.put("license", Collections.singletonMap("keys", keysList));
 
-        System.out.println(completeLicense);
-        return completeLicense.toString();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            System.out.println(objectMapper.writeValueAsString(licenseMap));
+            return objectMapper.writeValueAsString(licenseMap);
+        } catch (JsonProcessingException e) {
+            throw new LicenseGeneratorException("Failed to generate string: " + e.getMessage());
+        }
     }
 
     private static void writeToFile(String content) {
