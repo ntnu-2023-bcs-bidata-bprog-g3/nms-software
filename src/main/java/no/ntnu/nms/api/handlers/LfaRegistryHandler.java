@@ -1,8 +1,11 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.api.client.Client;
 import no.ntnu.nms.exception.LfaRegistryException;
 import no.ntnu.nms.lfa.LfaRegistry;
 import no.ntnu.nms.logging.Logging;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,26 @@ public class LfaRegistryHandler {
         Logging.getLogger().info("LFA endpoint called for all");
         LfaRegistry.getInstance().refreshLfaMap();
         return LfaRegistry.getInstance().jsonify();
+    }
+
+    /**
+     * Get all LFA with their licenses.
+     * @return {@link String} JSON representation of all LFA with their licenses.
+     */
+    @GetMapping(value={"/licenses"}, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    public String getLicenses() {
+        Logging.getLogger().info("LFA endpoint called for all licenses");
+        LfaRegistry.getInstance().refreshLfaMap();
+        JSONObject lfasBeforeLicense = new JSONObject(LfaRegistry.getInstance().jsonify());
+        JSONArray lfasWithLicense = new JSONObject("{\"lfas\": []}").getJSONArray("lfas");
+        for (Object currentLfa : lfasBeforeLicense.getJSONArray("lfas")) {
+            JSONObject lfaJson = (JSONObject) currentLfa;
+            JSONArray lfaLicenses = Client.getLfaLicenses(lfaJson.getString("ip"));
+            lfaJson.put("licenses", lfaLicenses);
+            lfasWithLicense.put(lfaJson);
+        }
+        return lfasWithLicense.toString();
     }
 
     /**
