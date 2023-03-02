@@ -73,6 +73,14 @@ public class LfaRegistry {
     }
 
     /**
+     * Returns the number of registered LFAs
+     * @return {@link int} the number of registered LFAs
+     */
+    public int getSize() {
+        return lfaMap.size();
+    }
+
+    /**
      * Returns a JSON representation of the LFA map
      * @return {@link String} JSON representation of the LFA map
      */
