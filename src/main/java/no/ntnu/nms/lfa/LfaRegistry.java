@@ -52,6 +52,15 @@ public class LfaRegistry {
     }
 
     /**
+     * Returns if the LFA is in the registry
+     * @param ip {@link String} the IP of the LFA to check
+     * @return {@link boolean} true if the LFA is in the registry, false otherwise
+     */
+    public boolean lfaInRegistry(String ip) {
+        return lfaMap.containsKey(ip);
+    }
+
+    /**
      * Removes a LFA from the registry
      * @param lfa {@link String} the LFA to remove
      */
