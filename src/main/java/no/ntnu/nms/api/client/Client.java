@@ -9,8 +9,11 @@ import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.apache.hc.client5.http.ssl.TrustSelfSignedStrategy;
 import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.apache.hc.core5.ssl.SSLContexts;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.SSLContext;
@@ -73,5 +76,38 @@ public class Client {
             Logging.getLogger().warning(e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Gets the licenses from the LFA.
+     * @param ip The ip of the LFA.
+     * @return A {@link JSONArray} with the licenses of the given LFA.
+     */
+    public static JSONArray getLfaLicenses(String ip) {
+        String url = "https://" + ip + "/api/v1/licenses";
+        String body;
+        try (CloseableHttpClient httpClient = getHttpClient()) {
+            if (httpClient == null) {
+                Logging.getLogger().warning("Failed to create http client");
+                return null;
+            }
+            body = httpClient.execute(ClassicRequestBuilder.get(url).build(),
+                    (ClassicHttpResponse response) -> {
+                        if (response.getCode() != 200) {
+                            Logging.getLogger().warning("Failed to connect to LFA: " + response.getCode());
+                            return null;
+                        } else {
+                            return EntityUtils.toString(response.getEntity(), "UTF-8");
+                        }
+                    });
+        } catch (Exception e) {
+            Logging.getLogger().warning(e.getMessage());
+            return null;
+        }
+        if (body == null) {
+            return null;
+        }
+        System.out.println(body);
+        return new JSONObject(body).getJSONArray("licenses");
     }
 }
