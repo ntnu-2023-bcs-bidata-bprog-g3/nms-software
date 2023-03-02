@@ -42,6 +42,10 @@ public class LfaRegistryHandler {
     public String getLicenses() {
         Logging.getLogger().info("LFA endpoint called for all licenses");
         LfaRegistry.getInstance().refreshLfaMap();
+        if (LfaRegistry.getInstance().getSize() == 0) {
+            Logging.getLogger().info("No LFA found");
+            return "{\"error\": \"No LFA found\"}";
+        }
         JSONObject lfasBeforeLicense = new JSONObject(LfaRegistry.getInstance().jsonify());
         JSONArray lfasWithLicense = new JSONObject("{\"lfas\": []}").getJSONArray("lfas");
         for (Object currentLfa : lfasBeforeLicense.getJSONArray("lfas")) {
