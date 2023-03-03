@@ -13,11 +13,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * Class for generating licenses.
+ */
 public class LicenseGenerator {
 
+    /**
+     * Path to temporary files.
+     */
     private static final String TEMP_FILE_PATH = "data/sublicense/";
 
 
+    /**
+     * Generates a license.
+     * @param ip IP address of the client
+     * @param mediafunction Mediafunction to generate license for
+     * @param duration Duration of the license
+     * @return Path to the license file
+     * @throws LicenseGeneratorException If the license could not be generated
+     */
     public static String generateLicense(String ip, String mediafunction, int duration) throws LicenseGeneratorException {
         if (ip == null ||ip.length() == 0 || mediafunction == null
                 || mediafunction.length() == 0 || duration < 1) {
@@ -38,6 +52,11 @@ public class LicenseGenerator {
         return path;
     }
 
+    /**
+     * Signs a license file.
+     * @param path Path to the license file
+     * @throws LicenseGeneratorException If the license could not be generated
+     */
     private static void signFile(String path) throws LicenseGeneratorException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("bash", "-c", "openssl dgst -sha256 -sign intermediate-pk.key -out " + path + ".signature "  + path);
@@ -52,6 +71,12 @@ public class LicenseGenerator {
         }
     }
 
+    /**
+     * Writes the license string to a file.
+     * @param path Path to the license file
+     * @param content Content to write to the file
+     * @throws LicenseGeneratorException If the license could not be generated
+     */
     private static void writeToFile(String path, String content) throws LicenseGeneratorException {
         //write to file
         try {
@@ -61,6 +86,13 @@ public class LicenseGenerator {
         }
     }
 
+    /**
+     * Gets the pool and subtracts the duration from it.
+     * @param mediaFunction Mediafunction to subtract from
+     * @param duration Duration to subtract
+     * @return The pool
+     * @throws LicenseGeneratorException If the subtraction fails
+     */
     private static Pool getPoolAndSubtract(String mediaFunction, int duration) throws LicenseGeneratorException {
         Pool pool;
         try {
@@ -77,6 +109,12 @@ public class LicenseGenerator {
         return pool;
     }
 
+    /**
+     * Generates a license string.
+     * @param pool Pool to generate license for
+     * @param duration Duration of the license
+     * @return The license string
+     */
     private static String generateString(Pool pool, int duration) {
         HashMap<String, Object> licenseMap = new HashMap<>();
         HashMap<String, Object> infoMap = new HashMap<>();
