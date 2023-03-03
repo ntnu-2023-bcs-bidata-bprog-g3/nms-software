@@ -23,12 +23,7 @@ public class LicenseGenerator {
                 || mediafunction.length() == 0 || duration < 1) {
             throw new LicenseGeneratorException("Invalid input");
         }
-        Pool pool;
-        try {
-            pool = getPoolAndSubtract(mediafunction, duration);
-        } catch (LicenseGeneratorException e) {
-            throw new LicenseGeneratorException(e.getMessage());
-        }
+        Pool pool = getPoolAndSubtract(mediafunction, duration);
 
         int uid = (int) (Math.random() * 1000000000);
         String path = TEMP_FILE_PATH + uid + "/";
@@ -71,6 +66,9 @@ public class LicenseGenerator {
         try {
             pool = PoolRegistry.getInstance(false)
                     .getPoolByMediaFunction(mediaFunction);
+            if (pool == null) {
+                throw new NullPointerException();
+            }
         } catch (NullPointerException e) {
             throw new LicenseGeneratorException("No pool with media function " + mediaFunction + " found");
         }
