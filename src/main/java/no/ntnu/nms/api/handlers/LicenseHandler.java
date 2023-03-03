@@ -1,10 +1,10 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.api.BodyParser;
 import no.ntnu.nms.api.client.Client;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.exception.ParserException;
-import no.ntnu.nms.lfa.LfaRegistry;
 import no.ntnu.nms.license.LicenseGenerator;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.zip.ZipInputStream;
@@ -111,4 +112,22 @@ public class LicenseHandler {
 
         return "{\"message\": \"Sub-license generated :)\"}";
     }
+    
+    @PutMapping(value={"/consume"})
+    public String consumeLicense(@RequestBody String payload) {
+        Map<String, String> body = BodyParser.parseLfaBody(payload);
+
+        if (body.containsKey("error")) {
+            return body.get("error");
+        }
+
+        try {
+            Client.consumeLicense(new JSONObject(body));
+        } catch (HttpException | JSONException e) {
+            Logging.getLogger().info("Failed to consume license: " + e.getMessage());
+            return "{\"error\": \"Failed to consume license: " + e.getMessage() + "\"}";
+        }
+        return "{\"message\": \"License consumed :)\"}";
+    }
+
 }
