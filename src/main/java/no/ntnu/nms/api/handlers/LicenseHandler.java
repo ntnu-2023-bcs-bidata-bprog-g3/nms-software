@@ -8,6 +8,7 @@ import no.ntnu.nms.lfa.LfaRegistry;
 import no.ntnu.nms.licenseLedger.LicenseGenerator;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hc.core5.http.HttpException;
 import org.json.JSONException;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
@@ -108,6 +110,12 @@ public class LicenseHandler {
             PoolRegistry.getInstance(false).getPoolByMediaFunction(mediaFunction).addSeconds(duration);
             Logging.getLogger().info("Failed to upload sub-license: " + e.getMessage());
             return "{\"error\": \"Failed to upload sub-license: \n" + e.getMessage() + "\"}";
+        }
+
+        try {
+            FileUtils.deleteDirectory(new File(path));
+        } catch (IOException e) {
+            Logging.getLogger().info("Failed to delete temp sub-license: " + e.getMessage());
         }
 
         return "{\"message\": \"Sub-license generated :)\"}";
