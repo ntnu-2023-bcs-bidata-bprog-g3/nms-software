@@ -112,7 +112,12 @@ public class LicenseHandler {
 
         return "{\"message\": \"Sub-license generated :)\"}";
     }
-    
+
+    /**
+     * Consume parts of a license.
+     * @param payload {@link String} the payload containing the LFA IP, media function and duration.
+     * @return {@link String} a message that the license was consumed.
+     */
     @PutMapping(value={"/consume"})
     public String consumeLicense(@RequestBody String payload) {
         Map<String, String> body = BodyParser.parseLfaBody(payload);

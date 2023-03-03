@@ -9,8 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Parser for the body of a request.
+ */
 public class BodyParser {
 
+    /**
+     * Parse the body of a LFA request.
+     * @param payload {@link String} the payload of the request.
+     * @return {@link Map} a map containing the LFA IP, media function and duration.
+     */
     public static Map<String, String> parseLfaBody(String payload) {
         JSONObject body;
         HashMap<String, String> returnMap = new HashMap<>();
