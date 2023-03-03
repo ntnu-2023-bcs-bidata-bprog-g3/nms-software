@@ -6,7 +6,6 @@ import no.ntnu.nms.parser.LicenseParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -34,18 +33,24 @@ public class LicenseParserTest {
             Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
         }
         Files.deleteIfExists(testDir);
+
+        Path dir = Path.of("data/temp/");
+        //delete all files in the directory, but not the directory itself
+        if (Files.exists(dir)) {
+            Files.walk(dir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
     }
 
     @Test
-    void TestParseInvalidFile(@TempDir File tempDir) throws Exception {
+    void TestParseInvalidFile() throws Exception {
         // Create a valid license file
-        File licenseFile = new File(tempDir, "license.json");
+        File licenseFile = new File("data/temp/", "license.json");
         FileWriter writer = new FileWriter(licenseFile);
         writer.write("{\"licence\": {\"keys\": [{\"name\": \"test\", \"duration\": \"1 day\", \"info\": {\"description\": \"test description\"}}]}}");
         writer.close();
 
         // Create a signature file
-        File signatureFile = new File(tempDir, "license.json.signature");
+        File signatureFile = new File("data/temp/", "license.json.signature");
         writer = new FileWriter(signatureFile);
         writer.write("signature");
         writer.close();
@@ -61,11 +66,15 @@ public class LicenseParserTest {
         zos.close();
 
         assertThrows(ParserException.class, () -> parser.parse(new ZipInputStream(new ByteArrayInputStream(bos.toByteArray()))));
+
+        // Delete the license files
+        licenseFile.delete();
+        signatureFile.delete();
     }
 
 
     @Test
-    void TestParseValidFiles() {
+    void TestParseValidFiles() throws IOException {
         //create ZipInputStream of data/temp/zip/files.zip
         LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
         ZipInputStream zis = null;

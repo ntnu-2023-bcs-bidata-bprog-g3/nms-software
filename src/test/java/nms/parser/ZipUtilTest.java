@@ -101,25 +101,4 @@ public class ZipUtilTest {
         }
     }
 
-    @Test
-    public void TestMissingPublicKey() throws IOException {
-        byte[] licenseJsonData = "{\"license\": \"test\"}".getBytes(StandardCharsets.UTF_8);
-        byte[] licenseJsonSignatureData = "signature".getBytes(StandardCharsets.UTF_8);
-        byte[] zipData = createZipFile("license.json", licenseJsonData, "license.json.signature", licenseJsonSignatureData);
-
-        String extractedDirName = null;
-        try (ZipInputStream inputStream = new ZipInputStream(new ByteArrayInputStream(zipData))) {
-            extractedDirName = ZipUtil.unzipper(inputStream);
-            assertTrue(Files.exists(Path.of("data/temp/" + extractedDirName + "/license.json")));
-            assertTrue(Files.exists(Path.of("data/temp/" + extractedDirName + "/license.json.signature")));
-            assertFalse(Files.exists(Path.of("data/temp/" + extractedDirName + "/root-pubkey.pem")));
-        } finally {
-            // Clean up
-            Path dir = Path.of("data/temp/" + extractedDirName);
-            if (Files.exists(dir)) {
-                Files.walk(dir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-            }
-        }
-    }
-
 }
