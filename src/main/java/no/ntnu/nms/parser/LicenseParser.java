@@ -84,9 +84,10 @@ public class LicenseParser {
         }
 
         try {
-            JSONArray keyList = (JSONArray) object.getJSONObject("licence").get("keys");
-            for (Object o : keyList) {
-                parseLicense((JSONObject) o);
+            JSONArray keyList = object.getJSONObject("license").getJSONArray("keys");
+            for (int i = 0; i < keyList.length(); i++) {
+                JSONObject keyObject = keyList.getJSONObject(i);
+                parseLicense(keyObject);
             }
         } catch (JSONException | NullPointerException e) {
             throw new ParserException("There was an error reading the license file" + e.getMessage());
@@ -99,11 +100,8 @@ public class LicenseParser {
         String description;
         try {
             name = (String) object.get("name");
-            String durationString = (String) object.get("duration");
-            String durationCleanString = durationString.replaceAll("[^0-9]", "");
-            if (durationCleanString.isEmpty()) return;
-            duration = Integer.parseInt(durationCleanString)*60;
-            description = (String) object.getJSONObject("info").get("description");
+            duration = object.getInt("duration") * 60;
+            description = (String) object.get("description");
         } catch (JSONException e) {
             throw new ParserException("There was an error reading the license file" + e.getMessage());
         }
@@ -112,7 +110,7 @@ public class LicenseParser {
         if (pool == null) {
             PoolRegistry.getInstance(false).addPool(new Pool(name, duration, description));
         } else {
-            if (!PoolRegistry.getInstance(false).getPoolByMediaFunction(name).addSeconds(duration)) {
+            if (!pool.addSeconds(duration)) {
                 throw new ParserException("Could not add seconds to pool");
             }
         }

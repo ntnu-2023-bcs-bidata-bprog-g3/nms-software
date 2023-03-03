@@ -7,10 +7,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
-import javax.swing.text.html.parser.Parser;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +28,7 @@ public class LicenseParserTest {
     }
 
     @AfterAll
-    public static void tearDown() throws IOException{
+    public static void tearDown() throws IOException {
         Path testDir = Path.of(TEST_FILES_PATH);
         if (Files.exists(testDir)) {
             Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
@@ -73,7 +70,7 @@ public class LicenseParserTest {
         LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
         ZipInputStream zis = null;
         try {
-            zis = new ZipInputStream(new FileInputStream("src/main/resources/test/files.zip"));
+            zis = new ZipInputStream(new FileInputStream("src/main/resources/test/file.zip"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found" + e.getMessage());
             return; //ignore test if file is not found
