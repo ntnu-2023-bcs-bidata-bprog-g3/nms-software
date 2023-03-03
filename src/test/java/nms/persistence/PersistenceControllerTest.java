@@ -4,7 +4,7 @@ import static nms.Constants.TEST_FILES_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nms.Constants;
-import no.ntnu.nms.licenseLedger.LicenseLedger;
+import no.ntnu.nms.license.LicenseLedger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

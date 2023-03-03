@@ -2,7 +2,7 @@ package no.ntnu.nms.parser;
 
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
-import no.ntnu.nms.licenseLedger.LicenseLedger;
+import no.ntnu.nms.license.LicenseLedger;
 import no.ntnu.nms.logging.Logging;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;

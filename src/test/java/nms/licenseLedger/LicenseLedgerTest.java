@@ -38,7 +38,7 @@ public class LicenseLedgerTest {
             Files.createDirectory(licenseDir);
         }
         // Initialize the ledger with the test ledger path
-        no.ntnu.nms.licenseLedger.LicenseLedger.init(LEDGER_PATH);
+        no.ntnu.nms.license.LicenseLedger.init(LEDGER_PATH);
 
         //create a test license file
         Files.createFile(new File(LICENSE_PATH).toPath());
@@ -63,18 +63,18 @@ public class LicenseLedgerTest {
     @Test
     void testAddLicenseToLedger() throws Exception {
         // Add a license to the ledger
-        no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
+        no.ntnu.nms.license.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
         // Verify that the license is in the ledger
-        Assertions.assertTrue(no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().licenseIsInLedger(LICENSE_PATH));
+        Assertions.assertTrue(no.ntnu.nms.license.LicenseLedger.getInstance().licenseIsInLedger(LICENSE_PATH));
     }
 
     @Test
     void testLicenseIsInLedger() throws Exception {
         // Add a license to the ledger
-        no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
+        no.ntnu.nms.license.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
         // Verify that the license is in the ledger
-        Assertions.assertTrue(no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().licenseIsInLedger(LICENSE_PATH));
+        Assertions.assertTrue(no.ntnu.nms.license.LicenseLedger.getInstance().licenseIsInLedger(LICENSE_PATH));
         // Verify that a different license is not in the ledger
-        Assertions.assertFalse(no.ntnu.nms.licenseLedger.LicenseLedger.getInstance().licenseIsInLedger(OTHER_LICENSE_PATH));
+        Assertions.assertFalse(no.ntnu.nms.license.LicenseLedger.getInstance().licenseIsInLedger(OTHER_LICENSE_PATH));
     }
 }

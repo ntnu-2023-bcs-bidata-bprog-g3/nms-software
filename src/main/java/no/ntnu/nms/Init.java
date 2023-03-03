@@ -1,7 +1,7 @@
 package no.ntnu.nms;
 
 import no.ntnu.nms.domainModel.PoolRegistry;
-import no.ntnu.nms.licenseLedger.LicenseLedger;
+import no.ntnu.nms.license.LicenseLedger;
 
 
 public class Init {

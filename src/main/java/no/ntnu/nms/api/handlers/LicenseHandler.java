@@ -5,7 +5,7 @@ import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.lfa.LfaRegistry;
-import no.ntnu.nms.licenseLedger.LicenseGenerator;
+import no.ntnu.nms.license.LicenseGenerator;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FileUtils;

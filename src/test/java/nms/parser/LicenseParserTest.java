@@ -1,7 +1,7 @@
 package nms.parser;
 
 import no.ntnu.nms.exception.ParserException;
-import no.ntnu.nms.licenseLedger.LicenseLedger;
+import no.ntnu.nms.license.LicenseLedger;
 import no.ntnu.nms.parser.LicenseParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;

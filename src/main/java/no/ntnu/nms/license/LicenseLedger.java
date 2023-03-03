@@ -1,4 +1,4 @@
-package no.ntnu.nms.licenseLedger;
+package no.ntnu.nms.license;
 
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
