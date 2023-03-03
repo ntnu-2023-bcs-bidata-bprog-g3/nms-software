@@ -1,6 +1,7 @@
 package no.ntnu.nms.api.handlers;
 
 import no.ntnu.nms.api.client.Client;
+import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.lfa.LfaRegistry;
@@ -104,6 +105,7 @@ public class LicenseHandler {
         try {
             Client.uploadLicense(ip, path);
         } catch (HttpException e) {
+            PoolRegistry.getInstance(false).getPoolByMediaFunction(mediaFunction).addSeconds(duration);
             Logging.getLogger().info("Failed to upload sub-license: " + e.getMessage());
             return "{\"error\": \"Failed to upload sub-license: \n" + e.getMessage() + "\"}";
         }
