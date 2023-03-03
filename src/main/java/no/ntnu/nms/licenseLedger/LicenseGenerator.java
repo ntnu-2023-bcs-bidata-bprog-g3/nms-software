@@ -88,7 +88,7 @@ public class LicenseGenerator {
         infoMap.put("date", LocalDateTime.now().toString());
         infoMap.put("customer", "TV2");
         infoMap.put("issuer", "NMS");
-        infoMap.put("uid", pool.getId().toString());
+        //infoMap.put("uid", pool.getId().toString());
 
         keyMap.put("name", pool.getMediaFunction());
         keyMap.put("duration", duration);

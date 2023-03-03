@@ -42,21 +42,6 @@ public class PoolTest {
     }
 
     @Test
-    public void TestCreationUniqueId() {
-        Pool pool = new Pool("J2KHD",
-                30, "A test pool");
-        assertNotEquals(POOL.getId(), pool.getId());
-    }
-
-    @Test
-    public void TestSetId() {
-        Long oldId = POOL.getId();
-        POOL.setId(oldId + 1L);
-        assertNotEquals(oldId, POOL.getId());
-        assertEquals(oldId + 1L, POOL.getId());
-    }
-
-    @Test
     public void TestSetDescription() {
         String oldDescription = POOL.getDescription();
         POOL.setDescription("A new description");
@@ -88,7 +73,6 @@ public class PoolTest {
     @Test
     public void TestJsonify() {
         String json = "{" +
-                "\"id\": " + POOL.getId() + "," +
                 "\"mediaFunction\": \"J2KHD\"," +
                 "\"timeLeftSeconds\": 30," +
                 "\"description\": \"A test pool\"" +
@@ -154,6 +138,7 @@ public class PoolTest {
 
     @Test
     public void TeatToString() {
-        assertEquals("Pool[id=" + POOL.getId() + ", media function=J2KHD, time left=30, description=A test pool]", POOL.toString());
+        assertEquals("Pool[media function=J2KHD, time left=30, description=A test pool]",
+                POOL.toString());
     }
 }

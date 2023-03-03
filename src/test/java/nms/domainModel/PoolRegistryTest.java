@@ -142,8 +142,7 @@ public class PoolRegistryTest {
         poolRegistry.addPool(pool);
 
         jsonString =
-                "{\"pools\":[{\"id\": " + pool.getId() +
-                        ",\"mediaFunction\": \"test\",\"timeLeftSeconds\": 2,\"description\": \"test\"}]}";
+                "{\"pools\":[{\"mediaFunction\": \"test\",\"timeLeftSeconds\": 2,\"description\": \"test\"}]}";
 
         assertEquals(jsonString, poolRegistry.jsonify());
     }
