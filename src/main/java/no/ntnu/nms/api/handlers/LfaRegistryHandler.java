@@ -1,15 +1,20 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.api.BodyParser;
 import no.ntnu.nms.api.client.Client;
 import no.ntnu.nms.exception.LfaRegistryException;
 import no.ntnu.nms.lfa.LfaRegistry;
 import no.ntnu.nms.logging.Logging;
+import org.apache.hc.core5.http.HttpException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Map;
 
 import static no.ntnu.nms.api.Constants.BASE_URL;
 
@@ -79,6 +84,27 @@ public class LfaRegistryHandler {
             return "{\"error\": \"Failed to register LFA with name " + name + ": "
                     + e.getMessage() + "\"}";
         }
+    }
 
+    /**
+     * Consume parts of a license.
+     * @param payload {@link String} the payload containing the LFA IP, media function and duration.
+     * @return {@link String} a message that the license was consumed.
+     */
+    @PutMapping(value={"/consume"})
+    public String consumeLicense(@RequestBody String payload) {
+        Map<String, String> body = BodyParser.parseLfaBody(payload);
+
+        if (body.containsKey("error")) {
+            return body.get("error");
+        }
+
+        try {
+            Client.consumeLicense(new JSONObject(body));
+        } catch (HttpException | JSONException e) {
+            Logging.getLogger().info("Failed to consume license: " + e.getMessage());
+            return "{\"error\": \"Failed to consume license: " + e.getMessage() + "\"}";
+        }
+        return "{\"message\": \"License consumed :)\"}";
     }
 }

@@ -11,8 +11,6 @@ import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hc.core5.http.HttpException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -111,28 +109,6 @@ public class LicenseHandler {
         }
 
         return "{\"message\": \"Sub-license generated :)\"}";
-    }
-
-    /**
-     * Consume parts of a license.
-     * @param payload {@link String} the payload containing the LFA IP, media function and duration.
-     * @return {@link String} a message that the license was consumed.
-     */
-    @PutMapping(value={"/consume"})
-    public String consumeLicense(@RequestBody String payload) {
-        Map<String, String> body = BodyParser.parseLfaBody(payload);
-
-        if (body.containsKey("error")) {
-            return body.get("error");
-        }
-
-        try {
-            Client.consumeLicense(new JSONObject(body));
-        } catch (HttpException | JSONException e) {
-            Logging.getLogger().info("Failed to consume license: " + e.getMessage());
-            return "{\"error\": \"Failed to consume license: " + e.getMessage() + "\"}";
-        }
-        return "{\"message\": \"License consumed :)\"}";
     }
 
 }
