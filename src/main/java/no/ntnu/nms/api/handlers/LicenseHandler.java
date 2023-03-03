@@ -107,8 +107,15 @@ public class LicenseHandler {
         try {
             Client.uploadLicense(ip, path);
         } catch (HttpException e) {
-            PoolRegistry.getInstance(false).getPoolByMediaFunction(mediaFunction).addSeconds(duration);
+            PoolRegistry.getInstance(false).getPoolByMediaFunction(mediaFunction)
+                    .addSeconds(duration);
             Logging.getLogger().info("Failed to upload sub-license: " + e.getMessage());
+            try {
+                FileUtils.deleteDirectory(new File(path));
+            } catch (IOException ioe) {
+                Logging.getLogger().info("Failed to delete temp sub-license: "
+                        + ioe.getMessage());
+            }
             return "{\"error\": \"Failed to upload sub-license: \n" + e.getMessage() + "\"}";
         }
 
