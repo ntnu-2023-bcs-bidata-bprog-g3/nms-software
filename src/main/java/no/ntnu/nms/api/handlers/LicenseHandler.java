@@ -70,31 +70,15 @@ public class LicenseHandler {
      */
     @PostMapping(value={"/lfa"})
     public String generateSubLicense(@RequestBody String payload) {
-        JSONObject body;
+        Map<String, String> body = BodyParser.parseLfaBody(payload);
 
-        String ip;
-        String mediaFunction;
-        int duration;
-        try {
-            body = new JSONObject(payload);
-            ip = body.getString("ip");
-            mediaFunction = body.getString("mediaFunction");
-            duration = body.getInt("duration");
-        } catch (JSONException e) {
-            Logging.getLogger().info("Failed to parse payload: " + e.getMessage());
-            return "{\"error\": \"Failed to parse payload\"}";
+        if (body.containsKey("error")) {
+            return body.get("error");
         }
 
-        if (Objects.equals(ip, "") || Objects.equals(mediaFunction, "") || duration == 0) {
-            Logging.getLogger().info("Missing parameter values");
-            return "{\"error\": \"Missing parameter values\"}";
-        }
-
-        LfaRegistry.getInstance().refreshLfaMap();
-        if (!LfaRegistry.getInstance().lfaInRegistry(ip)) {
-            Logging.getLogger().info("LFA not in registry");
-            return "{\"error\": \"LFA not in registry\"}";
-        }
+        String ip = body.get("ip");
+        String mediaFunction = body.get("mediaFunction");
+        int duration = Integer.parseInt(body.get("duration"));
 
         String path;
         try {
