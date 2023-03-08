@@ -47,17 +47,11 @@ public class Checksum {
      * @param checksumDirectory The path to the file containing the checksum.
      * @return {@link Boolean} True if the checksums match, false otherwise.
      */
-    public static boolean compare(String fileDirectory, String checksumDirectory) {
-        try {
-            String checksum = Checksum.generateFromFile(fileDirectory);
-            byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
-                    .readFromFile(checksumDirectory), KeyGenerator.KEY);
-            String checksumFromFile = new String(decryptedChecksumFromFile);
-            return checksum.equals(checksumFromFile);
-        } catch (CryptographyException | FileHandlerException e) {
-            Logging.getLogger().severe("Unable to compare checksums. Core functionality affected.");
-            System.exit(1);
-        }
-        return true;
+    public static boolean compare(String fileDirectory, String checksumDirectory) throws CryptographyException, FileHandlerException {
+        String checksum = Checksum.generateFromFile(fileDirectory);
+        byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
+                .readFromFile(checksumDirectory), KeyGenerator.KEY);
+        String checksumFromFile = new String(decryptedChecksumFromFile);
+        return checksum.equals(checksumFromFile);
     }
 }

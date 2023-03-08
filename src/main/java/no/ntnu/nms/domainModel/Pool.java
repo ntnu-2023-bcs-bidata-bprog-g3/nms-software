@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class Pool implements Serializable {
 
-    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport changes;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.changes.addPropertyChangeListener(listener);
@@ -24,11 +24,6 @@ public class Pool implements Serializable {
         this.changes.removePropertyChangeListener(listener);
         Logging.getLogger().info("Pool registry change listener successfully removed");
     }
-
-    /**
-     * The id of the pool with the given media function.
-     */
-    private Long id;
     /**
      * The media function of the pool.
      */
@@ -49,9 +44,9 @@ public class Pool implements Serializable {
      * @param description {@link String} description of the media function in the pool.
      */
     public Pool(String mediaFunction, int timeLeftSeconds, String description) {
+        this.changes = new PropertyChangeSupport(this);
         Logging.getLogger().info("Creating new pool for mediafunction " + mediaFunction);
         setMediaFunction(mediaFunction);
-        setId((long) (Math.random() * 1000000000000000000L));
         setDescription(description);
         try {
             setTimeLeftSeconds(timeLeftSeconds);
@@ -59,16 +54,6 @@ public class Pool implements Serializable {
             Logging.getLogger().warning("Time left in seconds cannot be negative. Setting 0");
             setTimeLeftSeconds(0);
         }
-    }
-
-    /**
-     * Set the id of the pool.
-     * @param id {@link Long} id of the pool.
-     */
-    public void setId(Long id) {
-        Long oldId = this.id;
-        this.id = id;
-        changes.firePropertyChange("change", oldId, id);
     }
 
     /**
@@ -115,14 +100,6 @@ public class Pool implements Serializable {
     }
 
     /**
-     * Get the id of the pool.
-     * @return {@link Long} id of the pool.
-     */
-    public Long getId() {
-        return this.id;
-    }
-
-    /**
      * Get the time left in the pool, in seconds.
      * @return {@link Integer} time left in the pool, in seconds.
      */
@@ -155,6 +132,30 @@ public class Pool implements Serializable {
         return false;
     }
 
+
+    /**
+     * Add time to the time left in the pool
+     * @param seconds {@link Integer} number of seconds to add.
+     */
+    public boolean addSeconds(int seconds) {
+        if (seconds > 0) {
+            int oldTimeLeftSeconds = this.timeLeftSeconds;
+            this.timeLeftSeconds += seconds;
+            changes.firePropertyChange("change", oldTimeLeftSeconds,
+                    this.timeLeftSeconds);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the property change support.
+     * @return {@link PropertyChangeSupport} property change support of the pool.
+     */
+    public PropertyChangeSupport getChanges() {
+        return this.changes;
+    }
+
     /**
      * Get a string representation of the pool.
      * @return {@link String} string representation of the pool.
@@ -162,8 +163,7 @@ public class Pool implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "Pool[id=%d, media function=%s, time left=%d, description=%s]",
-                this.getId(),
+                "Pool[media function=%s, time left=%d, description=%s]",
                 this.getMediaFunction(),
                 this.getTimeLeftSeconds(),
                 this.getDescription()
@@ -176,9 +176,8 @@ public class Pool implements Serializable {
      */
     public String jsonify() {
         return String.format(
-                "{\"id\": %d,\"mediaFunction\": \"%s\",\"timeLeftSeconds\": %d,"
+                "{\"mediaFunction\": \"%s\",\"timeLeftSeconds\": %d,"
                         + "\"description\": \"%s\"}",
-                this.getId(),
                 this.getMediaFunction(),
                 this.getTimeLeftSeconds(),
                 this.getDescription()

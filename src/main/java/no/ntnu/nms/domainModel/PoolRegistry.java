@@ -1,5 +1,6 @@
 package no.ntnu.nms.domainModel;
 
+import no.ntnu.nms.CustomerConstants;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
@@ -25,10 +26,6 @@ public class PoolRegistry implements Serializable {
         }
     };
 
-    private static final String poolRegistryDir = "data/pool/";
-    private static final String poolRegistryName = "poolreg.ser";
-    private static final String poolRegistryPath = poolRegistryDir + poolRegistryName;
-
     /**
      * Singleton instance.
      */
@@ -40,31 +37,36 @@ public class PoolRegistry implements Serializable {
     private final ArrayList<Pool> poolList;
 
     /**
+     * Registry file path
+     */
+    private final String storageFilePath;
+
+    /**
      * Private constructor to prevent instantiation.
      */
-    private PoolRegistry() {
+    private PoolRegistry(String path) {
+        storageFilePath = path;
         poolList = new ArrayList<>();
     }
 
     /**
      * Init function used for setting up the application
      */
-    public static void init() {
-        if (instance == null) {
-            instance = new PoolRegistry();
-            PersistenceController.saveToFile(instance, poolRegistryPath, true);
-        }
+    public static void init(String path) {
+        instance = new PoolRegistry(path);
+        PersistenceController.saveToFile(instance, instance.storageFilePath, true);
     }
 
     /**
      * Get the singleton instance of the registry.
      * @return {@link PoolRegistry} getter for the singleton instance.
      */
-    public static PoolRegistry getInstance() {
+    public static PoolRegistry getInstance(boolean isTest) {
         if (instance == null) {
-            PersistenceController.loadFromFile(poolRegistryPath);
+            String path = isTest ? CustomerConstants.TEST_DATA_PATH : CustomerConstants.PROD_DATA_PATH;
+            path += "pool/poolreg.ser";
+            PersistenceController.loadFromFile(path);
         }
-
         return instance;
     }
 
@@ -149,24 +151,32 @@ public class PoolRegistry implements Serializable {
     }
 
     /**
+     * Clear the registry.
+     */
+    public void clear() {
+        poolList.clear();
+        updatePoolReg();
+    }
+
+    /**
      * Get a JSON representation of the registry.
      * @return {@link String} JSON representation of the registry.
      */
     public String jsonify() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append("{\"pools\":[");
         for (Pool pool : poolList) {
             sb.append(pool.jsonify());
             sb.append(",");
         }
         if (instance.getPoolCount() > 0) sb.deleteCharAt(sb.length() - 1);
-        sb.append("]");
+        sb.append("]}");
         return sb.toString();
     }
 
     private void updatePoolReg() {
         try {
-            PersistenceController.saveToFile(this, poolRegistryPath, true);
+            PersistenceController.saveToFile(this, storageFilePath, true);
         } catch (FileHandlerException e) {
             Logging.getLogger().severe("Unable to update pool registry. " +
                     "Core functionality has been affected. Error: " + e.getMessage());

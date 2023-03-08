@@ -1,11 +1,11 @@
 package no.ntnu.nms.exception;
 
-public class CryptographyException extends RuntimeException {
+public class LicenseGeneratorException extends RuntimeException {
     /**
      * Constructor for CryptographyException.
      * @param message the message to be displayed
      */
-    public CryptographyException(String message) {
+    public LicenseGeneratorException(String message) {
         super(message);
     }
 }

@@ -1,4 +1,4 @@
-package no.ntnu.nms.licenseLedger;
+package no.ntnu.nms.license;
 
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
@@ -18,6 +18,11 @@ public class LicenseLedger {
     private static LicenseLedger instance = null;
 
     /**
+     * The complete path to the ledger file
+     */
+    private String ledgerPath;
+
+    /**
      * The path to the ledger file.
      */
     private static final String LEDGER_PATH = "data/ledger/top_license_ledger.txt";
@@ -25,11 +30,14 @@ public class LicenseLedger {
     /**
      * Init function used for setting up the storage files
      */
-    public static void init() {
-        if (instance == null) {
-            instance = new LicenseLedger(LEDGER_PATH);
-            PersistenceController.saveToFile("", LEDGER_PATH, false);
-        }
+    public static void init(String ledgerPath) {
+            if (ledgerPath == null) {
+                instance = new LicenseLedger(LEDGER_PATH);
+                PersistenceController.saveToFile("", LEDGER_PATH, false);
+            } else {
+                instance = new LicenseLedger(ledgerPath);
+                PersistenceController.saveToFile("", ledgerPath, false);
+            }
     }
 
     /**
@@ -39,17 +47,14 @@ public class LicenseLedger {
      */
     private LicenseLedger(String ledgerDir) throws FileHandlerException {
             this.setLedgerPath(ledgerDir);
-        }public static LicenseLedger getInstance() {
+        }
+
+    public static LicenseLedger getInstance() {
         if (instance == null) {
             instance = new LicenseLedger(LEDGER_PATH);
         }
         return instance;
     }
-
-    /**
-     * The complete path to the ledger file.
-     */
-    private String ledgerPath;
 
     /**
      * Setter for the ledger path.

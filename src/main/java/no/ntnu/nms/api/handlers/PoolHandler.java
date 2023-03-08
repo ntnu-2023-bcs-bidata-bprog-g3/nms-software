@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 /**
  * PoolHandler is a handler for the pool API endpoint.
  */
+@CrossOrigin
 @RestController
 @RequestMapping(value = {BASE_URL + "/pool"})
 public class PoolHandler {
@@ -27,7 +28,7 @@ public class PoolHandler {
     public String poolGetter(@PathVariable String mediaFunction) {
         Logging.getLogger().info("Pool endpoint called with media function " + mediaFunction);
         try {
-            return PoolRegistry.getInstance()
+            return PoolRegistry.getInstance(false)
                     .getPoolByMediaFunction(mediaFunction)
                     .jsonify();
         } catch (NullPointerException e) {
@@ -41,15 +42,15 @@ public class PoolHandler {
      * Get all pools.
      * @return {@link String} JSON representation of all pools.
      */
-    @GetMapping(value={"/all"})
+    @GetMapping(value={"/all"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllPools() {
         Logging.getLogger().info("Pool endpoint called for all");
-        if (!PoolRegistry.getInstance().getPoolList().hasNext()) {
+        if (!PoolRegistry.getInstance(false).getPoolList().hasNext()) {
             Logging.getLogger().info("No pools found");
             return "{\"error\": \"No pools found\"}";
         }
-        return PoolRegistry.getInstance().jsonify();
+        return PoolRegistry.getInstance(false).jsonify();
     }
 
     /**
