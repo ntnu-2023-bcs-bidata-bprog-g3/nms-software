@@ -16,7 +16,12 @@ _Please note, Brew is required._
 brew install maven
 ```
 
-Launch the application by running:
+Package the application by running:
 ```bash
-mvn clean compile verify exec:java
+mvn clean compile package exec:java
+```
+
+Then run the created Jar file:
+```bash
+java -jar target/nms-software-1.0-SNAPSHOT.jar
 ```
