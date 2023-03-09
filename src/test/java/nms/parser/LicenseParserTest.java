@@ -2,8 +2,10 @@ package nms.parser;
 
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.license.LicenseLedger;
+import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.parser.LicenseParser;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +23,13 @@ public class LicenseParserTest {
 
     private LicenseParser parser;
 
+    @BeforeAll
+    public static void init() throws IOException {
+        Logging.setUpLogger("ALL");
+    }
+
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         parser = new LicenseParser();
     }
 
