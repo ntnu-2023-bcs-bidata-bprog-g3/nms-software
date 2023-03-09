@@ -90,7 +90,7 @@ public class LicenseParser {
                 parseLicense(keyObject);
             }
         } catch (JSONException | NullPointerException e) {
-            throw new ParserException("There was an error reading the license file" + e.getMessage());
+            throw new ParserException("Could not read license file: " + e.getMessage());
         }
     }
 

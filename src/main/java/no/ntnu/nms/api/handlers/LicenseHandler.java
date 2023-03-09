@@ -108,7 +108,7 @@ public class LicenseHandler {
             Logging.getLogger().info("Failed to delete temp sub-license: " + e.getMessage());
         }
 
-        return "{\"message\": \"Sub-license generated :)\"}";
+        return "{\"message\": \"Sub-license generated, sent and accepted\"}";
     }
 
 }
