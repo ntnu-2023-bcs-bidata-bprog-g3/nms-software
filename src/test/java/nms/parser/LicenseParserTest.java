@@ -23,11 +23,6 @@ public class LicenseParserTest {
 
     private LicenseParser parser;
 
-    @BeforeAll
-    public static void init() throws IOException {
-        Logging.setUpLogger("ALL");
-    }
-
     @BeforeEach
     public void setUp() {
         parser = new LicenseParser();
