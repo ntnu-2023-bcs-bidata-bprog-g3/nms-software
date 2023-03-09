@@ -2,6 +2,7 @@ package no.ntnu.nms.api.handlers;
 
 import no.ntnu.nms.api.BodyParser;
 import no.ntnu.nms.api.client.Client;
+import no.ntnu.nms.exception.ExceptionHandler;
 import no.ntnu.nms.exception.LfaRegistryException;
 import no.ntnu.nms.lfa.LfaRegistry;
 import no.ntnu.nms.logging.Logging;
@@ -82,7 +83,7 @@ public class LfaRegistryHandler {
             Logging.getLogger().info("Failed to register LFA with name " + name + ": "
                     + e.getMessage());
             return "{\"error\": \"Failed to register LFA with name " + name + ": "
-                    + e.getMessage() + "\"}";
+                    + ExceptionHandler.getMessage(e) + "\"}";
         }
     }
 
@@ -103,7 +104,7 @@ public class LfaRegistryHandler {
             Client.consumeLicense(new JSONObject(body));
         } catch (HttpException | JSONException e) {
             Logging.getLogger().info("Failed to consume license: " + e.getMessage());
-            return "{\"error\": \"Failed to consume license: " + e.getMessage() + "\"}";
+            return "{\"error\": \"Failed to consume license: " + ExceptionHandler.getMessage(e) + "\"}";
         }
         return "{\"message\": \"License consumed :)\"}";
     }

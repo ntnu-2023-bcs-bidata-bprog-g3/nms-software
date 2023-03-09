@@ -103,7 +103,7 @@ public class LicenseParser {
             duration = object.getInt("duration") * 60;
             description = (String) object.get("description");
         } catch (JSONException e) {
-            throw new ParserException("There was an error reading the license file" + e.getMessage());
+            throw new ParserException("Could not read: " + e.getMessage());
         }
         LicenseLedger.getInstance().addLicenseToLedger(licenseFile.getPath());
         Pool pool = PoolRegistry.getInstance(false).getPoolByMediaFunction(name);

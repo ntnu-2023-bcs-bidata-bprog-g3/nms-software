@@ -7,6 +7,7 @@ import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.license.LicenseGenerator;
 import no.ntnu.nms.logging.Logging;
+import no.ntnu.nms.exception.ExceptionHandler;
 import no.ntnu.nms.parser.LicenseParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -57,7 +58,7 @@ public class LicenseHandler {
             parser.parse(new ZipInputStream(realFile.getInputStream()));
         } catch (ParserException e) {
             Logging.getLogger().info("Failed to parse license file: " + e.getMessage());
-            return "{\"error\": \"" + e.getMessage() + "\"}";
+            return "{\"error\": \"" + ExceptionHandler.getMessage(e) + "\"}";
         }
         return "{\"message\": \"File uploaded :)\"}";
     }
@@ -84,7 +85,7 @@ public class LicenseHandler {
             path = LicenseGenerator.generateLicense(ip, mediaFunction, duration);
         } catch (LicenseGeneratorException e) {
             Logging.getLogger().info("Failed to generate sub-license: " + e.getMessage());
-            return "{\"error\": \"Failed to generate sub-license: " + e.getMessage() + "\"}";
+            return "{\"error\": \"Failed to generate sub-license: " + ExceptionHandler.getMessage(e) + "\"}";
         }
 
         try {
@@ -99,7 +100,7 @@ public class LicenseHandler {
                 Logging.getLogger().info("Failed to delete temp sub-license: "
                         + ioe.getMessage());
             }
-            return "{\"error\": \"Failed to upload sub-license: \n" + e.getMessage() + "\"}";
+            return "{\"error\": \"Failed to upload sub-license: \n" + ExceptionHandler.getMessage(e) + "\"}";
         }
 
         try {
