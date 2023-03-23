@@ -52,8 +52,8 @@ public class LicenseGenerator {
 
         try {
             writeToFile(path, generateString(pool, duration));
-            //signFile(path + "license.json");
-            signFile(path + "license.json", getPrivateKey());
+            PrivateKey privateKey = getPrivateKey();
+            signFile(path + "license.json", privateKey);
         } catch (LicenseGeneratorException e) {
             throw new LicenseGeneratorException(e.getMessage());
         } catch (Exception e) {
@@ -69,31 +69,21 @@ public class LicenseGenerator {
      * @param privateKey Private key to use for signing
      * @throws LicenseGeneratorException If the file could not be signed
      */
-    private static void signFile(String path) throws LicenseGeneratorException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", "openssl dgst -sha256 -sign intermediate-pk.key -out " + path + ".signature "  + path);
+    private static void signFile(String path, PrivateKey privateKey) throws LicenseGeneratorException {
         try {
-            Process process = processBuilder.inheritIO().start();
-            int returnCode = process.waitFor();
-            if (returnCode != 0) {
-                throw new LicenseGeneratorException("Failed to sign file");
-            }
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            signature.initSign(privateKey);
+
+            byte[] fileBytes = Files.readAllBytes(Paths.get(path));
+            signature.update(fileBytes);
+
+            byte[] signedBytes = signature.sign();
+
+            Path signaturePath = Paths.get(path + ".signature");
+            Files.write(signaturePath, signedBytes);
         } catch (Exception e) {
             throw new LicenseGeneratorException("Failed to sign file: " + e.getMessage());
         }
-    }
-
-    private static void signFile(String path, PrivateKey privateKey) throws Exception {
-        Signature signature = Signature.getInstance("SHA256");
-        signature.initSign(privateKey);
-
-        byte[] fileBytes = Files.readAllBytes(Paths.get(path));
-        signature.update(fileBytes);
-
-        byte[] signedBytes = signature.sign();
-
-        Path signaturePath = Paths.get(path + ".signature");
-        Files.write(signaturePath, signedBytes);
     }
 
     /**
@@ -168,19 +158,16 @@ public class LicenseGenerator {
         }
     }
 
-    private static PrivateKey getPrivateKey(){
+    private static PrivateKey getPrivateKey() throws LicenseGeneratorException {
         try {
             KeyStore keyStore = KeyStore.getInstance("JKS");
             InputStream is = App.class.getClassLoader().getResourceAsStream("keystore.jks");
             keyStore.load(is, "secret".toCharArray());
 
-            PrivateKey privateKey = (PrivateKey) keyStore.getKey("keystore", "secret".toCharArray());
-
-            return privateKey;
+            return (PrivateKey) keyStore.getKey("keystore", "secret".toCharArray());
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new LicenseGeneratorException("Failed to get private key: " + e.getMessage());
         }
-        return null;
     }
 
 }
