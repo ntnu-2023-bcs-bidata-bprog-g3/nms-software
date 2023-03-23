@@ -29,7 +29,7 @@ public class FileHandler {
     private static void createDir(String path) {
         try {
             // Check if directory exists, if not create it
-            Path directory = Paths.get(path.substring(0, path.lastIndexOf(File.separator)));
+            Path directory = Paths.get(path.substring(0, path.lastIndexOf("/")));
             if (Files.notExists(directory)) {
                 Files.createDirectories(directory);
             }
