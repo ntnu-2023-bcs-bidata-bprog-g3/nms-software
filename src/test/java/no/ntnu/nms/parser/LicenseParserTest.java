@@ -1,11 +1,8 @@
-package nms.parser;
+package no.ntnu.nms.parser;
 
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.license.LicenseLedger;
-import no.ntnu.nms.logging.Logging;
-import no.ntnu.nms.parser.LicenseParser;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static nms.Constants.TEST_FILES_PATH;
+import static no.ntnu.nms.Constants.TEST_FILES_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LicenseParserTest {
@@ -76,7 +73,7 @@ public class LicenseParserTest {
 
 
     @Test
-    void TestParseValidFiles() throws IOException {
+    void TestParseValidFiles() {
         //create ZipInputStream of data/temp/zip/files.zip
         LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
         ZipInputStream zis = null;

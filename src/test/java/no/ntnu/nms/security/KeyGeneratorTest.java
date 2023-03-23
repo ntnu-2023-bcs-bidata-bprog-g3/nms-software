@@ -1,6 +1,5 @@
-package nms.security;
+package no.ntnu.nms.security;
 
-import no.ntnu.nms.security.KeyGenerator;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

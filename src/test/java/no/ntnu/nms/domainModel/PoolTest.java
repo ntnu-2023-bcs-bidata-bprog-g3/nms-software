@@ -1,6 +1,5 @@
-package nms.domainModel;
+package no.ntnu.nms.domainModel;
 
-import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

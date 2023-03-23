@@ -1,4 +1,4 @@
-package nms.licenseLedger;
+package no.ntnu.nms.licenseLedger;
 
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.AfterAll;
@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import static nms.Constants.TEST_FILES_PATH;
+import static no.ntnu.nms.Constants.TEST_FILES_PATH;
 
 public class LicenseLedgerTest {
     private static final String LEDGER_PATH = TEST_FILES_PATH + "ledger/test_ledger.txt";
@@ -61,7 +61,7 @@ public class LicenseLedgerTest {
     }
 
     @Test
-    void testAddLicenseToLedger() throws Exception {
+    void testAddLicenseToLedger() {
         // Add a license to the ledger
         no.ntnu.nms.license.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
         // Verify that the license is in the ledger
@@ -69,7 +69,7 @@ public class LicenseLedgerTest {
     }
 
     @Test
-    void testLicenseIsInLedger() throws Exception {
+    void testLicenseIsInLedger() {
         // Add a license to the ledger
         no.ntnu.nms.license.LicenseLedger.getInstance().addLicenseToLedger(LICENSE_PATH);
         // Verify that the license is in the ledger

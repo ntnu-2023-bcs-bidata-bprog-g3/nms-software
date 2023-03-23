@@ -1,9 +1,8 @@
-package nms.api.handlers;
-
+package no.ntnu.nms.api.handlers;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LicenseHandlerTest {
+public class PoolhandlerTest {
 
     @Test
     public void TestTest() {

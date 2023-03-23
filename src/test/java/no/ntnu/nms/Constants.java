@@ -1,4 +1,4 @@
-package nms;
+package no.ntnu.nms;
 
 public class Constants {
 

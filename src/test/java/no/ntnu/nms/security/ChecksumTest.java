@@ -1,12 +1,9 @@
-package nms.security;
+package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.file_handler.FileHandler;
 import no.ntnu.nms.logging.Logging;
-import no.ntnu.nms.security.Checksum;
-import no.ntnu.nms.security.Cryptography;
-import no.ntnu.nms.security.KeyGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
