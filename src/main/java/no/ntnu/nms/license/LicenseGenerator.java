@@ -64,9 +64,10 @@ public class LicenseGenerator {
     }
 
     /**
-     * Signs a license file.
-     * @param path Path to the license file
-     * @throws LicenseGeneratorException If the license could not be generated
+     * Signs a file.
+     * @param path Path to the file to sign
+     * @param privateKey Private key to use for signing
+     * @throws LicenseGeneratorException If the file could not be signed
      */
     private static void signFile(String path) throws LicenseGeneratorException {
         ProcessBuilder processBuilder = new ProcessBuilder();
