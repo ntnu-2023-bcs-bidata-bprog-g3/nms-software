@@ -35,7 +35,7 @@ public class LicenseGenerator {
     /**
      * Generates a license.
      * @param ip IP address of the client
-     * @param mediafunction Mediafunction to generate license for
+     * @param mediafunction Media function to generate license for
      * @param duration Duration of the license
      * @return Path to the license file
      * @throws LicenseGeneratorException If the license could not be generated
