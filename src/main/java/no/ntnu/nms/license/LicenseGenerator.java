@@ -2,12 +2,20 @@ package no.ntnu.nms.license;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.ntnu.nms.App;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.file_handler.FileHandler;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.Signature;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,9 +52,12 @@ public class LicenseGenerator {
 
         try {
             writeToFile(path, generateString(pool, duration));
-            signFile(path + "license.json");
+            //signFile(path + "license.json");
+            signFile(path + "license.json", getPrivateKey());
         } catch (LicenseGeneratorException e) {
             throw new LicenseGeneratorException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         return path;
@@ -69,6 +80,19 @@ public class LicenseGenerator {
         } catch (Exception e) {
             throw new LicenseGeneratorException("Failed to sign file: " + e.getMessage());
         }
+    }
+
+    private static void signFile(String path, PrivateKey privateKey) throws Exception {
+        Signature signature = Signature.getInstance("SHA256");
+        signature.initSign(privateKey);
+
+        byte[] fileBytes = Files.readAllBytes(Paths.get(path));
+        signature.update(fileBytes);
+
+        byte[] signedBytes = signature.sign();
+
+        Path signaturePath = Paths.get(path + ".signature");
+        Files.write(signaturePath, signedBytes);
     }
 
     /**
@@ -142,4 +166,20 @@ public class LicenseGenerator {
             throw new LicenseGeneratorException("Failed to generate string: " + e.getMessage());
         }
     }
+
+    private static PrivateKey getPrivateKey(){
+        try {
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            InputStream is = App.class.getClassLoader().getResourceAsStream("keystore.jks");
+            keyStore.load(is, "secret".toCharArray());
+
+            PrivateKey privateKey = (PrivateKey) keyStore.getKey("keystore", "secret".toCharArray());
+
+            return privateKey;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
