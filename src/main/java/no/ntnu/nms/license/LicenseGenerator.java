@@ -158,10 +158,21 @@ public class LicenseGenerator {
         }
     }
 
+    /**
+     * Gets the private key from the keystore.
+     * @return The private key
+     * @throws LicenseGeneratorException If the private key could not be retrieved
+     */
     private static PrivateKey getPrivateKey() throws LicenseGeneratorException {
         try {
             KeyStore keyStore = KeyStore.getInstance("JKS");
             InputStream is = App.class.getClassLoader().getResourceAsStream("keystore.jks");
+            /*
+            For demonstration purposes, the keystore password is "secret" and it is written in-line.
+            For production environments, DO NOT add secrets to version control systems.
+            A better solution would be to derive a password from a mathematical function of
+            some customer unique information. See @link{KeyGenerator} as an example.
+             */
             keyStore.load(is, "secret".toCharArray());
 
             return (PrivateKey) keyStore.getKey("keystore", "secret".toCharArray());
