@@ -90,4 +90,29 @@ public class LicenseParserTest {
             fail();
         }
     }
+
+    @Test
+    void TestParseInvalidFiles() {
+        //create ZipInputStream of data/temp/zip/files.zip
+        LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
+        ZipInputStream zis = null;
+        try {
+            zis = new ZipInputStream(
+                    new FileInputStream("src/main/resources/test/fake_license.zip"));
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found" + e.getMessage());
+            return; //ignore test if file is not found
+        }
+
+        ParserException exception = null;
+        try {
+            parser.parse(zis);
+        } catch (ParserException e) {
+            exception = e;
+        }
+
+        assertNotNull(exception);
+        assertEquals("Error while verifying files: License file signature does not " +
+                "correspond with the public key", exception.getMessage());
+    }
 }
