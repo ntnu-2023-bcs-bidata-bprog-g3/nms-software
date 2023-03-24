@@ -40,8 +40,9 @@ public class LicenseGenerator {
      * @return Path to the license file
      * @throws LicenseGeneratorException If the license could not be generated
      */
-    public static String generateLicense(String ip, String mediafunction, int duration) throws LicenseGeneratorException {
-        if (ip == null ||ip.length() == 0 || mediafunction == null
+    public static String generateLicense(String ip, String mediafunction, int duration)
+            throws LicenseGeneratorException {
+        if (ip == null || ip.length() == 0 || mediafunction == null
                 || mediafunction.length() == 0 || duration < 1) {
             throw new LicenseGeneratorException("Invalid input");
         }
@@ -69,7 +70,8 @@ public class LicenseGenerator {
      * @param privateKey Private key to use for signing
      * @throws LicenseGeneratorException If the file could not be signed
      */
-    private static void signFile(String path, PrivateKey privateKey) throws LicenseGeneratorException {
+    private static void signFile(String path, PrivateKey privateKey)
+            throws LicenseGeneratorException {
         try {
             Signature signature = Signature.getInstance("SHA256withRSA");
             signature.initSign(privateKey);
@@ -108,7 +110,8 @@ public class LicenseGenerator {
      * @return The pool
      * @throws LicenseGeneratorException If the subtraction fails
      */
-    private static Pool getPoolAndSubtract(String mediaFunction, int duration) throws LicenseGeneratorException {
+    private static Pool getPoolAndSubtract(String mediaFunction, int duration)
+            throws LicenseGeneratorException {
         Pool pool;
         try {
             pool = PoolRegistry.getInstance(false)
@@ -117,10 +120,12 @@ public class LicenseGenerator {
                 throw new NullPointerException();
             }
         } catch (NullPointerException e) {
-            throw new LicenseGeneratorException("No pool with media function " + mediaFunction + " found");
+            throw new LicenseGeneratorException("No pool with media function "
+                    + mediaFunction + " found");
         }
-        if (!pool.subtractSeconds(duration)) throw new LicenseGeneratorException(
-                "Not enough time left in pool");
+        if (!pool.subtractSeconds(duration)) {
+            throw new LicenseGeneratorException("Not enough time left in pool");
+        }
         return pool;
     }
 
@@ -131,22 +136,23 @@ public class LicenseGenerator {
      * @return The license string
      */
     private static String generateString(Pool pool, int duration) {
-        HashMap<String, Object> licenseMap = new HashMap<>();
+
         HashMap<String, Object> infoMap = new HashMap<>();
-        ArrayList<HashMap<String, Object>> keysList = new ArrayList<>();
-        HashMap<String, Object> keyMap = new HashMap<>();
 
         infoMap.put("date", LocalDateTime.now().toString());
         infoMap.put("customer", "TV2");
         infoMap.put("issuer", "NMS");
         //infoMap.put("uid", pool.getId().toString());
 
+        HashMap<String, Object> keyMap = new HashMap<>();
         keyMap.put("name", pool.getMediaFunction());
         keyMap.put("duration", duration);
         keyMap.put("description", pool.getDescription());
 
+        ArrayList<HashMap<String, Object>> keysList = new ArrayList<>();
         keysList.add(keyMap);
 
+        HashMap<String, Object> licenseMap = new HashMap<>();
         licenseMap.put("info", infoMap);
         licenseMap.put("license", Collections.singletonMap("keys", keysList));
 
