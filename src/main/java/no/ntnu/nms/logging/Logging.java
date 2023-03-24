@@ -28,7 +28,8 @@ public class Logging {
      */
     public static void setUpLogger(String logLevel) throws IOException {
         SimpleFormatter formatter = new SimpleFormatter() {
-            private static final String format = "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$s %2$s %5$s%6$s";
+            private static final String format =
+                    "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$s %2$s %5$s%6$s";
 
             @Override
             public synchronized String format(LogRecord lr) {
