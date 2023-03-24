@@ -1,15 +1,14 @@
-package nms.persistence;
+package no.ntnu.nms.persistence;
 
-import static nms.Constants.TEST_FILES_PATH;
+import static no.ntnu.nms.Constants.TEST_FILES_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
-import nms.Constants;
+import no.ntnu.nms.Constants;
 import no.ntnu.nms.license.LicenseLedger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import no.ntnu.nms.domainModel.PoolRegistry;
-import no.ntnu.nms.persistence.PersistenceController;
 
 import java.io.File;
 import java.io.IOException;

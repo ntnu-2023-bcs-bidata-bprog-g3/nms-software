@@ -1,7 +1,6 @@
-package nms.file_handler;
+package no.ntnu.nms.file_handler;
 
-import nms.Constants;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.Constants;
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;

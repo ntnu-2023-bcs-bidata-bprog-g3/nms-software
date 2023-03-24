@@ -1,7 +1,6 @@
-package nms.security;
+package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
-import no.ntnu.nms.security.Cryptography;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

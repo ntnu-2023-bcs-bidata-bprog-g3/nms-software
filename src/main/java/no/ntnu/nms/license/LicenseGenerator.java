@@ -2,12 +2,20 @@ package no.ntnu.nms.license;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.ntnu.nms.App;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.file_handler.FileHandler;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.Signature;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +35,7 @@ public class LicenseGenerator {
     /**
      * Generates a license.
      * @param ip IP address of the client
-     * @param mediafunction Mediafunction to generate license for
+     * @param mediafunction Media function to generate license for
      * @param duration Duration of the license
      * @return Path to the license file
      * @throws LicenseGeneratorException If the license could not be generated
@@ -44,28 +52,35 @@ public class LicenseGenerator {
 
         try {
             writeToFile(path, generateString(pool, duration));
-            signFile(path + "license.json");
+            PrivateKey privateKey = getPrivateKey();
+            signFile(path + "license.json", privateKey);
         } catch (LicenseGeneratorException e) {
             throw new LicenseGeneratorException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         return path;
     }
 
     /**
-     * Signs a license file.
-     * @param path Path to the license file
-     * @throws LicenseGeneratorException If the license could not be generated
+     * Signs a file.
+     * @param path Path to the file to sign
+     * @param privateKey Private key to use for signing
+     * @throws LicenseGeneratorException If the file could not be signed
      */
-    private static void signFile(String path) throws LicenseGeneratorException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", "openssl dgst -sha256 -sign intermediate-pk.key -out " + path + ".signature "  + path);
+    private static void signFile(String path, PrivateKey privateKey) throws LicenseGeneratorException {
         try {
-            Process process = processBuilder.inheritIO().start();
-            int returnCode = process.waitFor();
-            if (returnCode != 0) {
-                throw new LicenseGeneratorException("Failed to sign file");
-            }
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            signature.initSign(privateKey);
+
+            byte[] fileBytes = Files.readAllBytes(Paths.get(path));
+            signature.update(fileBytes);
+
+            byte[] signedBytes = signature.sign();
+
+            Path signaturePath = Paths.get(path + ".signature");
+            Files.write(signaturePath, signedBytes);
         } catch (Exception e) {
             throw new LicenseGeneratorException("Failed to sign file: " + e.getMessage());
         }
@@ -142,4 +157,28 @@ public class LicenseGenerator {
             throw new LicenseGeneratorException("Failed to generate string: " + e.getMessage());
         }
     }
+
+    /**
+     * Gets the private key from the keystore.
+     * @return The private key
+     * @throws LicenseGeneratorException If the private key could not be retrieved
+     */
+    private static PrivateKey getPrivateKey() throws LicenseGeneratorException {
+        try {
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            InputStream is = App.class.getClassLoader().getResourceAsStream("keystore.jks");
+            /*
+            For demonstration purposes, the keystore password is "secret" and it is written in-line.
+            For production environments, DO NOT add secrets to version control systems.
+            A better solution would be to derive a password from a mathematical function of
+            some customer unique information. See @link{KeyGenerator} as an example.
+             */
+            keyStore.load(is, "secret".toCharArray());
+
+            return (PrivateKey) keyStore.getKey("keystore", "secret".toCharArray());
+        } catch (Exception e) {
+            throw new LicenseGeneratorException("Failed to get private key: " + e.getMessage());
+        }
+    }
+
 }

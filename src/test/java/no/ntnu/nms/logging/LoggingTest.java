@@ -1,8 +1,9 @@
-package nms.api.handlers;
+package no.ntnu.nms.logging;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PoolhandlerTest {
+public class LoggingTest {
 
     @Test
     public void TestTest() {

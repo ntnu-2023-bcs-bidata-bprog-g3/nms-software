@@ -88,7 +88,7 @@ public class Client {
                             .build(),
                     (ClassicHttpResponse response) -> response.getCode() == 200);
             if (!returnCode) {
-                throw new HttpException("Failed to consume license");
+                throw new HttpException("LFA did not return 200");
             }
         } catch (Exception e) {
             throw new HttpException(e.getMessage());

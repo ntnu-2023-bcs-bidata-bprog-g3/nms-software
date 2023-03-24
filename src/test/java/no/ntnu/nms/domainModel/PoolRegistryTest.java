@@ -1,8 +1,6 @@
-package nms.domainModel;
+package no.ntnu.nms.domainModel;
 
-import nms.Constants;
-import no.ntnu.nms.domainModel.Pool;
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.Constants;
 import no.ntnu.nms.file_handler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 
