@@ -1,5 +1,6 @@
 package no.ntnu.nms.api.handlers;
 
+import no.ntnu.nms.api.Constants;
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class RootTest {
 
     @Test
     public void TestRootGet() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/v1/")
+        mvc.perform(MockMvcRequestBuilders.get(Constants.BASE_URL)
                 .accept(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("This endpoint " +
