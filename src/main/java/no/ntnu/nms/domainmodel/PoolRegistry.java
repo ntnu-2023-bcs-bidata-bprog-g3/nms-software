@@ -179,13 +179,15 @@ public class PoolRegistry implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * Update the registry file.
+     */
     private void updatePoolReg() {
         try {
             PersistenceController.saveToFile(this, storageFilePath, true);
         } catch (FileHandlerException e) {
             Logging.getLogger().severe("Unable to update pool registry. " +
-                    "Core functionality has been affected. Error: " + e.getMessage());
-            System.out.println(e.getMessage());
+                    "Core functionality has been affected. " + e.getMessage());
             System.exit(1);
         }
     }

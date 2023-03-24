@@ -52,10 +52,10 @@ public class LicenseGenerator {
         String path = TEMP_FILE_PATH + uid + "/";
 
         try {
-            writeToFile(path, generateString(pool, duration));
+            FileHandler.writeStringToFile(generateString(pool, duration), path + "license.json");
             PrivateKey privateKey = getPrivateKey();
             signFile(path + "license.json", privateKey);
-        } catch (LicenseGeneratorException e) {
+        } catch (LicenseGeneratorException | FileHandlerException e) {
             throw new LicenseGeneratorException(e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -85,21 +85,6 @@ public class LicenseGenerator {
             Files.write(signaturePath, signedBytes);
         } catch (Exception e) {
             throw new LicenseGeneratorException("Failed to sign file: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Writes the license string to a file.
-     * @param path Path to the license file
-     * @param content Content to write to the file
-     * @throws LicenseGeneratorException If the license could not be generated
-     */
-    private static void writeToFile(String path, String content) throws LicenseGeneratorException {
-        //write to file
-        try {
-            FileHandler.writeStringToFile(content, path + "license.json");
-        } catch (FileHandlerException e) {
-            throw new LicenseGeneratorException("Failed to write to file: " + e.getMessage());
         }
     }
 

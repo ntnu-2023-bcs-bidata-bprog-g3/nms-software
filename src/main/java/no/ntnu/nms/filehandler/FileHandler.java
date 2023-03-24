@@ -33,7 +33,7 @@ public class FileHandler {
 
     }
 
-    private static void createDir(String path) {
+    private static void createDir(String path) throws FileHandlerException {
         try {
             // Check if directory exists, if not create it
             Path directory = Paths.get(path.substring(0, path.lastIndexOf("/")));
