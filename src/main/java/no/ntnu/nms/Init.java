@@ -14,7 +14,14 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 
 
+/**
+ * This class is used to initialize the pool registry and the license ledger.
+ */
 public class Init {
+    /**
+     * This method is used to initialize the pool registry and the license ledger.
+     * @param args ignored.
+     */
     public static void main(String[] args) {
 
         try (FileWriter fw = new FileWriter("intermediate.cert")) {
@@ -33,7 +40,7 @@ public class Init {
             fw.write(certPem);
         } catch (KeyStoreException | CertificateException | IOException
                  | NoSuchAlgorithmException e) {
-                System.exit(-1);
+            System.exit(-1);
         }
 
         PoolRegistry.init("data/pool/poolreg.ser");
