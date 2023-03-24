@@ -23,7 +23,7 @@ public class PoolHandler {
      * @return {@link String} JSON representation of the pool.
      * @throws ResponseStatusException if no pool with the given media function is found.
      */
-    @GetMapping(value={"/{mediaFunction}"})
+    @GetMapping(value = {"/{mediaFunction}"})
     @ResponseStatus(HttpStatus.OK)
     public String poolGetter(@PathVariable String mediaFunction) {
         Logging.getLogger().info("Pool endpoint called with media function " + mediaFunction);
@@ -42,7 +42,7 @@ public class PoolHandler {
      * Get all pools.
      * @return {@link String} JSON representation of all pools.
      */
-    @GetMapping(value={"/all"}, produces = {"application/json"})
+    @GetMapping(value = {"/all"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllPools() {
         Logging.getLogger().info("Pool endpoint called for all");
@@ -58,7 +58,7 @@ public class PoolHandler {
      * @param postString {@link String} the string to be posted.
      * @return {@link String} the string that was posted.
      */
-    @PostMapping(value={""})
+    @PostMapping(value = {""})
     @ResponseStatus(HttpStatus.CREATED)
     public String rootPost(@RequestBody String postString) {
         return "You posted: " + postString;
