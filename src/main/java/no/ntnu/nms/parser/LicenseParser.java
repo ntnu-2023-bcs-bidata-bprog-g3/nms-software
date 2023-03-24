@@ -1,5 +1,6 @@
 package no.ntnu.nms.parser;
 
+import no.ntnu.nms.CustomerConstants;
 import no.ntnu.nms.domainModel.Pool;
 import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.license.LicenseLedger;
@@ -13,36 +14,53 @@ import no.ntnu.nms.exception.ParserException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.zip.ZipInputStream;
 
+/**
+ * LicenseParser is a parser for the license file, with the corresponding checks and verifications.
+ */
 public class LicenseParser {
 
     private File licenseFile;
     private File signatureFile;
 
+    private byte[] licenseContent;
+
     private String dirName;
 
-    private final String publicKey = "-----BEGIN PUBLIC KEY-----\n" +
-            "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvP769XecV3Z0E2BC19Vo\n" +
-            "wu4z4OkVxjnfXFZiqLwD686W69vRDjn1ZCUphLeSB/x/5bhkiJHSQSJVDUgYBhzo\n" +
-            "i2itFpEIrweuaq1sSiQjRcnv+UV9XD7BU1JmR4zZQb8xyrbQeXsKhN6gT3Q0/nmt\n" +
-            "j4PF0fiRKeuA8pW618ftbjraSY/cgr8C/x3A1GcJBMvKMVGgZrQSTxZViZN0WdcP\n" +
-            "p+jG70s4G5jL35B8NdlafiW7pYaE4A8VUHcHIvdrkJWPNOwiTPa2CPRtopjZ1b83\n" +
-            "uPkDxVUSjMKPNkcDyXI4w/n4JwUNdWrgLHvTCeMOJWQheOM22+RuiEqA+z2fnvS2\n" +
-            "0QIDAQAB\n" +
-            "-----END PUBLIC KEY-----\n";
-
+    /**
+     * Constructor for LicenseParser.
+     */
     public LicenseParser() {
         licenseFile = null;
+        licenseContent = null;
         signatureFile = null;
         dirName = null;
     }
 
+    /**
+     * Verify the license file and signature file.
+     * @param dirName the name of the directory containing the files.
+     */
     private void assignFiles(String dirName) {
         this.licenseFile = new File("data/temp/" + dirName + "/license.json");
         this.signatureFile = new File("data/temp/" + dirName + "/license.json.signature");
+        try {
+            this.licenseContent = Files.readAllBytes(licenseFile.toPath());
+        } catch (IOException e) {
+            throw new ParserException("Failed to read license file: " + e.getMessage());
+        }
     }
 
+    /**
+     * Parse the license file and add the license to the ledger.
+     * @param inputStream the input stream containing the license file and signature file.
+     * @throws ParserException if the license file or signature file is invalid or checks fail.
+     */
     public void parse(ZipInputStream inputStream) throws ParserException {
         try {
             this.dirName = ZipUtil.unzipper(inputStream);
@@ -72,14 +90,13 @@ public class LicenseParser {
     }
 
 
+    /**
+     * Parses the files
+     */
     private void parseFiles() {
-        JSONObject object = null;
+        JSONObject object = new JSONObject(new String(this.licenseContent));
 
-        try {
-            object = new JSONObject(new String(Files.readAllBytes(licenseFile.toPath())));
-        } catch (IOException ignore) {}
-
-        if (object == null) {
+        if (object.isEmpty()) {
             throw new ParserException("The license file is empty");
         }
 
@@ -94,6 +111,11 @@ public class LicenseParser {
         }
     }
 
+    /**
+     * Parses the license file itself
+     * @param object the JSONObject contained in the license file
+     * @throws ParserException if the license file is invalid
+     */
     private void parseLicense(JSONObject object) throws ParserException {
         String name;
         int duration;
@@ -120,38 +142,68 @@ public class LicenseParser {
      * Verify the signature of the license file
      */
     private void verifyFiles() throws ParserException {
+
         if (!licenseFile.exists() || !signatureFile.exists()) {
             throw new ParserException("Could not find all files");
         }
 
         try {
-            // Create a temporary file with the contents of the publicKey string
-            File publicKeyTempFile = File.createTempFile("publicKey", ".pem");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(publicKeyTempFile));
-            writer.write(publicKey);
-            writer.close();
+            byte[] signatureBytes = Files.readAllBytes(signatureFile.toPath());
+            byte[] fileToVerifyBytes = Files.readAllBytes(licenseFile.toPath());
 
-            String command = String.format("openssl dgst -sha256 -verify %s -signature %s %s",
-                    publicKeyTempFile.getAbsolutePath(),
-                    signatureFile.getAbsolutePath(),
-                    licenseFile.getAbsolutePath());
-
-            ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.directory(new File("data/temp/" + dirName));
-            // Assume Unix
-            processBuilder.command("sh", "-c", command);
-            Process process = processBuilder.start();
-            if (process.waitFor() != 0) {
-                throw new ParserException("Could not verify license");
+            if (!isSignatureValid(getPublicKey(), signatureBytes,
+                    fileToVerifyBytes)) {
+                throw new ParserException("License file signature does not " +
+                        "correspond with the public key");
             }
-
-            // Delete the temporary file
-            publicKeyTempFile.delete();
         } catch (Exception e) {
             throw new ParserException("Error while verifying files: " + e.getMessage());
         }
     }
 
+    /**
+     * Get the public key from a string.
+     * @return the public key.
+     * @throws NoSuchAlgorithmException if the algorithm is not supported.
+     * @throws InvalidKeySpecException if the key is invalid.
+     */
+    private PublicKey getPublicKey()
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String formattedPubKey = CustomerConstants.ROOT_PUBLIC_KEY
+                .replace("-----BEGIN PUBLIC KEY-----\n", "")
+                .replace("-----END PUBLIC KEY-----\n", "")
+                .replaceAll("\\s+", "");
+
+        byte[] byteKey = Base64.getDecoder().decode(formattedPubKey);
+
+        X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+        return keyFactory.generatePublic(X509publicKey);
+    }
+
+    /**
+     * Check if the signature is valid.
+     * @param publicKey the public key to verify the signature with.
+     * @param signatureBytes the signature to verify.
+     * @param dataBytes the data to verify the signature with.
+     * @return true if the signature is valid, false otherwise.
+     * @throws NoSuchAlgorithmException if the algorithm is not supported.
+     * @throws InvalidKeyException if the key is invalid.
+     * @throws SignatureException if the signature is invalid.
+     */
+    private boolean isSignatureValid(PublicKey publicKey, byte[] signatureBytes, byte[] dataBytes)
+            throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initVerify(publicKey);
+        signature.update(dataBytes);
+
+        return signature.verify(signatureBytes);
+    }
+
+    /**
+     * Deletes the files in the temp folder.
+     */
     private void deleteFiles() {
         try {
             FileUtils.deleteDirectory(new File("data/temp/" + dirName));
