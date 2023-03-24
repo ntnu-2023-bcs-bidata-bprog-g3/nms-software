@@ -91,7 +91,7 @@ public class LicenseParser {
 
 
     /**
-     * Parses the files
+     * Parses the files.
      */
     private void parseFiles() {
         JSONObject object = new JSONObject(new String(this.licenseContent));
@@ -112,7 +112,7 @@ public class LicenseParser {
     }
 
     /**
-     * Parses the license file itself
+     * Parses the license file itself.
      * @param object the JSONObject contained in the license file
      * @throws ParserException if the license file is invalid
      */
@@ -139,7 +139,7 @@ public class LicenseParser {
     }
 
     /**
-     * Verify the signature of the license file
+     * Verify the signature of the license file.
      */
     private void verifyFiles() throws ParserException {
 
@@ -176,10 +176,10 @@ public class LicenseParser {
 
         byte[] byteKey = Base64.getDecoder().decode(formattedPubKey);
 
-        X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
+        X509EncodedKeySpec x509publicKey = new X509EncodedKeySpec(byteKey);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-        return keyFactory.generatePublic(X509publicKey);
+        return keyFactory.generatePublic(x509publicKey);
     }
 
     /**
