@@ -29,6 +29,9 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Client is a client for the lfa API endpoint, used to send requests to LFA.
+ */
 @Service
 public class Client {
 
@@ -41,11 +44,13 @@ public class Client {
             final SSLContext sslcontext = SSLContexts.custom()
                     .loadTrustMaterial(null, new TrustSelfSignedStrategy())
                     .build();
-            final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create()
+            final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder
+                    .create()
                     .setSslContext(sslcontext)
                     .setHostnameVerifier((hostname, session) -> true)
                     .build();
-            final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
+            final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder
+                    .create()
                     .setSSLSocketFactory(sslSocketFactory)
                     .build();
             return HttpClients.custom()
@@ -59,6 +64,11 @@ public class Client {
         }
     }
 
+    /**
+     * Sends a request to the LFA to consume a license.
+     * @param body The body of the request.
+     * @throws HttpException If the request fails.
+     */
     public static void consumeLicense(JSONObject body) throws HttpException {
 
         String ip;
@@ -75,8 +85,11 @@ public class Client {
 
         String url = "https://" + ip + "/api/v1/consume";
 
-        final HttpEntity entity = EntityBuilder.create().setContentType(ContentType.APPLICATION_JSON)
-                .setText("{\"mediaFunction\": \"" + mediaFunction + "\", \"duration\": " + duration + "}")
+        final HttpEntity entity = EntityBuilder
+                .create()
+                .setContentType(ContentType.APPLICATION_JSON)
+                .setText("{\"mediaFunction\": \"" + mediaFunction + "\", \"duration\": " +
+                        duration + "}")
                 .build();
 
         try (CloseableHttpClient httpClient = getHttpClient()) {
@@ -112,7 +125,8 @@ public class Client {
                         if (response.getCode() == 200) {
                             return true;
                         } else {
-                            Logging.getLogger().warning("Failed to connect to LFA: " + response.getCode());
+                            Logging.getLogger().warning("Failed to connect to LFA: " +
+                                    response.getCode());
                             return false;
                         }
                     });
@@ -138,7 +152,8 @@ public class Client {
             body = httpClient.execute(ClassicRequestBuilder.get(url).build(),
                     (ClassicHttpResponse response) -> {
                         if (response.getCode() != 200) {
-                            Logging.getLogger().warning("Failed to connect to LFA: " + response.getCode());
+                            Logging.getLogger().warning("Failed to connect to LFA: " +
+                                    response.getCode());
                             return null;
                         } else {
                             return EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -165,9 +180,12 @@ public class Client {
 
         final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.LEGACY);
-        builder.addPart("license", new FileBody(new File(path + "/license.json")));
-        builder.addPart("signature", new FileBody(new File(path + "/license.json.signature")));
-        builder.addPart("intermediate", new FileBody(new File("intermediate.cert")));
+        builder.addPart("license", new FileBody(
+                new File(path + "/license.json")));
+        builder.addPart("signature", new FileBody(
+                new File(path + "/license.json.signature")));
+        builder.addPart("intermediate", new FileBody(
+                new File("intermediate.cert")));
         final HttpEntity entity = builder.build();
 
         try (CloseableHttpClient httpClient = getHttpClient()) {
@@ -178,7 +196,8 @@ public class Client {
             body = httpClient.execute(ClassicRequestBuilder.post(url).setEntity(entity).build(),
                     (ClassicHttpResponse response) -> {
                         if (response.getCode() != 200) {
-                            Logging.getLogger().warning("Failed to connect to LFA: " + response.getCode());
+                            Logging.getLogger().warning("Failed to connect to LFA: " +
+                                    response.getCode());
                             return EntityUtils.toString(response.getEntity(), "UTF-8");
                         } else {
                             return null;
