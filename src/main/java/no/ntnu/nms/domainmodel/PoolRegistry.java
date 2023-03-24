@@ -32,12 +32,12 @@ public class PoolRegistry implements Serializable {
     private static PoolRegistry instance = null;
 
     /**
-     * List of all pools, used by the registry
+     * List of all pools, used by the registry.
      */
     private final ArrayList<Pool> poolList;
 
     /**
-     * Registry file path
+     * Registry file path.
      */
     private final String storageFilePath;
 
@@ -50,7 +50,8 @@ public class PoolRegistry implements Serializable {
     }
 
     /**
-     * Init function used for setting up the application
+     * Init function used for setting up the application.
+     * @param path {@link String} path to the registry file.
      */
     public static void init(String path) {
         instance = new PoolRegistry(path);
@@ -59,11 +60,13 @@ public class PoolRegistry implements Serializable {
 
     /**
      * Get the singleton instance of the registry.
+     * @param isTest {@link boolean} true if the application is running in test mode.
      * @return {@link PoolRegistry} getter for the singleton instance.
      */
     public static PoolRegistry getInstance(boolean isTest) {
         if (instance == null) {
-            String path = isTest ? CustomerConstants.TEST_DATA_PATH : CustomerConstants.PROD_DATA_PATH;
+            String path = isTest ? CustomerConstants.TEST_DATA_PATH :
+                    CustomerConstants.PROD_DATA_PATH;
             path += "pool/poolreg.ser";
             PersistenceController.loadFromFile(path);
         }
@@ -93,7 +96,7 @@ public class PoolRegistry implements Serializable {
 
     /**
      * Get an iterator for the complete pool list.
-     * @return {link Iterator<Pool> iterator for the complete pool list.
+     * @return {@link Iterator} iterator for the complete pool list.
      */
     public Iterator<Pool> getPoolList() {
         return poolList.iterator();
@@ -103,7 +106,7 @@ public class PoolRegistry implements Serializable {
      * Get a pool by its media function.
      * @param mediaFunction {@link String} media function of the pool.
      * @return {@link Pool} pool with the given media function or {@code null} if no
-     * pool with the given media function exists.
+     *     pool with the given media function exists.
      */
     public Pool getPoolByMediaFunction(String mediaFunction) {
         return poolList.stream()
@@ -144,7 +147,7 @@ public class PoolRegistry implements Serializable {
      * Check if the registry contains a pool with a given media function.
      * @param mediaFunction {@link String} media function of the pool to check for.
      * @return {@link boolean} {@code true} if the registry contains a pool with the
-     * given media function.
+     *     given media function.
      */
     public boolean containsPoolByMediaFunction(String mediaFunction) {
         return getPoolByMediaFunction(mediaFunction) != null;
@@ -169,7 +172,9 @@ public class PoolRegistry implements Serializable {
             sb.append(pool.jsonify());
             sb.append(",");
         }
-        if (instance.getPoolCount() > 0) sb.deleteCharAt(sb.length() - 1);
+        if (instance.getPoolCount() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
         sb.append("]}");
         return sb.toString();
     }
