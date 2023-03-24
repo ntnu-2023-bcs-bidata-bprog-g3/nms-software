@@ -18,7 +18,7 @@ public class LicenseLedger {
     private static LicenseLedger instance = null;
 
     /**
-     * The complete path to the ledger file
+     * The complete path to the ledger file.
      */
     private String ledgerPath;
 
@@ -28,16 +28,17 @@ public class LicenseLedger {
     private static final String LEDGER_PATH = "data/ledger/top_license_ledger.txt";
 
     /**
-     * Init function used for setting up the storage files
+     * Init function used for setting up the storage files.
+     * @param ledgerPath The path to the ledger file.
      */
     public static void init(String ledgerPath) {
-            if (ledgerPath == null) {
-                instance = new LicenseLedger(LEDGER_PATH);
-                PersistenceController.saveToFile("", LEDGER_PATH, false);
-            } else {
-                instance = new LicenseLedger(ledgerPath);
-                PersistenceController.saveToFile("", ledgerPath, false);
-            }
+        if (ledgerPath == null) {
+            instance = new LicenseLedger(LEDGER_PATH);
+            PersistenceController.saveToFile("", LEDGER_PATH, false);
+        } else {
+            instance = new LicenseLedger(ledgerPath);
+            PersistenceController.saveToFile("", ledgerPath, false);
+        }
     }
 
     /**
@@ -46,9 +47,13 @@ public class LicenseLedger {
      * @throws FileHandlerException If the ledger file cannot be created.
      */
     private LicenseLedger(String ledgerDir) throws FileHandlerException {
-            this.setLedgerPath(ledgerDir);
-        }
+        this.setLedgerPath(ledgerDir);
+    }
 
+    /**
+     * Getter for the singleton instance.
+     * @return The singleton instance.
+     */
     public static LicenseLedger getInstance() {
         if (instance == null) {
             instance = new LicenseLedger(LEDGER_PATH);
