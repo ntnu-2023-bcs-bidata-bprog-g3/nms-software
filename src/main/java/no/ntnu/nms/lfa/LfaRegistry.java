@@ -6,29 +6,32 @@ import no.ntnu.nms.logging.Logging;
 
 import java.util.HashMap;
 
+/**
+ * The LfaRegistry is a singleton class that holds all LFA's.
+ */
 public class LfaRegistry {
 
     /**
-     * The singleton instance of the LfaRegistry
+     * The singleton instance of the LfaRegistry.
      */
     private static LfaRegistry instance;
 
     /**
-     * The map of all LFA's
+     * The map of all LFA's.
      * Key: IP
      * Value: Name
      */
     private final HashMap<String, String> lfaMap;
 
     /**
-     * Private constructor for the LfaRegistry
+     * Private constructor for the LfaRegistry.
      */
     private LfaRegistry() {
         lfaMap = new HashMap<>();
     }
 
     /**
-     * Returns the singleton instance of the LfaRegistry
+     * Returns the singleton instance of the LfaRegistry.
      * @return the singleton instance of the LfaRegistry
      */
     public static LfaRegistry getInstance() {
@@ -39,8 +42,8 @@ public class LfaRegistry {
     }
 
     /**
-     * Adds a LFA to the registry
-     * @param ip {@link String} the IP of the LFA to add
+     * Adds a LFA to the registry.
+     * @param ip {@link String} the IP of the LFA to add.
      * @param name {@link String} the name of the LFA to add
      */
     public void addLfa(String ip, String name) throws LfaRegistryException {
@@ -52,7 +55,7 @@ public class LfaRegistry {
     }
 
     /**
-     * Returns if the LFA is in the registry
+     * Returns if the LFA is in the registry.
      * @param ip {@link String} the IP of the LFA to check
      * @return {@link boolean} true if the LFA is in the registry, false otherwise
      */
@@ -61,7 +64,7 @@ public class LfaRegistry {
     }
 
     /**
-     * Removes a LFA from the registry
+     * Removes a LFA from the registry.
      * @param lfa {@link String} the LFA to remove
      */
     public void removeLfa(String lfa) {
@@ -69,7 +72,7 @@ public class LfaRegistry {
     }
 
     /**
-     * Refreshes the LFA map by removing all LFA's that are not alive
+     * Refreshes the LFA map by removing all LFA's that are not alive.
      */
     public void refreshLfaMap() {
         for (String ip : lfaMap.keySet()) {
@@ -82,7 +85,7 @@ public class LfaRegistry {
     }
 
     /**
-     * Returns the number of registered LFAs
+     * Returns the number of registered LFAs.
      * @return {@link int} the number of registered LFAs
      */
     public int getSize() {
@@ -90,7 +93,7 @@ public class LfaRegistry {
     }
 
     /**
-     * Returns a JSON representation of the LFA map
+     * Returns a JSON representation of the LFA map.
      * @return {@link String} JSON representation of the LFA map
      */
     public String jsonify() {
@@ -100,7 +103,12 @@ public class LfaRegistry {
             return json.append("]}").toString();
         }
         for (String ip : lfaMap.keySet()) {
-            json.append("{\"ip\": \"").append(ip).append("\",\"name\": \"").append(lfaMap.get(ip)).append("\"},");
+            json
+                    .append("{\"ip\": \"")
+                    .append(ip)
+                    .append("\",\"name\": \"")
+                    .append(lfaMap.get(ip))
+                    .append("\"},");
         }
         json = new StringBuilder(json.substring(0, json.length() - 1));
         json.append("]}");
