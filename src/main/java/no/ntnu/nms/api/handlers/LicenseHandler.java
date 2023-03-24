@@ -38,7 +38,7 @@ public class LicenseHandler {
      * @param file {@link MultipartFile} the license file.
      * @return {@link String} a message that the file was uploaded.
      */
-    @PostMapping(value={""})
+    @PostMapping(value = {""})
     public String licensePost(@RequestBody Optional<MultipartFile> file) throws IOException {
         Logging.getLogger().info("License endpoint called");
         if (file.isEmpty() || file.get().getSize() == 0) {
@@ -68,7 +68,7 @@ public class LicenseHandler {
      * @param payload {@link String} the payload containing the LFA IP, media function and duration.
      * @return {@link String} a message that the sub-license was generated.
      */
-    @PostMapping(value={"/lfa"})
+    @PostMapping(value = {"/lfa"})
     public String generateSubLicense(@RequestBody String payload) {
         Map<String, String> body = BodyParser.parseLfaBody(payload);
 
@@ -85,7 +85,8 @@ public class LicenseHandler {
             path = LicenseGenerator.generateLicense(ip, mediaFunction, duration);
         } catch (LicenseGeneratorException e) {
             Logging.getLogger().info("Failed to generate sub-license: " + e.getMessage());
-            return "{\"error\": \"Failed to generate sub-license: " + ExceptionHandler.getMessage(e) + "\"}";
+            return "{\"error\": \"Failed to generate sub-license: "
+                    + ExceptionHandler.getMessage(e) + "\"}";
         }
 
         try {
@@ -100,7 +101,8 @@ public class LicenseHandler {
                 Logging.getLogger().info("Failed to delete temp sub-license: "
                         + ioe.getMessage());
             }
-            return "{\"error\": \"Failed to upload sub-license: \n" + ExceptionHandler.getMessage(e) + "\"}";
+            return "{\"error\": \"Failed to upload sub-license: \n"
+                    + ExceptionHandler.getMessage(e) + "\"}";
         }
 
         try {
