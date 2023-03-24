@@ -1,5 +1,8 @@
 package no.ntnu.nms.exception;
 
+/**
+ * Exception class for the LicenseGenerator.
+ */
 public class LicenseGeneratorException extends RuntimeException {
     /**
      * Constructor for CryptographyException.
