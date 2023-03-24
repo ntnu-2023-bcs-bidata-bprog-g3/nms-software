@@ -14,7 +14,9 @@ public class Cryptography {
      * @return The XORed byte array.
      */
     public static byte[] xorWithKey(byte[] input, byte[] key) throws CryptographyException {
-        if (input == null) throw new CryptographyException("Failed to decrypt/encrypt: input is null");
+        if (input == null) {
+            throw new CryptographyException("Failed to decrypt/encrypt: input is null");
+        }
         
         byte[] output = new byte[input.length];
         for (int i = 0; i < input.length; i++) {
