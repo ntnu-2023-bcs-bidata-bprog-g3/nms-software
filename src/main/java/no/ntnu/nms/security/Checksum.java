@@ -2,7 +2,7 @@ package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 
 import java.io.IOException;

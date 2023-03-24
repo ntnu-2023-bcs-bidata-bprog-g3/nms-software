@@ -2,7 +2,7 @@ package no.ntnu.nms.api.handlers;
 
 import no.ntnu.nms.api.BodyParser;
 import no.ntnu.nms.api.client.Client;
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.license.LicenseGenerator;

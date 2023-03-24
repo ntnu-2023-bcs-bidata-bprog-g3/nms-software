@@ -3,11 +3,11 @@ package no.ntnu.nms.license;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.nms.App;
-import no.ntnu.nms.domainModel.Pool;
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.Pool;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LicenseGeneratorException;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 
 import java.io.InputStream;
 import java.nio.file.Files;

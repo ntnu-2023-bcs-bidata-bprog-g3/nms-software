@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static no.ntnu.nms.api.Constants.BASE_URL;
 
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import org.springframework.web.server.ResponseStatusException;
 
 /**

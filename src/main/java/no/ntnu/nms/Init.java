@@ -1,6 +1,6 @@
 package no.ntnu.nms;
 
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.license.LicenseLedger;
 
 import java.io.FileWriter;

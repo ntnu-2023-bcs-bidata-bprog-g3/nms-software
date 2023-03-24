@@ -1,4 +1,4 @@
-package no.ntnu.nms.domainModel;
+package no.ntnu.nms.domainmodel;
 
 import no.ntnu.nms.CustomerConstants;
 import no.ntnu.nms.exception.FileHandlerException;

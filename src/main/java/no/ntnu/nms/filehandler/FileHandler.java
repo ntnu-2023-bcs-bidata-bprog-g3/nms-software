@@ -1,4 +1,5 @@
-package no.ntnu.nms.file_handler;
+package no.ntnu.nms.filehandler;
+
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.logging.Logging;
 

@@ -1,10 +1,10 @@
 package no.ntnu.nms.persistence;
 
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LedgerException;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
