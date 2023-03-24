@@ -16,9 +16,10 @@ public class Root {
      * Root endpoint handler method for a request of method GET.
      * @return {@link String} a message that the endpoint is not in use.
      */
-    @GetMapping(value={""})
+    @GetMapping(value = {""})
     public String rootEndpoint() {
         Logging.getLogger().info("Root endpoint called");
-        return "This endpoint is not in use. Please check the documentation for available endpoints.";
+        return "This endpoint is not in use. " +
+                "Please check the documentation for available endpoints.";
     }
 }
