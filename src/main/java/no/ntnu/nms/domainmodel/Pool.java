@@ -13,17 +13,30 @@ import java.io.Serializable;
  */
 public class Pool implements Serializable {
 
+    /**
+     * PropertyChangeListener for the registry.
+     */
     private final PropertyChangeSupport changes;
 
+    /**
+     * Adder for a property change listener. Used for saving the registry to file when
+     * a change is made.
+     * @param listener {@link PropertyChangeListener} listener to add.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.changes.addPropertyChangeListener(listener);
         Logging.getLogger().info("Pool registry change listener successfully added");
     }
 
+    /**
+     * Remover for a property change listener.
+     * @param listener {@link PropertyChangeListener} listener to remove.
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.changes.removePropertyChangeListener(listener);
         Logging.getLogger().info("Pool registry change listener successfully removed");
     }
+
     /**
      * The media function of the pool.
      */
@@ -134,8 +147,9 @@ public class Pool implements Serializable {
 
 
     /**
-     * Add time to the time left in the pool
+     * Add time to the time left in the pool.
      * @param seconds {@link Integer} number of seconds to add.
+     * @return {@link Boolean} {@code true} if the time was added.
      */
     public boolean addSeconds(int seconds) {
         if (seconds > 0) {
