@@ -25,6 +25,7 @@ public class PersistenceController {
      * @param filePath The path to the file to save to.
      * @param includeHash Whether to include a checksum.
      * @param objectToSerialize The object to serialize.
+     * @throws FileHandlerException If the file could not be saved.
      */
     public static void saveToFile(Object objectToSerialize, String filePath, boolean includeHash)
             throws FileHandlerException {
