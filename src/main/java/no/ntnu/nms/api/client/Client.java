@@ -101,7 +101,7 @@ public class Client {
      * @return True if the LFA is alive, false otherwise.
      */
     public static boolean lfaIsAlive(String ip) {
-        String url = "https://" + ip;
+        String url = "https://" + ip + "/api/v1/";
         try (CloseableHttpClient httpClient = getHttpClient()) {
             if (httpClient == null) {
                 Logging.getLogger().warning("Failed to create http client");
