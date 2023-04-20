@@ -82,6 +82,15 @@ public class LfaRegistry {
     }
 
     /**
+     * Returns the name of the LFA with the given IP
+     * @param ip
+     * @return String name
+     */
+    public String getLfaName(String ip) {
+        return lfaMap.get(ip);
+    }
+
+    /**
      * Returns the number of registered LFAs
      * @return {@link int} the number of registered LFAs
      */
