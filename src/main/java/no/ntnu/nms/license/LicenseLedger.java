@@ -29,6 +29,7 @@ public class LicenseLedger {
 
     /**
      * Init function used for setting up the storage files.
+     *
      * @param ledgerPath The path to the ledger file.
      */
     public static void init(String ledgerPath) {

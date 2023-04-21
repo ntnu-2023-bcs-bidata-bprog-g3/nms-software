@@ -8,6 +8,7 @@ import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.filehandler.FileHandler;
+import no.ntnu.nms.lfa.LfaRegistry;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -51,8 +52,10 @@ public class LicenseGenerator {
         int uid = (int) (Math.random() * 1000000000);
         String path = TEMP_FILE_PATH + uid + "/";
 
+        String name = LfaRegistry.getInstance().getLfaName(ip);
+
         try {
-            FileHandler.writeStringToFile(generateString(pool, duration), path + "license.json");
+            FileHandler.writeStringToFile(generateString(pool, duration, name), path + "license.json");
             PrivateKey privateKey = getPrivateKey();
             signFile(path + "license.json", privateKey);
         } catch (LicenseGeneratorException | FileHandlerException e) {
@@ -120,8 +123,7 @@ public class LicenseGenerator {
      * @param duration Duration of the license
      * @return The license string
      */
-    private static String generateString(Pool pool, int duration) {
-
+    private static String generateString(Pool pool, int duration, String name) {
         HashMap<String, Object> infoMap = new HashMap<>();
 
         infoMap.put("date", LocalDateTime.now().toString());
@@ -138,6 +140,7 @@ public class LicenseGenerator {
         keysList.add(keyMap);
 
         HashMap<String, Object> licenseMap = new HashMap<>();
+        licenseMap.put("name", name);
         licenseMap.put("info", infoMap);
         licenseMap.put("license", Collections.singletonMap("keys", keysList));
 

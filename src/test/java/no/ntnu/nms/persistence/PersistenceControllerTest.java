@@ -119,20 +119,18 @@ public class PersistenceControllerTest {
     @Test
     public void testAppendToFile() throws Exception {
         LicenseLedger.init(TEST_DIR + "licenseledger.txt");
-        Path licenseLedgerPath = Paths.get(TEST_DIR + "licenseledger.txt");
-
         // Create a test string to append to the file
         String toAppend = "Test line";
 
         // Append the string to the file
-        PersistenceController.appendToFile(toAppend, licenseLedgerPath.toString());
+        PersistenceController.appendToFile(toAppend, TEST_DIR + "licenseledger.txt");
 
         // Check that the file has been appended correctly
-        String fileContent = PersistenceController.loadLedger(licenseLedgerPath.toString());
+        String fileContent = PersistenceController.loadLedger(TEST_DIR + "licenseledger.txt");
         assertTrue(fileContent.endsWith(toAppend));
 
         // Delete the file
-        Files.deleteIfExists(Paths.get(licenseLedgerPath.toString()));
+        Files.deleteIfExists(Paths.get(TEST_DIR + "licenseledger.txt"));
     }
 
     @Test
