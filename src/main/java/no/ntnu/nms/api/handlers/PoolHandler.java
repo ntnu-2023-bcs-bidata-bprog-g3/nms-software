@@ -52,15 +52,4 @@ public class PoolHandler {
         }
         return PoolRegistry.getInstance(false).jsonify();
     }
-
-    /**
-     * A test handler for the method POST.
-     * @param postString {@link String} the string to be posted.
-     * @return {@link String} the string that was posted.
-     */
-    @PostMapping(value = {""})
-    @ResponseStatus(HttpStatus.CREATED)
-    public String rootPost(@RequestBody String postString) {
-        return "You posted: " + postString;
-    }
 }
