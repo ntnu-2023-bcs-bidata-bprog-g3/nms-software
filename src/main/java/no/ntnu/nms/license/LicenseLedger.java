@@ -28,16 +28,18 @@ public class LicenseLedger {
     private static final String LEDGER_PATH = "data/ledger/top_license_ledger.txt";
 
     /**
-     * Init function used for setting up the storage files
+     * Init function used for setting up the storage files.
+     *
+     * @param ledgerPath The path to the ledger file.
      */
     public static void init(String ledgerPath) {
-            if (ledgerPath == null) {
-                instance = new LicenseLedger(LEDGER_PATH);
-                PersistenceController.saveToFile("", LEDGER_PATH, false);
-            } else {
-                instance = new LicenseLedger(ledgerPath);
-                PersistenceController.saveToFile("", ledgerPath, false);
-            }
+        if (ledgerPath == null) {
+            instance = new LicenseLedger(LEDGER_PATH);
+            PersistenceController.saveToFile("", LEDGER_PATH, false);
+        } else {
+            instance = new LicenseLedger(ledgerPath);
+            PersistenceController.saveToFile("", ledgerPath, false);
+        }
     }
 
     /**
