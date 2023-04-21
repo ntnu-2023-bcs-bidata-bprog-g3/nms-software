@@ -47,8 +47,7 @@ public class ChecksumTest {
         }
     }
 
-    /*
-    Tests are currently broken, but we dont have time to fix them.
+    // Tests are currently broken, but we dont have time to fix them.
 
     @Test
     public void TestCompareChecksum(){
@@ -71,8 +70,6 @@ public class ChecksumTest {
             assertFalse(result);
         }
     }
-
-    */
 
     @Test
     public void TestCompareChecksumIllegal(){

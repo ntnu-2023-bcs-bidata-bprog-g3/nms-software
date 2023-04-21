@@ -1,5 +1,6 @@
 package no.ntnu.nms.parser;
 
+import no.ntnu.nms.domainModel.PoolRegistry;
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.license.LicenseLedger;
 import no.ntnu.nms.logging.Logging;
@@ -24,6 +25,8 @@ public class LicenseParserTest {
 
     @BeforeAll
     public static void setUpAll(){
+        LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
+        PoolRegistry.init("test_files/persistenceController/poolregistry.txt");
         try {
             Logging.setUpLogger("ALL");
         } catch (IOException ignore) {}
@@ -84,7 +87,6 @@ public class LicenseParserTest {
     @Test
     void TestParseValidFiles() {
         //create ZipInputStream of data/temp/zip/files.zip
-        LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
         ZipInputStream zis = null;
         try {
             zis = new ZipInputStream(new FileInputStream("src/main/resources/test/file.zip"));
@@ -103,7 +105,6 @@ public class LicenseParserTest {
     @Test
     void TestParseInvalidFiles() {
         //create ZipInputStream of data/temp/zip/files.zip
-        LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
         ZipInputStream zis = null;
         try {
             zis = new ZipInputStream(
