@@ -55,7 +55,7 @@ public class PoolRegistry implements Serializable {
      */
     public static void init(String path) {
         instance = new PoolRegistry(path);
-        PersistenceController.saveToFile(instance, instance.storageFilePath, true);
+        PersistenceController.saveToFile(instance, instance.storageFilePath, false);
     }
 
     /**
@@ -184,7 +184,7 @@ public class PoolRegistry implements Serializable {
      */
     private void updatePoolReg() {
         try {
-            PersistenceController.saveToFile(this, storageFilePath, true);
+            PersistenceController.saveToFile(this, storageFilePath, false);
         } catch (FileHandlerException e) {
             Logging.getLogger().severe("Unable to update pool registry. " +
                     "Core functionality has been affected. " + e.getMessage());
