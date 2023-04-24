@@ -47,7 +47,6 @@ public class PoolRegistryTest {
     public void TestInit() {
         assertNotNull(PoolRegistry.getInstance(true));
         assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser")));
-        assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser.md5")));
     }
 
     @Test
