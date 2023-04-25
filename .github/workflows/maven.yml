@@ -1,5 +1,4 @@
 name: Java CI with Maven
-run-name: Build and test
 
 on: [push, pull_request]
 
