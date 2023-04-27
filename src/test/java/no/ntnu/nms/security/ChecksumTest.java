@@ -50,7 +50,8 @@ public class ChecksumTest {
     @Test
     public void TestCompareChecksum(){
         if (file != null && file2 != null) {
-            byte[] checksumBytes = Cryptography.xorWithKey(Checksum.generateFromFile(file.getAbsolutePath()).getBytes(), KeyGenerator.KEY);
+            byte[] checksumBytes = Cryptography.xorWithKey(Checksum.generateFromFile(
+                    file.getAbsolutePath()).getBytes(), KeyGenerator.KEY);
             FileHandler.writeToFile(checksumBytes, file2.getAbsolutePath());
 
             boolean result = Checksum.compare(file.getAbsolutePath(), file2.getAbsolutePath());
@@ -61,7 +62,8 @@ public class ChecksumTest {
     @Test
     public void TestCompareChecksumNegative(){
         if (file != null && file2 != null) {
-            byte[] checksumBytes = Cryptography.xorWithKey("this is a test checksum".getBytes(), KeyGenerator.KEY);
+            byte[] checksumBytes = Cryptography.xorWithKey("this is a test checksum".getBytes(),
+                    KeyGenerator.KEY);
             FileHandler.writeToFile(checksumBytes, file2.getPath());
 
             boolean result = Checksum.compare(file.getPath(), file2.getPath());
@@ -72,14 +74,16 @@ public class ChecksumTest {
     @Test
     public void TestCompareChecksumIllegal(){
         if (file != null && file2 != null) {
-            assertThrows(FileHandlerException.class, () -> Checksum.compare(file.getAbsolutePath(), file2.getAbsolutePath()));
+            assertThrows(FileHandlerException.class, () -> Checksum.compare(file.getAbsolutePath(),
+                    file2.getAbsolutePath()));
         }
     }
 
     @Test
     public void TestCompareChecksumIllegal2(){
         if (file2 != null) {
-            assertThrows(CryptographyException.class, () -> Checksum.compare("test", file2.getAbsolutePath()));
+            assertThrows(CryptographyException.class, () -> Checksum.compare("test",
+                    file2.getAbsolutePath()));
         }
     }
 }
