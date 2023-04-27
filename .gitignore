@@ -1,6 +1,17 @@
+data/
+logs/
+
+### VisualStudioCode ###
+.vscode
+
+# MacOS directory file
+.DS_Store
+
 # JetBrains IDE
 .idea
 nms-software.iml
+
+target
 
 # Compiled class file
 *.class
