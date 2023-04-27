@@ -47,8 +47,6 @@ public class ChecksumTest {
         }
     }
 
-    // Tests are currently broken, but we dont have time to fix them.
-
     @Test
     public void TestCompareChecksum(){
         if (file != null && file2 != null) {

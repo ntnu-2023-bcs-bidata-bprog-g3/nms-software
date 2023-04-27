@@ -117,7 +117,6 @@ public class PersistenceController {
      */
     public static void loadFromFile(String filePath) {
         PoolRegistry poolreg = null;
-        String checksumPath = filePath + ".md5";
         try {
             byte[] encrypted = FileHandler.readFromFile(filePath);
             if (encrypted == null) {
@@ -128,9 +127,6 @@ public class PersistenceController {
             if (poolreg == null) {
                 throw new FileHandlerException("Failed to decrypt pool registry");
             }
-            // if (!Checksum.compare(filePath, checksumPath)) {
-            //    throw new FileHandlerException("Failed to compare old and new checksum");
-            //}
         } catch (FileHandlerException e) {
             Logging.getLogger().severe(
                     "Core functionality has been affected. Error: " + e.getMessage());
