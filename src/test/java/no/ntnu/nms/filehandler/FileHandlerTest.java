@@ -80,10 +80,12 @@ public class FileHandlerTest {
 
         assertEquals(test, read);
 
-        assertTrue(Files.exists(Path.of(TEST_DIR + "test.txt.bak")));
+        final Path backupFile = Path.of(TEST_DIR + "test.txt.bak");
+
+        assertTrue(Files.exists(backupFile));
 
         FileHandler.deleteBackup(TEST_DIR + "test.txt");
 
-        assertFalse(Files.exists(Path.of(TEST_DIR + "test.txt.bak")));
+        assertFalse(Files.exists(backupFile));
     }
 }
