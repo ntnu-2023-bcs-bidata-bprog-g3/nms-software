@@ -106,13 +106,4 @@ public class LicenseLedger {
         }
         return PersistenceController.loadLedger(ledgerPath).contains(checksum);
     }
-
-    /**
-     * Getter for the ledger.
-     * @return  The ledger as a string.
-     * @throws LedgerException If the ledger cannot be loaded.
-     */
-    public String getLedger() throws LedgerException {
-        return PersistenceController.loadLedger(this.ledgerPath);
-    }
 }
