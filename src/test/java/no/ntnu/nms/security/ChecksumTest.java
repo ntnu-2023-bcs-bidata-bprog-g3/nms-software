@@ -2,6 +2,7 @@ package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
