@@ -1,5 +1,8 @@
 package no.ntnu.nms.exception;
 
+/**
+ * Class for exceptions related to the LFA registry.
+ */
 public class LfaRegistryException extends RuntimeException {
     /**
      * Constructor for CryptographyException.

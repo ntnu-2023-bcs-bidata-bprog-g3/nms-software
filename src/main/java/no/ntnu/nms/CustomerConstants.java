@@ -1,13 +1,16 @@
 package no.ntnu.nms;
 
+/**
+ * Class containing constants related to the customer.
+ */
 public class CustomerConstants {
 
-    public final static String CUSTOMER_NAME = "DevelopmentCustomer";
+    public static final  String CUSTOMER_NAME = "DevelopmentCustomer";
 
-    public final static String TEST_DATA_PATH = "test_files/";
-    public final static String PROD_DATA_PATH = "data/";
+    public static final String TEST_DATA_PATH = "test_files/";
+    public static final String PROD_DATA_PATH = "data/";
 
-    public final static String ROOT_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n" +
+    public static final String ROOT_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n" +
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvP769XecV3Z0E2BC19Vo\n" +
             "wu4z4OkVxjnfXFZiqLwD686W69vRDjn1ZCUphLeSB/x/5bhkiJHSQSJVDUgYBhzo\n" +
             "i2itFpEIrweuaq1sSiQjRcnv+UV9XD7BU1JmR4zZQb8xyrbQeXsKhN6gT3Q0/nmt\n" +

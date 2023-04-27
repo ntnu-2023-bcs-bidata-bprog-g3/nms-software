@@ -3,11 +3,11 @@ package no.ntnu.nms.license;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.nms.App;
-import no.ntnu.nms.domainModel.Pool;
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.Pool;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LicenseGeneratorException;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.lfa.LfaRegistry;
 
 import java.io.InputStream;
@@ -41,8 +41,9 @@ public class LicenseGenerator {
      * @return Path to the license file
      * @throws LicenseGeneratorException If the license could not be generated
      */
-    public static String generateLicense(String ip, String mediafunction, int duration) throws LicenseGeneratorException {
-        if (ip == null ||ip.length() == 0 || mediafunction == null
+    public static String generateLicense(String ip, String mediafunction, int duration)
+            throws LicenseGeneratorException {
+        if (ip == null || ip.length() == 0 || mediafunction == null
                 || mediafunction.length() == 0 || duration < 1) {
             throw new LicenseGeneratorException("Invalid input");
         }
@@ -54,10 +55,10 @@ public class LicenseGenerator {
         String name = LfaRegistry.getInstance().getLfaName(ip);
 
         try {
-            writeToFile(path, generateString(pool, duration, name));
+            FileHandler.writeStringToFile(generateString(pool, duration, name), path + "license.json");
             PrivateKey privateKey = getPrivateKey();
             signFile(path + "license.json", privateKey);
-        } catch (LicenseGeneratorException e) {
+        } catch (LicenseGeneratorException | FileHandlerException e) {
             throw new LicenseGeneratorException(e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -72,7 +73,8 @@ public class LicenseGenerator {
      * @param privateKey Private key to use for signing
      * @throws LicenseGeneratorException If the file could not be signed
      */
-    private static void signFile(String path, PrivateKey privateKey) throws LicenseGeneratorException {
+    private static void signFile(String path, PrivateKey privateKey)
+            throws LicenseGeneratorException {
         try {
             Signature signature = Signature.getInstance("SHA256withRSA");
             signature.initSign(privateKey);
@@ -90,28 +92,14 @@ public class LicenseGenerator {
     }
 
     /**
-     * Writes the license string to a file.
-     * @param path Path to the license file
-     * @param content Content to write to the file
-     * @throws LicenseGeneratorException If the license could not be generated
-     */
-    private static void writeToFile(String path, String content) throws LicenseGeneratorException {
-        //write to file
-        try {
-            FileHandler.writeStringToFile(content, path + "license.json");
-        } catch (FileHandlerException e) {
-            throw new LicenseGeneratorException("Failed to write to file: " + e.getMessage());
-        }
-    }
-
-    /**
      * Gets the pool and subtracts the duration from it.
      * @param mediaFunction Mediafunction to subtract from
      * @param duration Duration to subtract
      * @return The pool
      * @throws LicenseGeneratorException If the subtraction fails
      */
-    private static Pool getPoolAndSubtract(String mediaFunction, int duration) throws LicenseGeneratorException {
+    private static Pool getPoolAndSubtract(String mediaFunction, int duration)
+            throws LicenseGeneratorException {
         Pool pool;
         try {
             pool = PoolRegistry.getInstance(false)
@@ -120,10 +108,12 @@ public class LicenseGenerator {
                 throw new NullPointerException();
             }
         } catch (NullPointerException e) {
-            throw new LicenseGeneratorException("No pool with media function " + mediaFunction + " found");
+            throw new LicenseGeneratorException("No pool with media function "
+                    + mediaFunction + " found");
         }
-        if (!pool.subtractSeconds(duration)) throw new LicenseGeneratorException(
-                "Not enough time left in pool");
+        if (!pool.subtractSeconds(duration)) {
+            throw new LicenseGeneratorException("Not enough time left in pool");
+        }
         return pool;
     }
 
@@ -134,21 +124,22 @@ public class LicenseGenerator {
      * @return The license string
      */
     private static String generateString(Pool pool, int duration, String name) {
-        HashMap<String, Object> licenseMap = new HashMap<>();
         HashMap<String, Object> infoMap = new HashMap<>();
-        ArrayList<HashMap<String, Object>> keysList = new ArrayList<>();
-        HashMap<String, Object> keyMap = new HashMap<>();
 
         infoMap.put("date", LocalDateTime.now().toString());
         infoMap.put("customer", "TV2");
         infoMap.put("issuer", "NMS");
         //infoMap.put("uid", pool.getId().toString());
 
+        HashMap<String, Object> keyMap = new HashMap<>();
         keyMap.put("name", pool.getMediaFunction());
         keyMap.put("duration", duration);
         keyMap.put("description", pool.getDescription());
 
+        ArrayList<HashMap<String, Object>> keysList = new ArrayList<>();
         keysList.add(keyMap);
+
+        HashMap<String, Object> licenseMap = new HashMap<>();
         licenseMap.put("name", name);
         licenseMap.put("info", infoMap);
         licenseMap.put("license", Collections.singletonMap("keys", keysList));

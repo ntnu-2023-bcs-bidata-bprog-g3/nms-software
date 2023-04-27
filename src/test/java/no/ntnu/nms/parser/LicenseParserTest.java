@@ -1,6 +1,6 @@
 package no.ntnu.nms.parser;
 
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.ParserException;
 import no.ntnu.nms.license.LicenseLedger;
 import no.ntnu.nms.logging.Logging;

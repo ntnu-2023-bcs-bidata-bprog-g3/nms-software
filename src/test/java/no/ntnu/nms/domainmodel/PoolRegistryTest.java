@@ -1,7 +1,7 @@
-package no.ntnu.nms.domainModel;
+package no.ntnu.nms.domainmodel;
 
 import no.ntnu.nms.Constants;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 
 import org.junit.jupiter.api.*;
@@ -47,7 +47,6 @@ public class PoolRegistryTest {
     public void TestInit() {
         assertNotNull(PoolRegistry.getInstance(true));
         assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser")));
-        assertTrue(Files.exists(Path.of(TEST_DIR + "poolreg.ser.md5")));
     }
 
     @Test

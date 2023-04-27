@@ -18,7 +18,7 @@ public class LicenseLedger {
     private static LicenseLedger instance = null;
 
     /**
-     * The complete path to the ledger file
+     * The complete path to the ledger file.
      */
     private String ledgerPath;
 
@@ -48,9 +48,13 @@ public class LicenseLedger {
      * @throws FileHandlerException If the ledger file cannot be created.
      */
     private LicenseLedger(String ledgerDir) throws FileHandlerException {
-            this.setLedgerPath(ledgerDir);
-        }
+        this.setLedgerPath(ledgerDir);
+    }
 
+    /**
+     * Getter for the singleton instance.
+     * @return The singleton instance.
+     */
     public static LicenseLedger getInstance() {
         if (instance == null) {
             instance = new LicenseLedger(LEDGER_PATH);

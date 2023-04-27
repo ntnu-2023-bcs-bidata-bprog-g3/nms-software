@@ -2,7 +2,7 @@ package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 
 import java.io.IOException;
@@ -24,7 +24,8 @@ public class Checksum {
      */
 
     public static String generateFromFile(String path) throws CryptographyException {
-        byte[] data, hash;
+        byte[] data;
+        byte[] hash;
         try {
             data = Files.readAllBytes(Paths.get(path));
             hash = MessageDigest.getInstance("MD5").digest(data);
@@ -47,7 +48,8 @@ public class Checksum {
      * @param checksumDirectory The path to the file containing the checksum.
      * @return {@link Boolean} True if the checksums match, false otherwise.
      */
-    public static boolean compare(String fileDirectory, String checksumDirectory) throws CryptographyException, FileHandlerException {
+    public static boolean compare(String fileDirectory, String checksumDirectory)
+            throws CryptographyException, FileHandlerException {
         String checksum = Checksum.generateFromFile(fileDirectory);
         byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
                 .readFromFile(checksumDirectory), KeyGenerator.KEY);

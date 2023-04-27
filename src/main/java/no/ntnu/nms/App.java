@@ -7,9 +7,16 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
+/**
+ * App is the main class for the application.
+ */
 @SpringBootApplication
 public class App {
 
+    /**
+     * Main method for the application.
+     * @param args ignored.
+     */
     public static void main(String[] args) {
 
         try {

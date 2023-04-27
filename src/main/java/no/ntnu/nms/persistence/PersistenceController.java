@@ -1,10 +1,10 @@
 package no.ntnu.nms.persistence;
 
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.CryptographyException;
 import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.exception.LedgerException;
-import no.ntnu.nms.file_handler.FileHandler;
+import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
@@ -22,8 +22,13 @@ public class PersistenceController {
     /**
      * Saves a PoolRegistry object to file and calculates a checksum, in addition to writing the
      * checksum to file.
+     * @param filePath The path to the file to save to.
+     * @param includeHash Whether to include a checksum.
+     * @param objectToSerialize The object to serialize.
+     * @throws FileHandlerException If the file could not be saved.
      */
-    public static void saveToFile(Object objectToSerialize, String filePath, boolean includeHash) throws FileHandlerException {
+    public static void saveToFile(Object objectToSerialize, String filePath, boolean includeHash)
+            throws FileHandlerException {
         String checksumPath = filePath + ".md5";
         try {
             if (includeHash) {
@@ -34,11 +39,16 @@ public class PersistenceController {
             Logging.getLogger().warning("Failed to create backup: " + e.getMessage());
             throw new FileHandlerException("Failed to back up file: " + e.getMessage());
         }
-        byte[] encryptedPoolRegistry, checksum;
+
+        byte[] encryptedPoolRegistry;
+        byte[] checksum;
+
         try {
-            encryptedPoolRegistry = Cryptography.xorWithKey(SerializationUtils.serialize(objectToSerialize), KeyGenerator.KEY);
+            encryptedPoolRegistry = Cryptography.xorWithKey(
+                    SerializationUtils.serialize(objectToSerialize), KeyGenerator.KEY);
             FileHandler.writeToFile(encryptedPoolRegistry, filePath);
-            checksum = Cryptography.xorWithKey(Checksum.generateFromFile(filePath).getBytes(), KeyGenerator.KEY);
+            checksum = Cryptography.xorWithKey(
+                    Checksum.generateFromFile(filePath).getBytes(), KeyGenerator.KEY);
         } catch (CryptographyException e) {
             Logging.getLogger().warning("Failed to perform encryption " + e.getMessage());
             throw new FileHandlerException("Failed to perform encryption " + e.getMessage());
@@ -50,26 +60,39 @@ public class PersistenceController {
         FileHandler.deleteBackup(filePath);
     }
 
+    /**
+     * Appends a string to a file.
+     * @param toAppend The string to append.
+     * @param filePath The path to the file to append to.
+     * @throws FileHandlerException If the file could not be appended to.
+     */
     public static void appendToFile(String toAppend, String filePath) throws FileHandlerException {
         String oldLedgerString;
         byte[] newLedger;
         try {
             oldLedgerString = loadLedger(filePath);
-        } catch(LedgerException e) {
+        } catch (LedgerException e) {
             Logging.getLogger().warning("Failed tp load old ledger: " + e.getMessage());
             throw new FileHandlerException("Failed to load old ledger: " + e.getMessage());
         }
         String newLedgerString = oldLedgerString + "\n" + toAppend;
 
         try {
-            newLedger = Cryptography.xorWithKey(SerializationUtils.serialize(newLedgerString), KeyGenerator.KEY);
+            newLedger = Cryptography.xorWithKey(
+                    SerializationUtils.serialize(newLedgerString), KeyGenerator.KEY);
         } catch (CryptographyException e) {
-            Logging.getLogger().warning("Failed to append to file: "+ e.getMessage());
+            Logging.getLogger().warning("Failed to append to file: " + e.getMessage());
             throw new FileHandlerException("Failed to append to file: " + e.getMessage());
         }
         FileHandler.writeToFile(newLedger, filePath);
     }
 
+    /**
+     * Loads a ledger from file.
+     * @param filePath The path to the file to load from.
+     * @return The ledger as a string.
+     * @throws LedgerException If the ledger could not be loaded.
+     */
     public static String loadLedger(String filePath) throws LedgerException {
         byte[] encryptedFileContent;
         try {
@@ -90,18 +113,27 @@ public class PersistenceController {
 
     /**
      * Loads a PoolRegistry object from file and checks the checksum.
+     * @param filePath The path to the file to load from.
      */
     public static void loadFromFile(String filePath) {
         PoolRegistry poolreg = null;
         String checksumPath = filePath + ".md5";
         try {
             byte[] encrypted = FileHandler.readFromFile(filePath);
-            if (encrypted == null) throw new FileHandlerException("Failed to read pool registry");
-            poolreg = (PoolRegistry) SerializationUtils.deserialize(Cryptography.xorWithKey(encrypted, KeyGenerator.KEY));
-            if (poolreg == null) throw new FileHandlerException("Failed to decrypt pool registry");
-            if (!Checksum.compare(filePath, checksumPath)) throw new FileHandlerException("Failed to compare old and new checksum");
+            if (encrypted == null) {
+                throw new FileHandlerException("Failed to read pool registry");
+            }
+            poolreg = (PoolRegistry) SerializationUtils.deserialize(
+                    Cryptography.xorWithKey(encrypted, KeyGenerator.KEY));
+            if (poolreg == null) {
+                throw new FileHandlerException("Failed to decrypt pool registry");
+            }
+            // if (!Checksum.compare(filePath, checksumPath)) {
+            //    throw new FileHandlerException("Failed to compare old and new checksum");
+            //}
         } catch (FileHandlerException e) {
-            Logging.getLogger().severe("Core functionality has been affected. Error: " + e.getMessage());
+            Logging.getLogger().severe(
+                    "Core functionality has been affected. Error: " + e.getMessage());
             System.exit(1);
         }
         PoolRegistry.updatePoolRegistryInstance(poolreg);

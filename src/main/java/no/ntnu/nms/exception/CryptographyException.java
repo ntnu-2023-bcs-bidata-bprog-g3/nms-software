@@ -1,5 +1,8 @@
 package no.ntnu.nms.exception;
 
+/**
+ * Class for exceptions related to cryptography.
+ */
 public class CryptographyException extends RuntimeException {
     /**
      * Constructor for CryptographyException.

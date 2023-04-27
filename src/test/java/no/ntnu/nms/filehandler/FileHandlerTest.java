@@ -1,4 +1,4 @@
-package no.ntnu.nms.file_handler;
+package no.ntnu.nms.filehandler;
 
 import no.ntnu.nms.Constants;
 import no.ntnu.nms.logging.Logging;

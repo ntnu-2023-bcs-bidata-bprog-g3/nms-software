@@ -19,6 +19,7 @@ public class ZipUtil {
      * the license file and signature file from the Zip file.
      *
      * @param inputStream {@link ZipFile} the {@link ZipInputStream} of the zip file to unzip
+     * @return {@link String} the name of the directory where the files were unzipped
      */
     public static String unzipper(ZipInputStream inputStream) throws ParserException, IOException {
         String dirName = String.valueOf(Math.abs(((int) Math.pow(10, 8))

@@ -1,4 +1,4 @@
-package no.ntnu.nms.domainModel;
+package no.ntnu.nms.domainmodel;
 
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.BeforeAll;

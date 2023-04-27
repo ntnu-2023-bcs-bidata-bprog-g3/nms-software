@@ -8,7 +8,7 @@ import no.ntnu.nms.license.LicenseLedger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import no.ntnu.nms.domainModel.PoolRegistry;
+import no.ntnu.nms.domainmodel.PoolRegistry;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,8 @@ public class PersistenceControllerTest {
     public static void tearDown() throws IOException{
         Path testDir = Path.of(TEST_FILES_PATH);
         if (Files.exists(testDir)) {
-            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile)
+                    .forEach(File::delete);
         }
         Files.deleteIfExists(testDir);
     }

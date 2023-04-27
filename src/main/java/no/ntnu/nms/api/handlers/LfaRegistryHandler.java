@@ -31,7 +31,7 @@ public class LfaRegistryHandler {
      * Get all LFA.
      * @return {@link String} JSON representation of all LFA.
      */
-    @GetMapping(value={""}, produces = {"application/json"})
+    @GetMapping(value = {""}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String getAllLfa() {
         Logging.getLogger().info("LFA endpoint called for all");
@@ -43,7 +43,7 @@ public class LfaRegistryHandler {
      * Get all LFA with their licenses.
      * @return {@link String} JSON representation of all LFA with their licenses.
      */
-    @GetMapping(value={"/licenses"}, produces = {"application/json"})
+    @GetMapping(value = {"/licenses"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String getLicenses() {
         Logging.getLogger().info("LFA endpoint called for all licenses");
@@ -69,9 +69,10 @@ public class LfaRegistryHandler {
      * Register a new LFA.
      * @param name {@link String} name of the LFA.
      * @param request {@link HttpServletRequest} the request.
+     * @param port {@link String} the port of the LFA.
      * @return {@link String} JSON representation of the result.
      */
-    @PutMapping(value={"/register"}, produces = {"application/json"})
+    @PutMapping(value = {"/register"}, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     public String registerLfa(@RequestParam String name, @RequestParam String port,
                               HttpServletRequest request) {
@@ -92,7 +93,7 @@ public class LfaRegistryHandler {
      * @param payload {@link String} the payload containing the LFA IP, media function and duration.
      * @return {@link String} a message that the license was consumed.
      */
-    @PutMapping(value={"/consume"})
+    @PutMapping(value = {"/consume"})
     public String consumeLicense(@RequestBody String payload) {
         Map<String, String> body = BodyParser.parseLfaBody(payload);
 
@@ -104,7 +105,8 @@ public class LfaRegistryHandler {
             Client.consumeLicense(new JSONObject(body));
         } catch (HttpException | JSONException e) {
             Logging.getLogger().info("Failed to consume license: " + e.getMessage());
-            return "{\"error\": \"Failed to consume license: " + ExceptionHandler.getMessage(e) + "\"}";
+            return "{\"error\": \"Failed to consume license: " +
+                    ExceptionHandler.getMessage(e) + "\"}";
         }
         return "{\"message\": \"License consumed :)\"}";
     }
