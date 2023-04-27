@@ -25,7 +25,11 @@ public class ZipUtilTest {
     public static void tearDown() throws IOException{
         Path testDir = Path.of(Constants.TEST_FILES_PATH);
         if (Files.exists(testDir)) {
-            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            try (var paths = Files.walk(testDir)) {
+                paths.sorted(java.util.Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            } catch (IOException ignore) {}
         }
         Files.deleteIfExists(testDir);
     }
@@ -51,7 +55,11 @@ public class ZipUtilTest {
             // Clean up
             Path dir = Path.of("data/temp/" + extractedDirName);
             if (Files.exists(dir)) {
-                Files.walk(dir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+                try (var paths = Files.walk(dir)) {
+                    paths.sorted(java.util.Comparator.reverseOrder())
+                            .map(Path::toFile)
+                            .forEach(File::delete);
+                } catch (IOException ignore) {}
             }
         }
     }
@@ -93,7 +101,11 @@ public class ZipUtilTest {
             // Clean up
             Path dir = Path.of("data/temp/" + "invalid.txt");
             if (Files.exists(dir)) {
-                Files.walk(dir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+                try (var paths = Files.walk(dir)) {
+                    paths.sorted(java.util.Comparator.reverseOrder())
+                            .map(Path::toFile)
+                            .forEach(File::delete);
+                } catch (IOException ignore) {}
             }
         }
     }

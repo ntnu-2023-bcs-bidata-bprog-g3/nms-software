@@ -37,8 +37,11 @@ public class PersistenceControllerTest {
     public static void tearDown() throws IOException{
         Path testDir = Path.of(TEST_FILES_PATH);
         if (Files.exists(testDir)) {
-            Files.walk(testDir).sorted(java.util.Comparator.reverseOrder()).map(Path::toFile)
-                    .forEach(File::delete);
+            try (var paths = Files.walk(testDir)) {
+                paths.sorted(java.util.Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            } catch (IOException ignore) {}
         }
         Files.deleteIfExists(testDir);
     }
