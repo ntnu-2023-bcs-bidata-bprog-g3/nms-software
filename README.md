@@ -22,12 +22,14 @@ To launch the application, you need to use an IDE bundled with Maven or install 
 ### Install Maven
 
 For Linux Debian, Ubuntu, etc.:
+
 ```bash
 sudo apt-get install maven
 ```
 
 For MacOS:
 _Please note, Brew is required._
+
 ```bash
 brew install maven
 ```
@@ -35,6 +37,7 @@ brew install maven
 ### Package the application
 
 Package the application by running:
+
 ```bash
 mvn clean compile package exec:java
 ```
@@ -42,6 +45,7 @@ mvn clean compile package exec:java
 ### Run the application
 
 Then run the created Jar file:
+
 ```bash
 java -jar target/nms-software-1.0-SNAPSHOT.jar
 ```
