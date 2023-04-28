@@ -1,9 +1,18 @@
 # nms-software
 
-[![Java CI with Maven](https://github.com/ntnu-2023-bcs-bidata-bprog-g2/nms-software/actions/workflows/maven.yml/badge.svg)](https://github.com/ntnu-2023-bcs-bidata-bprog-g2/nms-software/actions/workflows/maven.yml)
+## Background
 
-### Launch
+The network management system is developed and written as a part of a bachelor's thesis at the University of Science 
+and Technology in Gjøvik, Norway.
+
+## Description
+
+NMS, short for network management system, is one of the two components of an offline license management system.
+
+## Launch
 To launch the application, you need to use an IDE bundled with Maven or install Maven on you local machine.
+
+### Install Maven
 
 For Linux Debian, Ubuntu, etc.:
 ```bash
@@ -16,10 +25,14 @@ _Please note, Brew is required._
 brew install maven
 ```
 
+### Package the application
+
 Package the application by running:
 ```bash
 mvn clean compile package exec:java
 ```
+
+### Run the application
 
 Then run the created Jar file:
 ```bash
