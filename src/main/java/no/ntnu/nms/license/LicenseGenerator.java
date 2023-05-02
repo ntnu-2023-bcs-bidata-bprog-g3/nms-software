@@ -3,6 +3,7 @@ package no.ntnu.nms.license;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.nms.App;
+import no.ntnu.nms.CustomerConstants;
 import no.ntnu.nms.domainmodel.Pool;
 import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.exception.FileHandlerException;
@@ -127,9 +128,8 @@ public class LicenseGenerator {
         HashMap<String, Object> infoMap = new HashMap<>();
 
         infoMap.put("date", LocalDateTime.now().toString());
-        infoMap.put("customer", "TV2");
+        infoMap.put("customer", CustomerConstants.CUSTOMER_NAME);
         infoMap.put("issuer", "NMS");
-        //infoMap.put("uid", pool.getId().toString());
 
         HashMap<String, Object> keyMap = new HashMap<>();
         keyMap.put("name", pool.getMediaFunction());
