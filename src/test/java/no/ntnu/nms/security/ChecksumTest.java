@@ -51,7 +51,7 @@ public class ChecksumTest {
     public void TestCompareChecksum(){
         if (file != null && file2 != null) {
             byte[] checksumBytes = Cryptography.xorWithKey(Checksum.generateFromFile(
-                    file.getAbsolutePath()).getBytes(), KeyGenerator.KEY);
+                    file.getAbsolutePath()).getBytes(), Cryptography.KEY);
             FileHandler.writeToFile(checksumBytes, file2.getAbsolutePath());
 
             boolean result = Checksum.compare(file.getAbsolutePath(), file2.getAbsolutePath());
@@ -63,7 +63,7 @@ public class ChecksumTest {
     public void TestCompareChecksumNegative(){
         if (file != null && file2 != null) {
             byte[] checksumBytes = Cryptography.xorWithKey("this is a test checksum".getBytes(),
-                    KeyGenerator.KEY);
+                    Cryptography.KEY);
             FileHandler.writeToFile(checksumBytes, file2.getPath());
 
             boolean result = Checksum.compare(file.getPath(), file2.getPath());

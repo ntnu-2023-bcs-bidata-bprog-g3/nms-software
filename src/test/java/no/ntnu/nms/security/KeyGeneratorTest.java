@@ -7,12 +7,12 @@ public class KeyGeneratorTest {
 
     @Test
     public void TestEqualKeysKEY() {
-        assertArrayEquals(KeyGenerator.KEY, KeyGenerator.KEY); // KeyGenerator.KEY calls the generateKey() method.
+        assertArrayEquals(Cryptography.KEY, Cryptography.KEY); // KeyGenerator.KEY calls the generateKey() method.
     }
 
     @Test
     public void TestKeyLengthKEY() {
-        byte[] key = KeyGenerator.KEY;
+        byte[] key = Cryptography.KEY;
         assertEquals(32, key.length);
     }
 }

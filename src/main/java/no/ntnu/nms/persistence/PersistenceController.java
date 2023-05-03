@@ -8,7 +8,6 @@ import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.security.Checksum;
 import no.ntnu.nms.security.Cryptography;
-import no.ntnu.nms.security.KeyGenerator;
 
 import java.io.IOException;
 
@@ -45,10 +44,10 @@ public class PersistenceController {
 
         try {
             encryptedPoolRegistry = Cryptography.xorWithKey(
-                    SerializationUtils.serialize(objectToSerialize), KeyGenerator.KEY);
+                    SerializationUtils.serialize(objectToSerialize), Cryptography.KEY);
             FileHandler.writeToFile(encryptedPoolRegistry, filePath);
             checksum = Cryptography.xorWithKey(
-                    Checksum.generateFromFile(filePath).getBytes(), KeyGenerator.KEY);
+                    Checksum.generateFromFile(filePath).getBytes(), Cryptography.KEY);
         } catch (CryptographyException e) {
             Logging.getLogger().warning("Failed to perform encryption " + e.getMessage());
             throw new FileHandlerException("Failed to perform encryption " + e.getMessage());
@@ -79,7 +78,7 @@ public class PersistenceController {
 
         try {
             newLedger = Cryptography.xorWithKey(
-                    SerializationUtils.serialize(newLedgerString), KeyGenerator.KEY);
+                    SerializationUtils.serialize(newLedgerString), Cryptography.KEY);
         } catch (CryptographyException e) {
             Logging.getLogger().warning("Failed to append to file: " + e.getMessage());
             throw new FileHandlerException("Failed to append to file: " + e.getMessage());
@@ -103,7 +102,7 @@ public class PersistenceController {
         }
         byte[] decryptedFileContent;
         try {
-            decryptedFileContent = Cryptography.xorWithKey(encryptedFileContent, KeyGenerator.KEY);
+            decryptedFileContent = Cryptography.xorWithKey(encryptedFileContent, Cryptography.KEY);
         } catch (CryptographyException e) {
             Logging.getLogger().warning("Failed to decrypt ledger: " + e.getMessage());
             throw new LedgerException("Failed to decrypt ledger: " + e.getMessage());
@@ -123,7 +122,7 @@ public class PersistenceController {
                 throw new FileHandlerException("Failed to read pool registry");
             }
             poolreg = (PoolRegistry) SerializationUtils.deserialize(
-                    Cryptography.xorWithKey(encrypted, KeyGenerator.KEY));
+                    Cryptography.xorWithKey(encrypted, Cryptography.KEY));
             if (poolreg == null) {
                 throw new FileHandlerException("Failed to decrypt pool registry");
             }

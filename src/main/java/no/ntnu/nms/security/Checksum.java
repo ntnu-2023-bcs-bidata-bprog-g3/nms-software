@@ -52,7 +52,7 @@ public class Checksum {
             throws CryptographyException, FileHandlerException {
         String checksum = Checksum.generateFromFile(fileDirectory);
         byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
-                .readFromFile(checksumDirectory), KeyGenerator.KEY);
+                .readFromFile(checksumDirectory), Cryptography.KEY);
         String checksumFromFile = new String(decryptedChecksumFromFile);
         return checksum.equals(checksumFromFile);
     }
