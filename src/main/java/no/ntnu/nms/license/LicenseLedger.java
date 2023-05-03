@@ -7,6 +7,8 @@ import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
 import no.ntnu.nms.security.Checksum;
 
+import java.io.File;
+
 /**
  * A ledger for storing the checksums of all licenses redeemed.
  */
@@ -25,7 +27,7 @@ public class LicenseLedger {
     /**
      * The path to the ledger file.
      */
-    private static final String LEDGER_PATH = "data/ledger/top_license_ledger.txt";
+    private static final String LEDGER_PATH = "data"+ File.separator +"ledger"+ File.separator +"top_license_ledger.txt";
 
     /**
      * Init function used for setting up the storage files.

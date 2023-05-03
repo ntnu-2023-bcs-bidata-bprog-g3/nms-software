@@ -51,8 +51,8 @@ public class Checksum {
     public static boolean compare(String fileDirectory, String checksumDirectory)
             throws CryptographyException, FileHandlerException {
         String checksum = Checksum.generateFromFile(fileDirectory);
-        byte[] decryptedChecksumFromFile = Cryptography.xorWithKey(FileHandler
-                .readFromFile(checksumDirectory), KeyGenerator.KEY);
+        byte[] decryptedChecksumFromFile = Cryptography.applyCipher(FileHandler
+                .readFromFile(checksumDirectory), Cryptography.Mode.DECRYPT);
         String checksumFromFile = new String(decryptedChecksumFromFile);
         return checksum.equals(checksumFromFile);
     }

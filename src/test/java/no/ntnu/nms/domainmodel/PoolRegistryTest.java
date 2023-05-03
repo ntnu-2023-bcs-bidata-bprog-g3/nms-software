@@ -10,12 +10,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PoolRegistryTest {
 
-    private static final String TEST_DIR = Constants.TEST_FILES_PATH + "poolreg/";
+    private static final String TEST_DIR = Constants.TEST_FILES_PATH + "poolreg" + File.separator;
 
     @AfterEach
         public void tearDown() {

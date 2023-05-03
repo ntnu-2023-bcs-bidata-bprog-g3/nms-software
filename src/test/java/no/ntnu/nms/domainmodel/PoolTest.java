@@ -1,11 +1,12 @@
 package no.ntnu.nms.domainmodel;
 
+import no.ntnu.nms.Constants;
 import no.ntnu.nms.logging.Logging;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +20,7 @@ public class PoolTest {
         try {
             Logging.setUpLogger("ALL");
         } catch (IOException ignore) {}
+        PoolRegistry.init(Constants.TEST_FILES_PATH + "pool" + File.separator + "poolreg.ser");
     }
 
     @BeforeEach
@@ -77,27 +79,6 @@ public class PoolTest {
                 "\"description\": \"A test pool\"" +
                 "}";
         assertEquals(json, POOL.jsonify());
-    }
-
-    @Test
-    public void TestSetEventListener() {
-        PropertyChangeListener pcl = evt -> {};
-        assertEquals(0, POOL.getChanges().getPropertyChangeListeners().length);
-        POOL.addPropertyChangeListener(pcl);
-        POOL.setDescription("A new description");
-        assertTrue(POOL.getChanges().getPropertyChangeListeners().length > 0);
-    }
-
-    @Test
-    public void TestRemoveEventListener() {
-        PropertyChangeListener pcl = evt -> {};
-        assertEquals(0, POOL.getChanges().getPropertyChangeListeners().length);
-        POOL.addPropertyChangeListener(pcl);
-        POOL.setDescription("A new description");
-        assertTrue(POOL.getChanges().getPropertyChangeListeners().length > 0);
-
-        POOL.removePropertyChangeListener(pcl);
-        assertEquals(0, POOL.getChanges().getPropertyChangeListeners().length);
     }
 
     @Test

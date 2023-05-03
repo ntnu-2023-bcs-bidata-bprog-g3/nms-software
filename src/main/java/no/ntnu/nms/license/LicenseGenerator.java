@@ -11,6 +11,7 @@ import no.ntnu.nms.exception.LicenseGeneratorException;
 import no.ntnu.nms.filehandler.FileHandler;
 import no.ntnu.nms.lfa.LfaRegistry;
 
+import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +32,7 @@ public class LicenseGenerator {
     /**
      * Path to temporary files.
      */
-    private static final String TEMP_FILE_PATH = "data/sublicense/";
+    private static final String TEMP_FILE_PATH = "data"+ File.separator +"sublicense"+ File.separator;
 
 
     /**
@@ -51,7 +52,7 @@ public class LicenseGenerator {
         Pool pool = getPoolAndSubtract(mediafunction, duration);
 
         int uid = (int) (Math.random() * 1000000000);
-        String path = TEMP_FILE_PATH + uid + "/";
+        String path = TEMP_FILE_PATH + uid + File.separator;
 
         String name = LfaRegistry.getInstance().getLfaName(ip);
 
