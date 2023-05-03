@@ -123,7 +123,6 @@ public class Pool implements Serializable, PropertyChangeListener {
             this.timeLeftSeconds -= seconds;
             changes.firePropertyChange("change", oldTimeLeftSeconds,
                     this.timeLeftSeconds);
-            //PoolRegistry.getInstance(false).updatePoolReg();
             return true;
         }
         return false;
