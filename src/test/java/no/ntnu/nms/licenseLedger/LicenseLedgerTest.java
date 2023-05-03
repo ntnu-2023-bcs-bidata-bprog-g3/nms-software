@@ -12,9 +12,9 @@ import java.nio.file.Path;
 import static no.ntnu.nms.Constants.TEST_FILES_PATH;
 
 public class LicenseLedgerTest {
-    private static final String LEDGER_PATH = TEST_FILES_PATH + "ledger/test_ledger.txt";
-    private static final String LICENSE_PATH = TEST_FILES_PATH + "licenses/test_license.txt";
-    private static final String OTHER_LICENSE_PATH = TEST_FILES_PATH + "licenses/other_license.txt";
+    private static final String LEDGER_PATH = TEST_FILES_PATH + "ledger"+ File.separator +"test_ledger.txt";
+    private static final String LICENSE_PATH = TEST_FILES_PATH + "licenses"+ File.separator +"test_license.txt";
+    private static final String OTHER_LICENSE_PATH = TEST_FILES_PATH + "licenses"+ File.separator + "other_license.txt";
 
     @BeforeAll
     static void init() throws IOException {

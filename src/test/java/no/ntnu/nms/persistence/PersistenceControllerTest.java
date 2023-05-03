@@ -20,7 +20,7 @@ import java.util.List;
 
 public class PersistenceControllerTest {
 
-    private static final String TEST_DIR = Constants.TEST_FILES_PATH + "persistenceController/";
+    private static final String TEST_DIR = Constants.TEST_FILES_PATH + "persistenceController" + File.separator;
 
     private static final String filePath = TEST_DIR + "poolregistry.ser";
     private static final String checksumPath = filePath + ".md5";
