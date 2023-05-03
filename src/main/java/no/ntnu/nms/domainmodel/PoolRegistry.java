@@ -8,6 +8,7 @@ import no.ntnu.nms.persistence.PersistenceController;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.Serializable;
+import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,16 +17,6 @@ import java.util.Iterator;
  * Singleton class.
  */
 public class PoolRegistry implements Serializable {
-
-    /**
-     * PropertyChangeListener for the registry.
-     * Saves the registry to file when a change is made.
-     */
-    private final transient PropertyChangeListener pcl = evt -> {
-        if (evt.getOldValue() != evt.getNewValue()) {
-            updatePoolReg();
-        }
-    };
 
     /**
      * Singleton instance.
@@ -91,7 +82,6 @@ public class PoolRegistry implements Serializable {
      */
     public void addPool(Pool pool) {
         poolList.add(pool);
-        pool.addPropertyChangeListener(pcl);
         updatePoolReg();
     }
 
@@ -123,7 +113,6 @@ public class PoolRegistry implements Serializable {
      */
     public void removePool(Pool pool) {
         poolList.remove(pool);
-        pool.removePropertyChangeListener(pcl);
         updatePoolReg();
     }
 
@@ -183,7 +172,7 @@ public class PoolRegistry implements Serializable {
     /**
      * Update the registry file.
      */
-    private void updatePoolReg() {
+    protected void updatePoolReg() {
         try {
             PersistenceController.saveToFile(this, storageFilePath, false);
         } catch (FileHandlerException e) {

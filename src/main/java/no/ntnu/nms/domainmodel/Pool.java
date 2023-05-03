@@ -3,6 +3,7 @@ package no.ntnu.nms.domainmodel;
 
 import no.ntnu.nms.logging.Logging;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -11,31 +12,12 @@ import java.io.Serializable;
  * A Pool object represents a pool of a media function.
  *
  */
-public class Pool implements Serializable {
+public class Pool implements Serializable, PropertyChangeListener {
 
     /**
      * PropertyChangeListener for the registry.
      */
     private final PropertyChangeSupport changes;
-
-    /**
-     * Adder for a property change listener. Used for saving the registry to file when
-     * a change is made.
-     * @param listener {@link PropertyChangeListener} listener to add.
-     */
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        this.changes.addPropertyChangeListener(listener);
-        Logging.getLogger().info("Pool registry change listener successfully added");
-    }
-
-    /**
-     * Remover for a property change listener.
-     * @param listener {@link PropertyChangeListener} listener to remove.
-     */
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        this.changes.removePropertyChangeListener(listener);
-        Logging.getLogger().info("Pool registry change listener successfully removed");
-    }
 
     /**
      * The media function of the pool.
@@ -58,6 +40,7 @@ public class Pool implements Serializable {
      */
     public Pool(String mediaFunction, int timeLeftSeconds, String description) {
         this.changes = new PropertyChangeSupport(this);
+        changes.addPropertyChangeListener(this);
         Logging.getLogger().info("Creating new pool for mediafunction " + mediaFunction);
         setMediaFunction(mediaFunction);
         setDescription(description);
@@ -140,6 +123,7 @@ public class Pool implements Serializable {
             this.timeLeftSeconds -= seconds;
             changes.firePropertyChange("change", oldTimeLeftSeconds,
                     this.timeLeftSeconds);
+            //PoolRegistry.getInstance(false).updatePoolReg();
             return true;
         }
         return false;
@@ -157,6 +141,7 @@ public class Pool implements Serializable {
             this.timeLeftSeconds += seconds;
             changes.firePropertyChange("change", oldTimeLeftSeconds,
                     this.timeLeftSeconds);
+            //PoolRegistry.getInstance(false).updatePoolReg();
             return true;
         }
         return false;
@@ -196,5 +181,17 @@ public class Pool implements Serializable {
                 this.getTimeLeftSeconds(),
                 this.getDescription()
         );
+    }
+
+    /**
+     * This method gets called when a bound property is changed.
+     *
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Logging.getLogger().info("Pool change listener triggered. Updating pool registry.");
+        PoolRegistry.getInstance(false).updatePoolReg();
     }
 }
