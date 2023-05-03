@@ -1,11 +1,39 @@
 package no.ntnu.nms.security;
 
 import no.ntnu.nms.exception.CryptographyException;
+import no.ntnu.nms.logging.Logging;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  * Utility class for encrypting and decrypting data.
  */
 public class Cryptography {
+
+    // The key used for encryption/decryption.
+    public static final byte[] KEY = generateKey();
+
+    /**
+     * Generates a key for encryption/decryption.
+     * @return The generated key.
+     * @throws RuntimeException if the AES algorithm is not available.
+     */
+    public static byte[] generateKey() throws CryptographyException{
+        try {
+            javax.crypto.KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            random.setSeed(123456L); // Set a fixed seed for the random number generator, can be e.g customer ID
+            keyGen.init(256, random); // key length of 256 bits
+            SecretKey secretKey = keyGen.generateKey();
+            return secretKey.getEncoded();
+        } catch (NoSuchAlgorithmException e) {
+            Logging.getLogger().warning("Failed to generate key: " + e.getMessage());
+            throw new CryptographyException("Failed to generate key: " + e.getMessage());
+        }
+    }
 
     /**
      * XORs a byte array with a key.
@@ -17,7 +45,7 @@ public class Cryptography {
         if (input == null) {
             throw new CryptographyException("Failed to decrypt/encrypt: input is null");
         }
-        
+
         byte[] output = new byte[input.length];
         for (int i = 0; i < input.length; i++) {
             output[i] = (byte) (input[i] ^ key[i % key.length]);
