@@ -5,10 +5,8 @@ import no.ntnu.nms.exception.FileHandlerException;
 import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
 
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.Serializable;
-import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;
 import java.util.Iterator;
 
