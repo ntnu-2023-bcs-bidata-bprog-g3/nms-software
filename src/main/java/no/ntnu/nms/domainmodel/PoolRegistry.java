@@ -6,6 +6,7 @@ import no.ntnu.nms.logging.Logging;
 import no.ntnu.nms.persistence.PersistenceController;
 
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,7 +68,7 @@ public class PoolRegistry implements Serializable {
         if (instance == null) {
             String path = isTest ? CustomerConstants.TEST_DATA_PATH :
                     CustomerConstants.PROD_DATA_PATH;
-            path += "pool/poolreg.ser";
+            path += "pool"+ File.separator +"poolreg.ser";
             PersistenceController.loadFromFile(path);
         }
         return instance;

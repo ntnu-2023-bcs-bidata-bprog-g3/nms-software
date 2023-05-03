@@ -3,6 +3,7 @@ package no.ntnu.nms;
 import no.ntnu.nms.domainmodel.PoolRegistry;
 import no.ntnu.nms.license.LicenseLedger;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,8 +44,8 @@ public class Init {
             System.exit(-1);
         }
 
-        PoolRegistry.init("data/pool/poolreg.ser");
-        LicenseLedger.init("data/ledger/top_license_ledger.txt");
+        PoolRegistry.init("data"+ File.separator +"pool"+ File.separator +"poolreg.ser");
+        LicenseLedger.init("data"+ File.separator +"ledger"+ File.separator +"top_license_ledger.txt");
 
     }
 }

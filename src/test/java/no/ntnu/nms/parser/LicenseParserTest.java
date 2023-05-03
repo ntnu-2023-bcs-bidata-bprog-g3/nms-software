@@ -25,8 +25,8 @@ public class LicenseParserTest {
 
     @BeforeAll
     public static void setUpAll(){
-        LicenseLedger.init("test_files/persistenceController/licenseledger.txt");
-        PoolRegistry.init("test_files/persistenceController/poolregistry.txt");
+        LicenseLedger.init("test_files" + File.separator +"persistenceController"+ File.separator + "licenseledger.txt");
+        PoolRegistry.init("test_files"+ File.separator +"persistenceController"+ File.separator +"poolregistry.txt");
         try {
             Logging.setUpLogger("ALL");
         } catch (IOException ignore) {}
