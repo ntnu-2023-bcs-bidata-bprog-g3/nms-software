@@ -21,7 +21,7 @@ jobs:
           sudo apt-get install cloc -y
           cloc src
       - name: Build and run tests
-        run: mvn --batch-mode --fail-at-end package
+        run: mvn --batch-mode --fail-at-end package -U
       - name: Surefire Report
         if: ${{ always() }}
         uses: ScaCap/action-surefire-report@v1.4.0
