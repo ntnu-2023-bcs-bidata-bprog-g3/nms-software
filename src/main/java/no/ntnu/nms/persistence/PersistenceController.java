@@ -101,7 +101,8 @@ public class PersistenceController {
         }
         byte[] decryptedFileContent;
         try {
-            decryptedFileContent = Cryptography.applyCipher(encryptedFileContent, Cryptography.Mode.DECRYPT);
+            decryptedFileContent = Cryptography.applyCipher(encryptedFileContent,
+                    Cryptography.Mode.DECRYPT);
         } catch (CryptographyException e) {
             Logging.getLogger().warning("Failed to decrypt ledger: " + e.getMessage());
             throw new LedgerException("Failed to decrypt ledger: " + e.getMessage());

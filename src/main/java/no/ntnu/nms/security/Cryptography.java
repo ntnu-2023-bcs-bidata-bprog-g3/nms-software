@@ -14,11 +14,17 @@ import java.security.SecureRandom;
  * Utility class for encrypting and decrypting data.
  */
 public class Cryptography {
+    /**
+     * An enum describing the mode to use for encryption/decryption.
+     */
     public enum Mode {
         ENCRYPT,
         DECRYPT
     }
-    // The key used for encryption/decryption.
+
+    /**
+     * The key used for encryption/decryption.
+     */
     public static final byte[] KEY = generateKey();
 
     /**
@@ -26,12 +32,12 @@ public class Cryptography {
      * @return The generated key.
      * @throws RuntimeException if the AES algorithm is not available.
      */
-    public static byte[] generateKey() throws CryptographyException{
+    public static byte[] generateKey() throws CryptographyException {
         try {
             javax.crypto.KeyGenerator keyGen = KeyGenerator.getInstance("AES");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             random.setSeed(123456L); // Set a fixed seed for the random number generator, can be e.g. customer ID
-            keyGen.init(256, random); // key length of 256 bits
+            keyGen.init(256, random); // Key length of 256 bits
             SecretKey secretKey = keyGen.generateKey();
             return secretKey.getEncoded();
         } catch (NoSuchAlgorithmException e) {

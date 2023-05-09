@@ -57,7 +57,7 @@ public class PoolRegistry implements Serializable {
         if (instance == null) {
             String path = isTest ? CustomerConstants.TEST_DATA_PATH :
                     CustomerConstants.PROD_DATA_PATH;
-            path += "pool"+ File.separator +"poolreg.ser";
+            path += "pool" + File.separator + "poolreg.ser";
             PersistenceController.loadFromFile(path);
         }
         return instance;

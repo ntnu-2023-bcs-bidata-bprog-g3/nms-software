@@ -85,7 +85,7 @@ public class LfaRegistry {
     }
 
     /**
-     * Returns the name of the LFA with the given IP
+     * Returns the name of the LFA with the given IP.
      *
      * @param ip the ip
      * @return String name
