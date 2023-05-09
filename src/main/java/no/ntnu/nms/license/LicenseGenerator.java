@@ -32,7 +32,8 @@ public class LicenseGenerator {
     /**
      * Path to temporary files.
      */
-    private static final String TEMP_FILE_PATH = "data"+ File.separator +"sublicense"+ File.separator;
+    private static final String TEMP_FILE_PATH = "data" + File.separator + "sublicense"
+            + File.separator;
 
 
     /**
@@ -57,7 +58,8 @@ public class LicenseGenerator {
         String name = LfaRegistry.getInstance().getLfaName(ip);
 
         try {
-            FileHandler.writeStringToFile(generateString(pool, duration, name), path + "license.json");
+            FileHandler.writeStringToFile(generateString(pool, duration, name),
+                    path + "license.json");
             PrivateKey privateKey = getPrivateKey();
             signFile(path + "license.json", privateKey);
         } catch (LicenseGeneratorException | FileHandlerException e) {
