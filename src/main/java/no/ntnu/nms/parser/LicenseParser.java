@@ -47,8 +47,10 @@ public class LicenseParser {
      * @param dirName the name of the directory containing the files.
      */
     private void assignFiles(String dirName) {
-        this.licenseFile = new File("data"+ File.separator + "temp"+  File.separator  + dirName +  File.separator + "license.json");
-        this.signatureFile = new File("data"+ File.separator + "temp"+ File.separator + dirName +  File.separator +"license.json.signature");
+        this.licenseFile = new File("data" + File.separator + "temp" +  File.separator
+                + dirName +  File.separator + "license.json");
+        this.signatureFile = new File("data" + File.separator + "temp" + File.separator
+                + dirName +  File.separator + "license.json.signature");
         try {
             this.licenseContent = Files.readAllBytes(licenseFile.toPath());
         } catch (IOException e) {

@@ -27,7 +27,8 @@ public class LicenseLedger {
     /**
      * The path to the ledger file.
      */
-    private static final String LEDGER_PATH = "data"+ File.separator +"ledger"+ File.separator +"top_license_ledger.txt";
+    private static final String LEDGER_PATH = "data" + File.separator + "ledger" + File.separator
+            + "top_license_ledger.txt";
 
     /**
      * Init function used for setting up the storage files.
