@@ -20,5 +20,5 @@ public class CustomerConstants {
             "p+jG70s4G5jL35B8NdlafiW7pYaE4A8VUHcHIvdrkJWPNOwiTPa2CPRtopjZ1b83\n" +
             "uPkDxVUSjMKPNkcDyXI4w/n4JwUNdWrgLHvTCeMOJWQheOM22+RuiEqA+z2fnvS2\n" +
             "0QIDAQAB\n" +
-            "-----END PUBLIC KEY-----\n";
+            "-----END PUBLIC KEY-----";
 }

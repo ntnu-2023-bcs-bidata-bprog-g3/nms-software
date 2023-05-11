@@ -26,8 +26,8 @@ public class Init {
     public static void main(String[] args) {
 
         try (FileWriter fw = new FileWriter("intermediate.cert")) {
-            KeyStore keyStore = KeyStore.getInstance("JKS");
-            InputStream is = App.class.getClassLoader().getResourceAsStream("keystore.jks");
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            InputStream is = App.class.getClassLoader().getResourceAsStream("keystore.p12");
             keyStore.load(is, "secret".toCharArray());
 
             Certificate certificate = keyStore.getCertificate("keystore");

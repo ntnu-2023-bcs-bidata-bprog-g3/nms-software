@@ -173,7 +173,7 @@ public class LicenseParser {
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         String formattedPubKey = CustomerConstants.ROOT_PUBLIC_KEY
                 .replace("-----BEGIN PUBLIC KEY-----\n", "")
-                .replace("-----END PUBLIC KEY-----\n", "")
+                .replace("-----END PUBLIC KEY-----", "")
                 .replaceAll("\\s+", "");
 
         byte[] byteKey = Base64.getDecoder().decode(formattedPubKey);
